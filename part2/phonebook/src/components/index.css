@@ -1,0 +1,9 @@
+.info-message{
+    color: darkgoldenrod;
+    background: darkolivegreen;
+    font-size: 25px;
+    border-style: groove;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
