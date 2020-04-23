@@ -12,8 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
   const [message, setMessage] = useState('')
-  const cors = require('cors')
-  app.use(cors())
+
 
   useEffect(() => {
     service.getAll()
