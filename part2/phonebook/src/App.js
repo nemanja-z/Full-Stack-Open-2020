@@ -49,6 +49,8 @@ const App = () => {
             setPersons(persons.map(p => p.id === id ? request : p))
             setNewNumber('')
             setNewName('')
+            setMessage(`${p.name}'s number is updated to ${p.number}`)
+            setTimeout(() => { setMessage(null) }, 5000)
           })
           .catch(() => {
             setMessage(`Information of ${p.name} has already been removed from server`)
@@ -56,8 +58,7 @@ const App = () => {
               setMessage(null)
             }, 5000)
           })
-        setMessage(`${p.name}'s number is updated to ${p.number}`)
-        setTimeout(() => { setMessage(null) }, 5000)
+
 
 
       }
