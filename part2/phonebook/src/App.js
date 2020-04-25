@@ -66,12 +66,20 @@ const App = () => {
     service.create(p)
       .then(request => {
         setPersons(persons.concat(request))
+        setMessage(`${p.name} is added to the phonebook`)
+        setTimeout(() => { setMessage(null) }, 5000)
+        setNewNumber('')
+        setNewName('')
       })
-    setMessage(`${p.name} is added to the phonebook`)
-    setTimeout(() => { setMessage(null) }, 5000)
-    setNewNumber('')
-    setNewName('')
+      .catch(error => {
+        const message = JSON.stringify(error.response.data)
+        setMessage(`${message}`)
+        setTimeout(() => { setMessage(null) }, 5000)
+      })
   }
+
+
+
   const handleRemove = (e) => {
     let obj = persons[e.target.id];
     if (window.confirm(`Do you really want to delete ${obj.name}?`)) {
