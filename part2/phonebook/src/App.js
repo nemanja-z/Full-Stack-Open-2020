@@ -21,7 +21,6 @@ const App = () => {
       })
       .catch(e => e);
   }, []);
-  console.log(persons)
   const handleChange = (e) => {
     e.preventDefault()
     setNewName(e.target.value)
@@ -37,30 +36,29 @@ const App = () => {
 
   const addName = (e) => {
     e.preventDefault()
-    let p = {
+    const p = {
       name: newName,
       number: newNumber,
-
     }
-    if (persons.some(per => per.name === p.name)) {
-      const proba = persons.find(pr => pr.name === p.name)
-      if (window.confirm(`${p.name} is already added to phonebook. Do you want to replace the old number with a new one?`)) {
-        service.update(proba.id, p)
-          .then(request => {
-            setPersons(persons.concat(request))
-          }
-          )
-          .catch((error => {
 
+    if (persons.some(per => per.name === p.name)) {
+      const id = persons.find(pr => pr.name === p.name).id
+      if (window.confirm(`${p.name} is already added to phonebook. Do you want to replace the old number with a new one?`)) {
+        service.update(id, p)
+          .then(request => {
+            setPersons(persons.map(p => p.id === id ? request : p))
+            setNewNumber('')
+            setNewName('')
+          })
+          .catch(() => {
             setMessage(`Information of ${p.name} has already been removed from server`)
             setTimeout(() => {
               setMessage(null)
             }, 5000)
-          }))
+          })
         setMessage(`${p.name}'s number is updated to ${p.number}`)
         setTimeout(() => { setMessage(null) }, 5000)
-        setNewNumber('')
-        setNewName('')
+
 
       }
       return;
@@ -76,13 +74,8 @@ const App = () => {
   }
   const handleRemove = (e) => {
     let obj = persons[e.target.id];
-    console.log(obj)
     if (window.confirm(`Do you really want to delete ${obj.name}?`)) {
       service.remove(obj.id)
-        .then(request => {
-          setPersons([...persons])
-        })
-
     }
     else {
       return false;
