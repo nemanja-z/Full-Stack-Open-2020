@@ -1,0 +1,11 @@
+POST http://localhost:3003/
+Content-Type: application/json
+
+{"title": "Lifestyleblogi",
+	"author": "Seppo Hipster",
+	"url": "https://www.hipsterinelamaa.fi/",
+	"likes": 400}
+
+
+
+
