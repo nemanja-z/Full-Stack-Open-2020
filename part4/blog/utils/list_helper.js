@@ -1,3 +1,4 @@
+
 const dummy = (blogs) => {
     return 1
 }
@@ -21,21 +22,43 @@ const favoriteBlog = blog => {
     }
 }
 const mostBlogs = blog => {
+
     if (blog.length === 0) {
         return null;
     }
-    else {
-        const res = blog.reduce((sum, item) => {
-            sum[item.author] = (sum[item.author] || 0) + 1;
-            return sum, 0
-        })
-    } return res
+
+    const proba = Object.values(blog).reduce((r, k, v) => {
+        r[k.author] = (r[k.author] || 0) + 1
+        return r
+    }, {});
+    const pro = Object.entries(proba).sort((c, u) => c > u)
+    return {
+        author: pro[0][0],
+        blogs: pro[0][1]
+    }
+
 }
+
+const mostLikes = blog => {
+
+    if (blog.length === 0) {
+        return null
+    }
+    const max = Math.max(...blog.map(b => b.likes))
+    const maxAuthor = blog.find(b => b.likes === max)
+    return {
+        author: maxAuthor.author,
+        likes: maxAuthor.likes
+    }
+}
+
+
 
 
 module.exports = {
     dummy,
     total,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }
