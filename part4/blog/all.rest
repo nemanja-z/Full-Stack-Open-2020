@@ -1,10 +1,11 @@
-POST http://localhost:3003/
+PUT http://localhost:3003/api/blogs/5ea59e620af81b2ddc3c6bd0
 Content-Type: application/json
 
-{"title": "Lifestyleblogi",
-	"author": "Seppo Hipster",
-	"url": "https://www.hipsterinelamaa.fi/",
-	"likes": 400}
+{"likes":505}
+
+
+
+
 
 
 
