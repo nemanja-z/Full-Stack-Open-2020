@@ -7,45 +7,36 @@ blogRouter.get('/', async (req, res) => {
     res.json(blogs.map(blog => blog.toJSON()))
 
 })
-blogRouter.get('/:id', (req, res, next) => {
-    Blog.findById(req.params.id)
-        .then(blog => {
-            if (blog) {
-                res.json(blog.toJSON())
-            } else {
-                res.status(404).end()
-            }
-        })
-        .catch(error => next(error))
-})
-
-
-
-blogRouter.delete('/:id', (req, res, next) => {
-    Blog.findByIdAndRemove(req.params.id)
-        .then(() => {
-            res.status(204).end()
-        })
-        .catch(error => next(error))
-})
-
-blogRouter.put('/:id', (req, res, next) => {
-    const body = req.body
-
-    const blog = {
-        content: body.content
+blogRouter.get('/:id', async (req, res) => {
+    const blog = await Blog.findById(req.params.id)
+    if (blog) {
+        res.json(blog.toJSON())
+    } else {
+        res.status(404).end()
     }
+})
 
-    Blog.findByIdAndUpdate(req.params.id, blog, { new: true })
-        .then(updatedBlog => {
-            res.json(updatedBlog.toJSON())
-        })
-        .catch(error => next(error))
+
+blogRouter.delete('/:id', async (req, res, next) => {
+    const blog = await Blog.findByIdAndRemove(req.params.id)
+    res.status(204).end()
+})
+
+blogRouter.put('/:id', async (req, res, next) => {
+    const body = req.body
+    const blog = { likes: body.likes }
+    const updatedLikes = await Blog.findByIdAndUpdate(req.params.id, blog, { new: true })
+    res.status(200).json(updatedLikes)
 })
 
 
 blogRouter.post('/', (req, res) => {
     const body = req.body;
+    if (!body.title || !body.url) {
+        return res.status(400).json({
+            error: 'missing title or url'
+        })
+    }
     const blog = new Blog({
 
         title: body.title,
