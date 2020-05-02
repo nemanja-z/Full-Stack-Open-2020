@@ -5,20 +5,19 @@ import loginService from './services/login'
 
 const App = () => {
   const [blog, setBlogs] = useState({})
-  const [newBlog, setNewBlog] = useState({ title: '', author: '' })
+  const [newTitle, setNewTitle] = useState('')
+  const [newUrl, setNewUrl] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState(null)
   const [user, setUser] = useState(null)
   const [loggedIn, setLoggedIn] = useState(false)
 
 
 
   useEffect(() => {
-    blogService.getAll().then(blogs => {
-      setBlogs(blogs)
-      console.log(blogs)
-    }
+    blogService.getAll().then(blogs => setBlogs(blogs)
     )
   }, [])
   useEffect(() => {
@@ -28,20 +27,25 @@ const App = () => {
       setUser(user)
       blogService.setToken(user.token)
     }
+
+    if (loggedIn) {
+      setMessage('successful login')
+      setTimeout(() =>
+        setMessage(null), 5000)
+    }
     if (!loggedIn) {
       window.localStorage.removeItem('loggedUser')
       setUser(null)
     }
-  }, [loggedIn])
 
+  }, [loggedIn])
+  console.log(message)
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
       const user = await loginService.login({
         username, password
       })
-      setLoggedIn(loggedIn)
-      console.log(user)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setLoggedIn(true)
@@ -49,31 +53,62 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setMessage('wrong credentials')
       setTimeout(() => {
-        setErrorMessage(null)
-      },
-        5000)
+        setMessage(null)
+      }, 5000)
     }
   }
-  const handleBlogChange = e => {
-    setNewBlog({
-      title: e.target.value,
-      author: e.target.value
-    })
+
+
+
+  const handleTitleChange = e => {
+    e.preventDefault()
+    setNewTitle(e.target.value)
+  }
+  const handleAuthorChange = e => {
+    e.preventDefault()
+    setNewAuthor(e.target.value)
+  }
+
+  const handleUrlChange = e => {
+    e.preventDefault()
+    setNewUrl(e.target.value)
   }
   const addBlog = (e) => {
     e.preventDefault()
+    const newBlog = {
+      title: newTitle,
+      author: newAuthor,
+      url: newUrl
+    }
+
+    blogService.create(newBlog)
+      .then(response => {
+        setBlogs(blog.concat(response))
+        setNewTitle('')
+        setNewAuthor('')
+        setNewUrl('')
+      })
+    setMessage(`A new blog by ${user.name} is added`)
+    setTimeout(() => {
+      setMessage(null)
+    },
+      5000)
   }
   const blogForm = () => (
     <form onSubmit={addBlog}>
       title:<input
-        value={newBlog.title}
-        onChange={handleBlogChange}
+        value={newTitle}
+        onChange={handleTitleChange}
       />
       author:<input
-        value={newBlog.author}
-        onChange={handleBlogChange}
+        value={newAuthor}
+        onChange={handleAuthorChange}
+      />
+      url:<input
+        value={newUrl}
+        onChange={handleUrlChange}
       />
       <button type="submit">save</button>
     </form>
@@ -101,19 +136,12 @@ const App = () => {
       <button type="submit">login</button>
     </form>
   )
-  /*const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <input
-        value={newBlog}
-        onChange={handleBlogChange}
-      />
-      <button type="submit">save</button>
-    </form>
-  )*/
+
   if (user === null) {
     return (
       <div>
         <h2>Login to application</h2>
+        {message === null ? null : <h3>{message}</h3>}
         {loginForm()}
       </div>
     )
@@ -122,6 +150,8 @@ const App = () => {
   return (
     <div>
       <h2>Blogs</h2>
+
+      {message === null ? null : <h2>{message}</h2>}
       <button onClick={() => setLoggedIn(!loggedIn)}>{loggedIn ? 'logout' : 'login'}</button>
       <h3>{user.name}</h3>
       <div>
@@ -133,11 +163,6 @@ const App = () => {
   )
 }
 
-/* {user === null ?
-      loginForm() :
-      <div>
-        <p>{user.name} logged in</p>
-        {blogForm()}
-      </div>*/
+
 
 export default App
