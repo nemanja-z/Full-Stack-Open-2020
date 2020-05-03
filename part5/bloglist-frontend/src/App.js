@@ -7,8 +7,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
-  const [blog, setBlogs] = useState({})
-
+  const [blog, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState(null)
@@ -59,8 +58,19 @@ const App = () => {
       }, 5000)
     }
   }
-
-
+  const removeBlog = async (blog) => {
+    if (window.confirm(`Do you really want to delete ${blog.title}`)) {
+      try {
+        blogService.remove(blog.id)
+        setBlogs(await blogService.getAll())
+        setMessage(`${blog.title} has been removed`)
+      } catch (exception) {
+        setMessage(exception)
+      }
+    }
+  }
+  const sortedBlogs = blog.sort((a, b) => a.likes < b.likes)
+  console.log(sortedBlogs)
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
     blogService.create(blogObject)
@@ -107,10 +117,9 @@ const App = () => {
       {message === null ? null : <h2>{message}</h2>}
       <button onClick={() => setLoggedIn(!loggedIn)}>{loggedIn ? 'logout' : 'login'}</button>
       <h3>{user.name}</h3>
-      <div>
-        {blog.map(b =>
-          <Blog key={b.id} blog={b} />)}
-      </div>
+      {sortedBlogs.map((blog) =>
+        <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />
+      ).sort((a, b) => a.likes > b.likes)}
       {blogForm()}
     </div>
   )
