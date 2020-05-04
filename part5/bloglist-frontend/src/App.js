@@ -17,9 +17,13 @@ const App = () => {
 
 
   useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(blogs)
-    )
+    const getBlogs = async () => {
+      const blogs = await blogService.getAll()
+      setBlogs(blogs)
+    }
+    getBlogs()
   }, [])
+  console.log(JSON.stringify(blog.user))
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
@@ -28,17 +32,8 @@ const App = () => {
       blogService.setToken(user.token)
     }
 
-    if (loggedIn) {
-      setMessage('successful login')
-      setTimeout(() =>
-        setMessage(null), 5000)
-    }
-    if (!loggedIn) {
-      window.localStorage.removeItem('loggedUser')
-      setUser(null)
-    }
 
-  }, [loggedIn])
+  }, [])
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -48,6 +43,9 @@ const App = () => {
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setLoggedIn(true)
+      setMessage('successful login')
+      setTimeout(() =>
+        setMessage(null), 5000)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -69,19 +67,21 @@ const App = () => {
       }
     }
   }
+  const loggedOut = () => {
+    setLoggedIn(!loggedIn)
+    window.localStorage.removeItem('loggedUser')
+    setUser(null)
+  }
   const sortedBlogs = blog.sort((a, b) => a.likes < b.likes)
-  console.log(sortedBlogs)
-  const addBlog = (blogObject) => {
+  const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
-    blogService.create(blogObject)
-      .then(response => {
-        setBlogs(blog.concat(response))
-      })
+    const result = await blogService.create(blogObject)
+    setBlogs(blog.concat(result))
     setMessage(`A new blog by ${user.name} is added`)
     setTimeout(() => {
       setMessage(null)
     },
-      5000)
+    5000)
   }
   const blogForm = () => (
     <Togglable buttonLabel='new blog' ref={blogFormRef}>
@@ -115,7 +115,7 @@ const App = () => {
       <h2>Blogs</h2>
 
       {message === null ? null : <h2>{message}</h2>}
-      <button onClick={() => setLoggedIn(!loggedIn)}>{loggedIn ? 'logout' : 'login'}</button>
+      <button onClick={loggedOut}>logout</button>
       <h3>{user.name}</h3>
       {sortedBlogs.map((blog) =>
         <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />

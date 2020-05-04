@@ -12,18 +12,16 @@ const Blog = ({ user, blog, removeBlog }) => {
         <div>
           <button type="button" onClick={() => removeBlog(blog)}>Delete</button>
         </div>
-      );
+      )
     }
 
-    return null;
-  };
-
+    return null
+  }
   const updateLikes = async (blog) => {
     blog.likes = blog.likes + 1
     const result = await blogService.update(blog)
     setLikes(result.likes)
   }
-  console.log(likes)
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -31,18 +29,16 @@ const Blog = ({ user, blog, removeBlog }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-  const toggleShow = () => {
-    setShowAll(!showAll)
-  }
+
+
   if (showAll) {
     return (
       <div style={blogStyle}>
-
-        <button onClick={toggleShow}>show less</button>
-        <div>
-          <p>{blog.title} by {user.name}</p>
+        <button onClick={() => setShowAll(!showAll)} className='toggle'>show less</button>
+        <div className='blogs'>
+          <p>{blog.title}</p>
         </div>
-        <div>
+        <div className='blogs'>
           <p>{blog.author}</p>
         </div>
         <div>
@@ -57,9 +53,9 @@ const Blog = ({ user, blog, removeBlog }) => {
   }
 
   return (
-    <div style={blogStyle}>
-      <p>{blog.title} by {user.name}</p>
-      <button onClick={toggleShow}>show more</button>
+    <div style={blogStyle} className='blog'>
+      <p>`${blog.title} ${blog.author}`</p>
+      <button onClick={() => setShowAll(!showAll)}>show more</button>
     </div>)
 }
 export default Blog
