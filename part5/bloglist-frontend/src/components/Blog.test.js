@@ -7,28 +7,27 @@ test('render content', () => {
   const blog = {
     title: 'Que te llamas',
     author: 'Horhe',
-    url: 'affffffffff',
-    likes: 50
+    url: 'rumbadebarcelona.com',
+    likes: 54
   }
   const component = render(
     <Blog blog={blog} />
   )
   expect(component.container).toHaveTextContent('Que te llamas')
 })
-test('render likes and url on click', () => {
+test('render url and likes', () => {
   const blog = {
     title: 'Que te llamas',
     author: 'Horhe',
-    url: 'affffffffff',
-    likes: 50
+    url: 'rumbadebarcelona.com',
+    likes: 54
   }
   const mockHandler = jest.fn()
   const component = render(
-    <Blog blogs={blog} toggle={mockHandler} />
+    <Blog blog={blog} toggleShow={mockHandler} />
   )
-  const button = component.getByText('show less')
+  const button = component.getByText('show more')
   fireEvent.click(button)
-
-  const div = component.container.querySelector('.blogs')
-  expect(div).toHaveTextContent('affffffffff')
+  const div = component.container.querySelector('.more')
+  expect(div).toBeDefined()
 })

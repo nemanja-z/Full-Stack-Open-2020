@@ -30,32 +30,32 @@ const Blog = ({ user, blog, removeBlog }) => {
     marginBottom: 5
   }
 
-
+  const toggleShow = () => setShowAll(!showAll)
   if (showAll) {
-    return (
-      <div style={blogStyle}>
-        <button onClick={() => setShowAll(!showAll)} className='toggle'>show less</button>
-        <div className='blogs'>
-          <p>{blog.title}</p>
-        </div>
-        <div className='blogs'>
-          <p>{blog.author}</p>
-        </div>
-        <div>
-          <p>{blog.url}</p>
-        </div>
-        <div style={{ display: 'flex' }}>
-          <p>{likes}</p>
-          <button onClick={() => updateLikes(blog)}>like</button>
-        </div>
-        {showDelete}
-      </div>)
+
+    <div className='blog' style={blogStyle}>
+      <button onClick={toggleShow}>show less</button>
+      <div>
+        <p>{blog.title}</p>
+      </div>
+      <div>
+        <p>{blog.author}</p>
+      </div>
+      <div className='more'>
+        <p>{blog.url}</p>
+      </div>
+      <div style={{ display: 'flex' }} className='more'>
+        <p>{likes}</p>
+        <button onClick={() => updateLikes(blog)}>like</button>
+      </div>
+      {showDelete}
+    </div>
   }
 
   return (
-    <div style={blogStyle} className='blog'>
+    <div className='blog' style={blogStyle}>
       <p>`${blog.title} ${blog.author}`</p>
-      <button onClick={() => setShowAll(!showAll)}>show more</button>
+      <button onClick={toggleShow}>show more</button>
     </div>)
 }
 export default Blog
