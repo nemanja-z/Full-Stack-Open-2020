@@ -1,22 +1,12 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ user, blog, removeBlog }) => {
+const Blog = ({ blog }) => {
   const [showAll, setShowAll] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
 
 
-  const showDelete = () => {
-    if (blog.user.id.toString() === user.id.toString()) {
-      return (
-        <div>
-          <button type="button" onClick={() => removeBlog(blog)}>Delete</button>
-        </div>
-      )
-    }
 
-    return null
-  }
   const updateLikes = async (blog) => {
     blog.likes = blog.likes + 1
     const result = await blogService.update(blog)
@@ -32,24 +22,24 @@ const Blog = ({ user, blog, removeBlog }) => {
 
   const toggleShow = () => setShowAll(!showAll)
   if (showAll) {
+    return (
+      <div className='blog' style={blogStyle}>
+        <button onClick={toggleShow}>show less</button>
+        <div>
+          <p>{blog.title}</p>
+        </div>
+        <div>
+          <p>{blog.author}</p>
+        </div>
+        <div className='more'>
+          <p>{blog.url}</p>
+        </div>
+        <div style={{ display: 'flex' }} className='more'>
+          <p>{likes}</p>
+          <button onClick={() => updateLikes(blog)}>like</button>
+        </div>
 
-    <div className='blog' style={blogStyle}>
-      <button onClick={toggleShow}>show less</button>
-      <div>
-        <p>{blog.title}</p>
-      </div>
-      <div>
-        <p>{blog.author}</p>
-      </div>
-      <div className='more'>
-        <p>{blog.url}</p>
-      </div>
-      <div style={{ display: 'flex' }} className='more'>
-        <p>{likes}</p>
-        <button onClick={() => updateLikes(blog)}>like</button>
-      </div>
-      {showDelete}
-    </div>
+      </div>)
   }
 
   return (
