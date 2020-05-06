@@ -82,7 +82,7 @@ const App = () => {
     setTimeout(() => {
       setMessage(null)
     },
-      5000)
+    5000)
   }
   const blogForm = () => (
     <Togglable buttonLabel='new blog' ref={blogFormRef}>

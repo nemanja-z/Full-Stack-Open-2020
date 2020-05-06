@@ -31,16 +31,19 @@ const BlogForm = ({ createBlog }) => {
     setNewUrl('')
   }
   return (
-    <form onSubmit={addBlog}>
-            title:<input
+    <form id='form' onSubmit={addBlog}>
+      title:<input
+        id='title'
         value={newTitle}
         onChange={handleTitleChange}
       />
           author:<input
+        id='author'
         value={newAuthor}
         onChange={handleAuthorChange}
       />
           url:<input
+        id='url'
         value={newUrl}
         onChange={handleUrlChange}
       />
