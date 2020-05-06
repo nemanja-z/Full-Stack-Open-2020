@@ -56,6 +56,7 @@ const App = () => {
       }, 5000)
     }
   }
+
   const removeBlog = async (blog) => {
     if (window.confirm(`Do you really want to delete ${blog.title}`)) {
       try {
@@ -81,7 +82,7 @@ const App = () => {
     setTimeout(() => {
       setMessage(null)
     },
-    5000)
+      5000)
   }
   const blogForm = () => (
     <Togglable buttonLabel='new blog' ref={blogFormRef}>
@@ -118,7 +119,7 @@ const App = () => {
       <button onClick={loggedOut}>logout</button>
       <h3>{user.name}</h3>
       {sortedBlogs.map((blog) =>
-        <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />
+        <Blog key={blog.id} blog={blog} />
       ).sort((a, b) => a.likes > b.likes)}
       {blogForm()}
     </div>

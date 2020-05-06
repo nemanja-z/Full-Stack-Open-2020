@@ -22,7 +22,6 @@ test('render url and likes', () => {
     url: 'rumbadebarcelona.com',
     likes: 54
   }
-
   const component = render(
     <Blog blog={blog} />
   )
@@ -32,23 +31,4 @@ test('render url and likes', () => {
   expect(
     component.container.querySelector('.more')
   ).toBeDefined()
-})
-test('click twice like button', () => {
-  const blog = {
-    title: 'Que te llamas',
-    author: 'Horhe',
-    url: 'rumbadebarcelona.com',
-    likes: 54
-  }
-
-  const component = render(
-    <Blog blog={blog} />
-  )
-
-  const button = component.getByText('show more')
-  fireEvent.click(button)
-  const button1 = component.getByText('like')
-  fireEvent.click(button1)
-  fireEvent.click(button1)
-  component.debug()
 })
