@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, user, removeBlog }) => {
   const [showAll, setShowAll] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
 
@@ -12,13 +12,19 @@ const Blog = ({ blog }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-
+  console.log(blog)
   const updateLikes = async (blog) => {
     blog.likes = blog.likes + 1
     const result = await blogService.update(blog)
     setLikes(result.likes)
   }
 
+  const showRemove = () => {
+    if (blog.user.name === user.name) {
+      return <button onClick={() => removeBlog(blog)}>Delete</button>
+
+    }
+  }
   const toggleShow = () => setShowAll(!showAll)
   if (showAll) {
     return (
@@ -37,7 +43,7 @@ const Blog = ({ blog }) => {
           <p data-testid='likes'>{likes}</p>
           <button onClick={() => updateLikes(blog)} className='like-update'>like</button>
         </div>
-
+        {showRemove()}
       </div>)
   }
 
@@ -47,4 +53,5 @@ const Blog = ({ blog }) => {
       <button onClick={toggleShow}>show more</button>
     </div>)
 }
+
 export default Blog

@@ -18,13 +18,9 @@ const App = () => {
 
 
   useEffect(() => {
-    const getBlogs = async () => {
-      const blogs = await blogService.getAll()
-      setBlogs(blogs)
-    }
-    getBlogs()
+    blogService.getAll().then(response => { setBlogs(response) })
+
   }, [])
-  console.log(JSON.stringify(blog.user))
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
@@ -58,17 +54,8 @@ const App = () => {
     }
   }
 
-  const removeBlog = async (blog) => {
-    if (window.confirm(`Do you really want to delete ${blog.title}`)) {
-      try {
-        blogService.remove(blog.id)
-        setBlogs(await blogService.getAll())
-        setMessage(`${blog.title} has been removed`)
-      } catch (exception) {
-        setMessage(exception)
-      }
-    }
-  }
+
+
   const loggedOut = () => {
     setLoggedIn(!loggedIn)
     window.localStorage.removeItem('loggedUser')
@@ -101,6 +88,18 @@ const App = () => {
       handleSubmit={handleLogin}
     />
   )
+  const removeBlog = async (blog) => {
+    const { id } = blog
+    if (window.confirm(`Do you really want to delete ${blog.title}`)) {
+      try {
+        blogService.remove(id)
+        setBlogs(await blogService.getAll())
+        setMessage(`${blog.title} has been removed`)
+      } catch (exception) {
+        console.log(exception)
+      }
+    }
+  }
 
   if (user === null) {
     return (
@@ -120,7 +119,7 @@ const App = () => {
       <button onClick={loggedOut}>logout</button>
       <h3>{user.name}</h3>
       {sortedBlogs.map((blog) =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />
       ).sort((a, b) => a.likes > b.likes)}
       {blogForm()}
     </div>
