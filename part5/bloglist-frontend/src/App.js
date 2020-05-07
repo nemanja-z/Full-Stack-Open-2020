@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -82,7 +83,7 @@ const App = () => {
     setTimeout(() => {
       setMessage(null)
     },
-    5000)
+      5000)
   }
   const blogForm = () => (
     <Togglable buttonLabel='new blog' ref={blogFormRef}>
@@ -105,7 +106,7 @@ const App = () => {
     return (
       <div>
         <h2>Login to application</h2>
-        {message === null ? null : <h3>{message}</h3>}
+        <Notification message={message} />
         {loginForm()}
       </div>
     )
@@ -115,7 +116,7 @@ const App = () => {
     <div>
       <h2>Blogs</h2>
 
-      {message === null ? null : <h2>{message}</h2>}
+      <Notification message={message} />
       <button onClick={loggedOut}>logout</button>
       <h3>{user.name}</h3>
       {sortedBlogs.map((blog) =>
