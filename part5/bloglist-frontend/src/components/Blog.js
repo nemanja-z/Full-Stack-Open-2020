@@ -12,7 +12,6 @@ const Blog = ({ blog, user, removeBlog }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-  console.log(blog)
   const updateLikes = async (blog) => {
     blog.likes = blog.likes + 1
     const result = await blogService.update(blog)

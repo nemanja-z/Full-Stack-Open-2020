@@ -27,17 +27,13 @@ blogsRouter.get('/:id', async (req, res) => {
 
 blogsRouter.delete('/:id', async (req, res) => {
     const decodedToken = jwt.verify(req.token, process.env.SECRET)
-    if (!req.token || decodedToken.id.toString() !== blog.userId.toString()) {
+    const blog = await Blog.findById(req.params.id)
+    const user = await User.findById(decodedToken.id);
+    if (!req.token || user._id.toString() !== blog.user.toString()) {
         res.status(401).json({ "error": "you are not authorized to delete" })
     }
-    const blog = await Blog.findById(request.params.id)
-    const user = await User.findById(decodedToken.id);
-    if (blog.user.toString() === user.id.toString()) {
-        await Blog.findByIdAndDelete(request.params.id)
-        return response.status(204).end()
-    } else {
-        response.status(401).json({ error: 'user unauthorized' })
-    }
+    await Blog.findByIdAndDelete(req.params.id)
+    res.status(204).end()
 
 
 })

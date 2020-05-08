@@ -81,42 +81,42 @@ describe('GET /blogs', () => {
     })
 
 
-    /*  describe('deletion of a blog', () => {
-          test('succeeds with status code 204 if id is valid', async () => {
-              const blogsAtStart = await helper.blogsInDb()
-              const blogToDelete = blogsAtStart[0]
-  
-              await api
-                  .delete(`/api/blogs/${blogToDelete.id}`)
-                  .expect(204)
-  
-              const blogsAtEnd = await helper.blogsInDb()
-  
-              expect(blogsAtEnd).toHaveLength(
-                  helper.initialBlogs.length - 1
-              )
-  
-              const title = blogsAtEnd.map(r => r.title)
-  
-              expect(title).not.toContain(blogToDelete.title)
-          })
-      })*/
-    test('blog without url or title is not added', async () => {
-        const newBlog = {
-            author: "Robert C. Martin",
-            url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-            likes: 10
-        }
 
-        await api
-            .post('/api/blogs')
-            .set('Authorization', `bearer ${token}`)
-            .send(newBlog)
-            .expect(400)
-            .expect('Content-Type', /application\/json/)
-
-    })
+    /* test('succeeds with status code 204 if id is valid', async () => {
+         c
+ 
+         await api
+             .delete(`/api/blogs/${blogToDelete._id}`)
+             .set('Authorization', `bearer ${token}`)
+             .expect(204)
+ 
+         const blogsAtEnd = await helper.blogsInDb()
+ 
+         expect(blogsAtEnd).toHaveLength(
+             helper.initialBlogs.length - 1
+         )
+ 
+         const title = blogsAtEnd.map(r => r.title)
+ 
+         expect(title).not.toContain(blogToDelete.title)
+     })*/
 })
+test('blog without url or title is not added', async () => {
+    const newBlog = {
+        author: "Robert C. Martin",
+        url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+        likes: 10
+    }
+
+    await api
+        .post('/api/blogs')
+        .set('Authorization', `bearer ${token}`)
+        .send(newBlog)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+
+})
+
 
 
 
