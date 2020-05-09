@@ -34,7 +34,11 @@ describe('Blog app', function () {
       cy.get('#username').type('proba')
       cy.get('#password').type('tri')
       cy.get('#login-button').click()
-
+      cy.contains('new blog').click()
+      cy.get('#title').type('this')
+      cy.get('#author').type('is')
+      cy.get('#url').type('confusing.com')
+      cy.contains('save').click()
     })
 
     it('A blog can be created', function () {
@@ -64,12 +68,11 @@ describe('Blog app', function () {
       cy.get('#url').type('confusing.com')
       cy.contains('save').click()
       cy.contains('show more').click()
-      cy.contains('like').click()
-      cy.contains('like').click()
-      cy.contains('like').click()
-      cy.contains('like').click()
-      cy.contains('4')
       cy.contains('delete').click()
+      cy.get('this').should('not.exist')
+    })
+    it('Blogs are sorted by number of likes', function () {
+      cy.get('.blog').then(($blog) => { })
     })
   })
 })

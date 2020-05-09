@@ -19,12 +19,10 @@ const Blog = ({ blog, user, removeBlog }) => {
   }
   const showRemove = () => {
     if (blog.user.name === user.name) {
-      return <button onClick={() => removeBlog(blog)}>Delete</button>
+      return <button onClick={() => removeBlog(blog)}>delete</button>
 
     }
   }
-  console.log(blog, user)
-
   const toggleShow = () => setShowAll(!showAll)
   if (showAll) {
     return (
