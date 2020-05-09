@@ -8,27 +8,25 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
 const testUser = {
-    name: 'Test User',
-    username: 'user1',
-    password: 'password',
+    name: 'pro',
+    username: 'blema',
+    password: 'nema',
 }
 beforeEach(async () => {
     await Blog.deleteMany({})
     await User.deleteMany({})
-    const blogObjects = helper.initialBlogs
-        .map(blog => new Blog(blog))
-    const promiseArray = blogObjects.map(blog => blog.save())
-    await Promise.all(promiseArray)
     const newUser = await api.post('/api/users').send(testUser)
 
-    const creds = {
+    const credentials = {
         username: testUser.username,
         password: testUser.password,
     }
 
-    const login = await api.post('/api/login').send(creds)
+    const login = await api.post('/api/login').send(credentials)
     token = login.body.token
-
+    const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
+    const promiseArray = blogObjects.map(blog => blog.save())
+    await Promise.all(promiseArray)
 
 })
 describe('GET /blogs', () => {

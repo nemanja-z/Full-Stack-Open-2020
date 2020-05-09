@@ -72,6 +72,7 @@ const App = () => {
     },
       5000)
   }
+
   const blogForm = () => (
     <Togglable buttonLabel='new blog' ref={blogFormRef}>
       <BlogForm

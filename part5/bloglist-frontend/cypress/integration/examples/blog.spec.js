@@ -1,14 +1,15 @@
 describe('Blog app', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
-    const user = { name: 'proba', username: 'proba', password: 'tri' }
-    cy.request('POST', 'http://localhost:3003/api/users/', user)
+    const user = { username: 'proba', password: 'tri' }
+    cy.request('POST', 'http://localhost:3003/api/users', user)
     cy.visit('http://localhost:3000')
   })
-  it('Login from is shown', function () {
+
+  it('Login from is shown', () => {
     cy.contains('Login to application')
-    cy.contains('login').click()
   })
+
   describe('Login', function () {
     it('login fails with wrong password', function () {
       cy.get('#username').type('who')
@@ -23,34 +24,52 @@ describe('Blog app', function () {
       cy.get('#login-button').click()
 
       cy.get('.message').contains('successful login')
+      cy.contains('Blogs')
+      cy.contains('logout').click()
     })
   })
-  describe.only('When logged in', function () {
+
+  describe('When logged in', function () {
     beforeEach(function () {
       cy.get('#username').type('proba')
       cy.get('#password').type('tri')
       cy.get('#login-button').click()
 
-      cy.get('.message').contains('successful login')
     })
 
     it('A blog can be created', function () {
       cy.contains('new blog').click()
-      cy.get('#title').type('Karmen')
-      cy.get('#author').type('moja kompjuterska')
-      cy.get('#url').type('zena.com')
+      cy.get('#title').type('this')
+      cy.get('#author').type('is')
+      cy.get('#url').type('confusing.com')
       cy.contains('save').click()
+      cy.contains('show more').click()
     })
-    it('A blog can be created', function () {
+    it('A blog can be liked', function () {
       cy.contains('new blog').click()
-      cy.get('#title').type('Karmen')
-      cy.get('#author').type('moja kompjuterska')
-      cy.get('#url').type('zena.com')
+      cy.get('#title').type('this')
+      cy.get('#author').type('is')
+      cy.get('#url').type('confusing.com')
       cy.contains('save').click()
       cy.contains('show more').click()
       cy.contains('like').click()
+      cy.contains('like').click()
+      cy.contains('like').click()
+      cy.contains('like').click()
+    })
+    it('A blog can be deleted', function () {
+      cy.contains('new blog').click()
+      cy.get('#title').type('this')
+      cy.get('#author').type('is')
+      cy.get('#url').type('confusing.com')
+      cy.contains('save').click()
+      cy.contains('show more').click()
+      cy.contains('like').click()
+      cy.contains('like').click()
+      cy.contains('like').click()
+      cy.contains('like').click()
+      cy.contains('4')
+      cy.contains('delete').click()
     })
   })
 })
-
-

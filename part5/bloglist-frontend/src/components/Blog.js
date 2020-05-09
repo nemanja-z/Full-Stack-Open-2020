@@ -17,13 +17,14 @@ const Blog = ({ blog, user, removeBlog }) => {
     const result = await blogService.update(blog)
     setLikes(result.likes)
   }
-
   const showRemove = () => {
     if (blog.user.name === user.name) {
       return <button onClick={() => removeBlog(blog)}>Delete</button>
 
     }
   }
+  console.log(blog, user)
+
   const toggleShow = () => setShowAll(!showAll)
   if (showAll) {
     return (
