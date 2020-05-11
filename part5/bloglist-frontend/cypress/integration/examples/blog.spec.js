@@ -31,14 +31,7 @@ describe('Blog app', function () {
 
   describe('When logged in', function () {
     beforeEach(function () {
-      cy.get('#username').type('proba')
-      cy.get('#password').type('tri')
-      cy.get('#login-button').click()
-      cy.contains('new blog').click()
-      cy.get('#title').type('this')
-      cy.get('#author').type('is')
-      cy.get('#url').type('confusing.com')
-      cy.contains('save').click()
+      cy.login({ username: 'proba', password: 'tri' })
     })
 
     it('A blog can be created', function () {
@@ -71,8 +64,58 @@ describe('Blog app', function () {
       cy.contains('delete').click()
       cy.get('this').should('not.exist')
     })
-    it('Blogs are sorted by number of likes', function () {
-      cy.get('.blog').then(($blog) => { })
+    describe('Sort blogs by likes number', function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: 'this',
+          author: 'is',
+          url: 'confusing',
+          likes: 43
+        })
+        cy.createBlog({
+          title: 'this',
+          author: 'is',
+          url: 'confusing...not',
+          likes: 100
+        })
+        cy.createBlog({
+          title: 'this',
+          author: 'is',
+          url: 'not confusing',
+          likes: 75
+        })
+      })
+      it.only('Sort blogs', function () {
+
+        /*  cy.get('.blog').then((blog) => {
+          for (let i = 0; i < blog.length; i++) {
+            cy.contains('show more').click()
+            cy.get('[data-testid= "likes"]')
+          }*/
+        /*   let likes = []
+           cy.get('.blog').each(() => {
+             cy.contains('show more').click()
+             cy.get('[data-testid= "likes"]')
+           }).then((like) => {
+             like.map(l => likes.push(l))
+             console.log(likes)
+           })*/
+        cy.get('.blog').each(() => {
+          cy.contains('show more').click()
+        }).then(() => {
+          cy.get('[data-testid= "likes"]').should((like) => {
+            expect(like).to.have.length(3)
+            expect(like.first()).to.contain('100')
+            expect(like.last()).to.contain('43')
+          })
+        })
+      })
     })
+
+
+
+
   })
 })
+
+
