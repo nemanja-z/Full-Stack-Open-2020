@@ -11,6 +11,8 @@ const Notification = () => {
     padding: 10,
     borderWidth: 1
   }
+  // if (!message) return null
+
   console.log('message is:', message)
   return (
     <div style={style}>
@@ -18,5 +20,4 @@ const Notification = () => {
     </div>
   )
 }
-//   {message.map((m, i) => <p key={i}>{m}</p>)}
 export default Notification

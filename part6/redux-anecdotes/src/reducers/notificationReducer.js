@@ -4,7 +4,9 @@ const initialState = ''
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case 'MESSAGE':
-            return action.message
+            return [...state, action.message]
+        case 'CLEAR':
+            return initialState
         default:
             return state;
     }
@@ -13,18 +15,18 @@ const reducer = (state = initialState, action) => {
 export const voteNotification = (content) => {
     return {
         type: 'MESSAGE',
-        message: `You have voted for ${content}`
+        message: `You have voted for: ${content}`
     }
 }
-export const newNotification = (anecdote) => {
+export const newNotification = (content) => {
     return {
         type: 'MESSAGE',
-        message: `You have created ${anecdote}`
+        message: `You have created ${content}`
     }
 }
 export const clearNotification = () => {
     return {
-        type: 'MESSAGE',
+        type: 'CLEAR',
         message: null
     }
 }
