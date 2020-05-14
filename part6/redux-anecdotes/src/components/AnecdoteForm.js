@@ -6,13 +6,13 @@ import { useDispatch } from 'react-redux'
 const AnecdoteForm = () => {
 
     const dispatch = useDispatch()
-    const addAnecdote = (e) => {
+    const addAnecdote = async (e) => {
         e.preventDefault()
         const content = e.target.anecdote.value
         e.target.anecdote.value = ''
         dispatch(newAnecdote(content))
-        dispatch(newNotification(content))
-        setTimeout(() => dispatch(clearNotification()), 5000)
+        // dispatch(newNotification(content))
+        //setTimeout(() => dispatch(clearNotification()), 5000)
 
     }
     return (

@@ -12,10 +12,13 @@ const reducer = (state = initialState, action) => {
     }
 }
 
-export const voteNotification = (content) => {
-    return {
-        type: 'MESSAGE',
-        message: `You have voted for: ${content}`
+export const voteNotification = (content, time) => {
+    return async dispatch => {
+        dispatch({
+            type: 'MESSAGE',
+            message: `You have voted for: ${content}`
+        })
+        setTimeout(() => dispatch(clearNotification()), time * 1000)
     }
 }
 export const newNotification = (content) => {
