@@ -33,7 +33,12 @@
     {
       "content": "Posao",
       "id": "70362",
-      "votes": 18
+      "votes": 20
+    },
+    {
+      "content": "Stara majka",
+      "id": "12020",
+      "votes": 0
     }
   ]
 }

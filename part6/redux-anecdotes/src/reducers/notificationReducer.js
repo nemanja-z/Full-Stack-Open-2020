@@ -21,10 +21,13 @@ export const voteNotification = (content, time) => {
         setTimeout(() => dispatch(clearNotification()), time * 1000)
     }
 }
-export const newNotification = (content) => {
-    return {
-        type: 'MESSAGE',
-        message: `You have created ${content}`
+export const newNotification = (content, time) => {
+    return async dispatch => {
+        dispatch({
+            type: 'MESSAGE',
+            message: `You have created ${content}`
+        })
+        setTimeout(() => dispatch(clearNotification()), time * 1000)
     }
 }
 export const clearNotification = () => {
