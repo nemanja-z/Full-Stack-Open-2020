@@ -41,7 +41,7 @@ const Blog = ({ blog, user, removeBlog }) => {
           <p>{blog.url}</p>
         </div>
         <div style={{ display: 'flex' }} className='more'>
-          <p data-testid='likes'>{blog.likes}</p>
+          <p data-testid='likes'>{likes}</p>
           <button onClick={() => updateLikes(blog)} className='like-update'>like</button>
         </div>
         {showRemove()}

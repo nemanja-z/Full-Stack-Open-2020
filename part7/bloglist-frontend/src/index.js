@@ -5,11 +5,11 @@ import { Provider } from 'react-redux'
 import store from './store'
 
 store.subscribe(() => {
-    const storeNow = store.getState()
-    console.log(storeNow)
+  const storeNow = store.getState()
+  console.log(storeNow)
 })
 ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
-    document.getElementById('root'))
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root'))
