@@ -24,4 +24,4 @@ const update = async (data) => {
   return response.data
 }
 
-export default { getAll, create, update, setToken, remove }
+export default { getAll, create, update, remove }

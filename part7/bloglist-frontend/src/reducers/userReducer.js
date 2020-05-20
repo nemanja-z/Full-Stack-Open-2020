@@ -1,5 +1,4 @@
 import loginService from '../services/login'
-import blogService from '../services/blogs'
 import { newMessage } from './messageReducer'
 
 const reducer = (state = [], action) => {

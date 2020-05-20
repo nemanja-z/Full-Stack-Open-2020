@@ -2,25 +2,25 @@ import blogService from '../services/blogs'
 
 const reducer = (state = [], action) => {
   switch (action.type) {
-  case 'INIT':
-    return action.data
-  case 'NEW':
-    return state.concat(action.data)
-  case 'VOTE': {
-    const { id } = action.data
-    const updated = state.find(s => s.id === id)
-    const changed = {
-      ...updated,
-      votes: updated.votes + 1
+    case 'INIT':
+      return action.data
+    case 'NEW':
+      return state.concat(action.data)
+    case 'VOTE': {
+      const { id } = action.data
+      const updated = state.find(s => s.id === id)
+      const changed = {
+        ...updated,
+        votes: updated.votes + 1
+      }
+      return state.map(s => s.id === id ? changed : s)
     }
-    return state.map(s => s.id === id ? changed : s)
-  }
-  case 'DELETE': {
-    const { id } = action.data
-    return [...state.filter(s => s.id !== id)]
-  }
-  default:
-    return state
+    case 'DELETE': {
+      const { id } = action.data
+      return [...state.filter(s => s.id !== id)]
+    }
+    default:
+      return state
   }
 }
 

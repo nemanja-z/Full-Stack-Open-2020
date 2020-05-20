@@ -6,6 +6,8 @@ import Togglable from './components/Togglable'
 import Notification from './components/Notification'
 import { initBlogs, addBlogs, deleteBlog } from './reducers/blogReducer'
 import { login, logout, getUser } from './reducers/userReducer'
+import { initUsers } from './reducers/usersReducer'
+
 import { newMessage } from './reducers/messageReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -17,10 +19,12 @@ const App = () => {
   const message = useSelector(state => state.message)
   const blog = useSelector(state => state.blog)
   const user = useSelector(state => state.user)
-
+  const users = useSelector(state => state.users)
+  console.log('blogs', blog)
   useEffect(() => {
     dispatch(initBlogs())
     dispatch(getUser())
+    dispatch(initUsers())
 
   }, [dispatch])
   const handleLogin = async (event) => {
@@ -89,7 +93,7 @@ const App = () => {
       <h3>{user.name}</h3>
       {sortedBlogs.map((blog) =>
         <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />
-      ).sort((a, b) => a.likes > b.likes)}
+      )}
       {blogForm()}
     </div>
   )
