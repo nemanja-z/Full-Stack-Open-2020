@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { voteBlog } from '../reducers/blogReducer'
+import { likeBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 
 const Blog = ({ blog, user, removeBlog }) => {
   const [showAll, setShowAll] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
   const dispatch = useDispatch()
-
+  if (blog === undefined) return null
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -16,12 +16,11 @@ const Blog = ({ blog, user, removeBlog }) => {
   }
   const updateLikes = async (blog) => {
     blog.likes = blog.likes + 1
-    //const result = await blogService.update(blog)
-    dispatch(voteBlog(blog))
+    dispatch(likeBlog(blog))
     setLikes(blog.likes)
   }
   const showRemove = () => {
-    if (blog.user.name === user.name) {
+    if (blog.user.name === user.username) {
       return <button onClick={() => removeBlog(blog)}>delete</button>
 
     }

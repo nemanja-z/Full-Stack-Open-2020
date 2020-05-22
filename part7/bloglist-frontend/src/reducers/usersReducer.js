@@ -2,10 +2,10 @@ import usersService from '../services/users'
 
 const reducer = (state = [], action) => {
   switch (action.type) {
-    case 'INIT':
-      return action.data
-    default:
-      return state
+  case 'OBTAIN':
+    return action.data
+  default:
+    return state
   }
 }
 
@@ -14,7 +14,7 @@ export const initUsers = () => {
     const users = await usersService.initUsers()
     console.log('users', users)
     dispatch({
-      type: 'INIT',
+      type: 'OBTAIN',
       data: users
     })
   }

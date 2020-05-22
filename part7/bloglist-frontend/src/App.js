@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Users from './components/Users'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
@@ -19,14 +20,14 @@ const App = () => {
   const message = useSelector(state => state.message)
   const blog = useSelector(state => state.blog)
   const user = useSelector(state => state.user)
-  const users = useSelector(state => state.users)
-  console.log('blogs', blog)
   useEffect(() => {
     dispatch(initBlogs())
-    dispatch(getUser())
     dispatch(initUsers())
-
+  }, [])
+  useEffect(() => {
+    dispatch(getUser())
   }, [dispatch])
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -44,7 +45,7 @@ const App = () => {
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
     dispatch(addBlogs(blogObject))
-    dispatch(newMessage(`A new blog by ${user.name} is added`))
+    dispatch(newMessage(`A new blog by ${user.username} is added`))
   }
 
   const blogForm = () => (
@@ -95,6 +96,7 @@ const App = () => {
         <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />
       )}
       {blogForm()}
+      <Users />
     </div>
   )
 }
