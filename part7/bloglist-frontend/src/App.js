@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Users from './components/Users'
+import User from './components/User'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
@@ -8,7 +9,9 @@ import Notification from './components/Notification'
 import { initBlogs, addBlogs, deleteBlog } from './reducers/blogReducer'
 import { login, logout, getUser } from './reducers/userReducer'
 import { initUsers } from './reducers/usersReducer'
-
+import {
+  useRouteMatch, Switch, Route
+} from 'react-router-dom'
 import { newMessage } from './reducers/messageReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -20,6 +23,8 @@ const App = () => {
   const message = useSelector(state => state.message)
   const blog = useSelector(state => state.blog)
   const user = useSelector(state => state.user)
+  const users = useSelector(state => state.users)
+
   useEffect(() => {
     dispatch(initBlogs())
     dispatch(initUsers())
@@ -74,7 +79,9 @@ const App = () => {
       }
     }
   }
-
+  const match = useRouteMatch('/users/:id')
+  const showUser = match ? users.find(u => u.id === match.params.id) : null
+  console.log(typeof showUser)
   if (user === null) {
     return (
       <div>
@@ -88,15 +95,24 @@ const App = () => {
   return (
     <div>
       <h2>Blogs</h2>
+      <Switch>
+        <Route path='/users/:id'>
+          <User user={showUser} />
+        </Route>
+        <Route path='/users'>
+          <Users />
+        </Route>
+        <Route path='/'>
+          <Notification message={message} />
+          <button onClick={loggedOut}>logout</button>
+          <h3>{user.name}</h3>
+          {sortedBlogs.map((blog) =>
+            <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />
+          )}
+          {blogForm()}
+        </Route>
 
-      <Notification message={message} />
-      <button onClick={loggedOut}>logout</button>
-      <h3>{user.name}</h3>
-      {sortedBlogs.map((blog) =>
-        <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />
-      )}
-      {blogForm()}
-      <Users />
+      </Switch>
     </div>
   )
 }
