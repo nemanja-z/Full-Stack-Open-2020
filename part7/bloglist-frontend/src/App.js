@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import BlogDetails from './components/BlogDetails'
 import Users from './components/Users'
 import User from './components/User'
 import LoginForm from './components/LoginForm'
@@ -79,9 +80,11 @@ const App = () => {
       }
     }
   }
-  const match = useRouteMatch('/users/:id')
-  const showUser = match ? users.find(u => u.id === match.params.id) : null
-  console.log(typeof showUser)
+  const matchUsers = useRouteMatch('/users/:id')
+  const showUser = matchUsers ? users.find(u => u.id === matchUsers.params.id) : null
+  const matchBlog = useRouteMatch('/blogs/:id')
+  const showBlog = matchBlog ? blog.find(b => b.id === matchBlog.params.id) : null
+  console.log(showBlog, 'showBlog')
   if (user === null) {
     return (
       <div>
@@ -99,6 +102,9 @@ const App = () => {
         <Route path='/users/:id'>
           <User user={showUser} />
         </Route>
+        <Route path='/blogs/:id'>
+          <BlogDetails key={blog.id} user={user} blog={showBlog} removeBlog={removeBlog} />
+        </Route>
         <Route path='/users'>
           <Users />
         </Route>
@@ -107,10 +113,11 @@ const App = () => {
           <button onClick={loggedOut}>logout</button>
           <h3>{user.name}</h3>
           {sortedBlogs.map((blog) =>
-            <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />
+            <Blog key={blog.id} blog={blog} />
           )}
           {blogForm()}
         </Route>
+
 
       </Switch>
     </div>

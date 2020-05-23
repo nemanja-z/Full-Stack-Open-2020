@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
-import { likeBlog } from '../reducers/blogReducer'
-import { useDispatch } from 'react-redux'
+import React from 'react'
+import {
+  Link
+} from 'react-router-dom'
 
-const Blog = ({ blog, user, removeBlog }) => {
-  const [showAll, setShowAll] = useState(false)
-  const [likes, setLikes] = useState(blog.likes)
-  const dispatch = useDispatch()
+const Blog = ({ blog }) => {
+  /*  const [showAll, setShowAll] = useState(false)
+  const [likes, setLikes] = useState(blog.likes) */
+  //const dispatch = useDispatch()
   if (blog === undefined) return null
   const blogStyle = {
     paddingTop: 10,
@@ -14,7 +15,7 @@ const Blog = ({ blog, user, removeBlog }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-  const updateLikes = async (blog) => {
+  /* const updateLikes = async (blog) => {
     blog.likes = blog.likes + 1
     dispatch(likeBlog(blog))
     setLikes(blog.likes)
@@ -46,12 +47,12 @@ const Blog = ({ blog, user, removeBlog }) => {
         {showRemove()}
       </div>)
   }
-
+ */
   return (
     <div className='blog' style={blogStyle}>
-      <p>{`${blog.title} ${blog.author}`}</p>
-      <button onClick={toggleShow}>show more</button>
+      <p><Link to={`/blogs/${blog.id}`}>{`${blog.title} ${blog.author}`}</Link></p>
     </div>)
 }
 
 export default Blog
+//      <button onClick={toggleShow}>show more</button>
