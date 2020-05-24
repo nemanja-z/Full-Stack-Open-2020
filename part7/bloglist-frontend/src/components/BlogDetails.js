@@ -1,13 +1,22 @@
 import React, { useState } from 'react'
 import { likeBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
+import commentBlog from '../reducers/blogReducer'
+import Comment from './Comment'
+import { useField } from '../hooks/useField'
+
 
 const BlogDetails = ({ blog, user, removeBlog }) => {
     const [likes, setLikes] = useState(blog.likes)
     const dispatch = useDispatch()
+    const comment = useField('text')
 
     if (!blog) return null
-
+    const addComment = () => {
+        const { id } = blog
+        let comm = { comment: comment.value }
+        dispatch(commentBlog(id, comm))
+    }
     const updateLikes = async (blog) => {
         blog.likes = blog.likes + 1
         dispatch(likeBlog(blog))
@@ -29,6 +38,7 @@ const BlogDetails = ({ blog, user, removeBlog }) => {
             </div>
             <p>{`added by ${blog.user.username}`}</p>
             {showRemove()}
+            <Comment addComment={addComment} comment={comment} />
         </div>
     )
 }
