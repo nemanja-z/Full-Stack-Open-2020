@@ -1,53 +1,43 @@
-import React, { useState } from 'react'
-
+import React from 'react'
+import { useField } from '../hooks/useField'
 const BlogForm = ({ createBlog }) => {
-  const [newTitle, setNewTitle] = useState('')
-  const [newUrl, setNewUrl] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
+  const title = useField('text')
+  const url = useField('text')
+  const author = useField('text')
 
-  const handleTitleChange = e => {
-    e.preventDefault()
-    setNewTitle(e.target.value)
-  }
-  const handleAuthorChange = e => {
-    e.preventDefault()
-    setNewAuthor(e.target.value)
-  }
-
-  const handleUrlChange = e => {
-    e.preventDefault()
-    setNewUrl(e.target.value)
-  }
   const addBlog = (e) => {
     e.preventDefault()
     const newBlog = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl,
+      title: title.value,
+      author: author.value,
+      url: url.value,
       likes: 0
     }
     createBlog(newBlog)
-    setNewTitle('')
-    setNewAuthor('')
-    setNewUrl('')
+    title.reset()
+    author.reset()
+    url.reset()
+
   }
+
   return (
     <form id='form' onSubmit={addBlog}>
       title:<input
-        id='title'
-        value={newTitle}
-        onChange={handleTitleChange}
-      />
+        value={title.value}
+        type={title.type}
+        onChange={title.onChange}
+        reset={title.reset} />
           author:<input
-        id='author'
-        value={newAuthor}
-        onChange={handleAuthorChange}
+        value={author.value}
+        type={author.type}
+        onChange={author.onChange}
+        reset={author.reset}
       />
           url:<input
-        id='url'
-        value={newUrl}
-        onChange={handleUrlChange}
-      />
+        value={url.value}
+        type={url.type}
+        onChange={url.onChange}
+        reset={url.reset} />
       <button type="submit">save</button>
     </form>
   )

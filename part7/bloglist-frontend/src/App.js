@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import BlogDetails from './components/BlogDetails'
 import Users from './components/Users'
 import User from './components/User'
+import Navigation from './components/Navigation'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
@@ -13,19 +14,19 @@ import { initUsers } from './reducers/usersReducer'
 import {
   useRouteMatch, Switch, Route
 } from 'react-router-dom'
+import { useField } from './hooks/useField'
 import { newMessage } from './reducers/messageReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const username = useField('text')
+  const password = useField('text')
   const blogFormRef = React.createRef()
   const dispatch = useDispatch()
   const message = useSelector(state => state.message)
   const blog = useSelector(state => state.blog)
   const user = useSelector(state => state.user)
   const users = useSelector(state => state.users)
-
   useEffect(() => {
     dispatch(initBlogs())
     dispatch(initUsers())
@@ -33,17 +34,23 @@ const App = () => {
   useEffect(() => {
     dispatch(getUser())
   }, [dispatch])
-
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    const creds = {
+      username: username.value.toString(),
+      password: password.value.toString()
+    }
     try {
-      await dispatch(login({ username, password }))
-      setUsername('')
-      setPassword('')
+      await dispatch(login(creds))
+
     } catch (exception) {
+      username.reset()
+      password.reset()
       dispatch(newMessage('wrong credentials'))
     }
   }
+  console.log(username.value, 'creds')
+  console.log(password.value, 'creds2')
   const loggedOut = () => {
     dispatch(logout())
   }
@@ -65,11 +72,10 @@ const App = () => {
     <LoginForm
       username={username}
       password={password}
-      handleUsernameChange={({ target }) => setUsername(target.value)}
-      handlePasswordChange={({ target }) => setPassword(target.value)}
       handleSubmit={handleLogin}
     />
   )
+
   const removeBlog = async (blog) => {
     if (window.confirm(`Do you really want to delete ${blog.title}`)) {
       try {
@@ -98,6 +104,7 @@ const App = () => {
   return (
     <div>
       <h2>Blogs</h2>
+      <Navigation user={user} loggedOut={loggedOut} />
       <Switch>
         <Route path='/users/:id'>
           <User user={showUser} />
@@ -110,14 +117,13 @@ const App = () => {
         </Route>
         <Route path='/'>
           <Notification message={message} />
-          <button onClick={loggedOut}>logout</button>
+
           <h3>{user.name}</h3>
           {sortedBlogs.map((blog) =>
             <Blog key={blog.id} blog={blog} />
           )}
           {blogForm()}
         </Route>
-
 
       </Switch>
     </div>
