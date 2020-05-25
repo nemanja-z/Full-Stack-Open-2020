@@ -1,2 +1,5 @@
-GET http://localhost:3003/api/blogs
+POST http://localhost:3003/api/blogs/5ecbc5bf46225725f0983fce/comments
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InByb2JhIiwiaWQiOiI1ZWM3Y2ExY2ZhYjUzZDE5MjQ5YTBjYTUiLCJpYXQiOjE1OTA0MTc4MjJ9.vzIFiaZMdh5mLR5JWZcJEuC5lh2rkAh-7KrLWIiZCUM
+Content-Type: application/json
 
+{"comment":"pokusaj"}

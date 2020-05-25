@@ -11,7 +11,8 @@ const BlogForm = ({ createBlog }) => {
       title: title.value,
       author: author.value,
       url: url.value,
-      likes: 0
+      likes: 0,
+      comments: ''
     }
     createBlog(newBlog)
     title.reset()
@@ -23,21 +24,15 @@ const BlogForm = ({ createBlog }) => {
   return (
     <form id='form' onSubmit={addBlog}>
       title:<input
-        value={title.value}
-        type={title.type}
-        onChange={title.onChange}
-        reset={title.reset} />
-          author:<input
-        value={author.value}
-        type={author.type}
-        onChange={author.onChange}
-        reset={author.reset}
+        {...title}
+        reset='reset' />
+      author:<input
+        {...author}
+        reset='reset'
       />
-          url:<input
-        value={url.value}
-        type={url.type}
-        onChange={url.onChange}
-        reset={url.reset} />
+      url:<input
+        {...url}
+        reset='reset' />
       <button type="submit">save</button>
     </form>
   )

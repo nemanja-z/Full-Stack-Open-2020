@@ -3,14 +3,14 @@ import { newMessage } from './messageReducer'
 
 const reducer = (state = [], action) => {
   switch (action.type) {
-    case 'LOGIN':
-      return action.data
-    case 'LOGOUT':
-      return null
-    case 'GET':
-      return action.data
-    default:
-      return state
+  case 'LOGIN':
+    return action.data
+  case 'LOGOUT':
+    return null
+  case 'GET':
+    return action.data
+  default:
+    return state
   }
 }
 export const login = (creds) => {

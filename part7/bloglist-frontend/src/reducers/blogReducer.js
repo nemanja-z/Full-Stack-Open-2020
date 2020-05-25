@@ -2,34 +2,29 @@ import blogService from '../services/blogs'
 
 const reducer = (state = [], action) => {
   switch (action.type) {
-    case 'INIT':
-      return action.data
-    case 'NEW':
-      return state.concat(action.data)
-    case 'LIKE': {
-      const { id } = action.data
-      const updated = state.find(s => s.id === id)
-      const changed = {
-        ...updated,
-        likes: updated.likes + 1
-      }
-      return state.map(s => s.id === id ? changed : s)
+  case 'INIT':
+    return action.data
+  case 'NEW':
+    return state.concat(action.data)
+  case 'LIKE': {
+    const { id } = action.data
+    const updated = state.find(s => s.id === id)
+    const changed = {
+      ...updated,
+      likes: updated.likes + 1
     }
-    case 'COMMENT': {
-      const { id } = action.data
-      const updated = state.find(s => s.id === id)
-      const changed = {
-        ...updated,
-        comment: action.comment
-      }
-      return state.map(s => s.id === id ? changed : s)
-    }
-    case 'DELETE': {
-      const { id } = action.data
-      return state.filter(s => s.id !== id)
-    }
-    default:
-      return state
+    return state.map(s => s.id === id ? changed : s)
+  }
+  case 'COMMENT': {
+    const { id } = action.data
+    return state.map(s => s.id === id ? action.data : s)
+  }
+  case 'DELETE': {
+    const { id } = action.data
+    return state.filter(s => s.id !== id)
+  }
+  default:
+    return state
   }
 }
 
@@ -62,10 +57,11 @@ export const likeBlog = (blog) => {
 }
 export const commentBlog = (id, comment) => {
   return async dispatch => {
-    const update = await blogService.comment(id, comment)
+    const commented = await blogService.postComment(id, comment)
+    console.log(commented, 'com')
     dispatch({
       type: 'COMMENT',
-      data: update
+      data: commented
     })
   }
 }

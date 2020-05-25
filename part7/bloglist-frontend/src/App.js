@@ -12,7 +12,7 @@ import { initBlogs, addBlogs, deleteBlog } from './reducers/blogReducer'
 import { login, logout, getUser } from './reducers/userReducer'
 import { initUsers } from './reducers/usersReducer'
 import {
-  useRouteMatch, Switch, Route
+  useRouteMatch, Switch, Route, useHistory
 } from 'react-router-dom'
 import { useField } from './hooks/useField'
 import { newMessage } from './reducers/messageReducer'
@@ -27,6 +27,7 @@ const App = () => {
   const blog = useSelector(state => state.blog)
   const user = useSelector(state => state.user)
   const users = useSelector(state => state.users)
+  const history = useHistory()
   useEffect(() => {
     dispatch(initBlogs())
     dispatch(initUsers())
@@ -42,6 +43,8 @@ const App = () => {
     }
     try {
       await dispatch(login(creds))
+      username.reset()
+      password.reset()
 
     } catch (exception) {
       username.reset()
@@ -49,10 +52,9 @@ const App = () => {
       dispatch(newMessage('wrong credentials'))
     }
   }
-  console.log(username.value, 'creds')
-  console.log(password.value, 'creds2')
   const loggedOut = () => {
     dispatch(logout())
+    history.push('/')
   }
   const sortedBlogs = blog.sort((a, b) => a.likes < b.likes)
   const addBlog = async (blogObject) => {
@@ -90,7 +92,6 @@ const App = () => {
   const showUser = matchUsers ? users.find(u => u.id === matchUsers.params.id) : null
   const matchBlog = useRouteMatch('/blogs/:id')
   const showBlog = matchBlog ? blog.find(b => b.id === matchBlog.params.id) : null
-  console.log(showBlog, 'showBlog')
   if (user === null) {
     return (
       <div>

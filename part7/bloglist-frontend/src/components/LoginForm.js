@@ -8,16 +8,15 @@ const LoginForm = ({ handleSubmit, username, password }) => {
         <div>
           username
           <input
-            value={username.value}
-            type={username.type}
-            onChange={username.onChange}
-            reset={username.reset}
+            {...username}
+            reset='reset'
           />
         </div>
         <div>
           password
           <input
             {...password}
+            reset='reset'
           />
         </div>
         <button id='login-button' type="submit">login</button>

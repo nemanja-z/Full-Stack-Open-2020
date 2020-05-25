@@ -57,24 +57,30 @@ blogsRouter.put('/:id', async (req, res) => {
 
     return res.status(200).json(updatedBlog);
 })
-blogsRouter.post('/:id', async (req, res) => {
-    const { title, author, url, likes, comment } = req.body;
 
-
-
-    const blog = { title, author, url, likes };
-    const comm = { ...blog, comment }
-
-    const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, comm, {
-        new: true
-    });
-
-    if (!updatedBlog) {
-        return res.status(400).end();
+blogsRouter.post('/:id/comments', async (req, res) => {
+    const body = req.body
+    const token = req.token
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        return res.status(401).json({ error: 'token missing or invalid' })
     }
 
-    return res.status(200).json(updatedBlog);
+    const blog = await Blog.findById(req.params.id)
+    const comm = ({
+        title: blog.title,
+        author: blog.author,
+        url: blog.url,
+        likes: blog.likes,
+        user: blog.user,
+        comments: blog.comments.concat(body.comment)
+    })
+
+    const savedBlog = await Blog.findByIdAndUpdate(req.params.id, comm, { new: true })
+
+    res.status(201).json(savedBlog.toJSON())
 })
+
 
 blogsRouter.post('/', async (req, res) => {
     const body = req.body
@@ -95,7 +101,7 @@ blogsRouter.post('/', async (req, res) => {
         url: body.url,
         likes: body.likes,
         user: user._id,
-        comment: body.comment
+        comments: ''
     })
 
     const savedBlog = await blog.save()
