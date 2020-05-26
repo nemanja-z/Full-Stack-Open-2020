@@ -14,10 +14,10 @@ const LoginForm = ({ handleSubmit, username, password }) => {
         <Form.Group controlId="password">
           <Form.Label>password</Form.Label>
           <Form.Control {...password} reset='reset' />
-          <Button variant="primary" type="submit">
-            login
-          </Button>
         </Form.Group>
+        <Button variant="primary" type="submit">
+          login
+        </Button>
       </Form>
     </div >
   )

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import Blog from './components/Blog'
 import BlogDetails from './components/BlogDetails'
 import Users from './components/Users'
@@ -8,11 +8,11 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
-import { initBlogs, addBlogs, deleteBlog } from './reducers/blogReducer'
+import { initBlogs, addBlogs } from './reducers/blogReducer'
 import { login, logout, getUser } from './reducers/userReducer'
 import { initUsers } from './reducers/usersReducer'
 import {
-  useRouteMatch, Switch, Route, useHistory, Link
+  useRouteMatch, Switch, Route, useHistory
 } from 'react-router-dom'
 import { useField } from './hooks/useField'
 import { newMessage } from './reducers/messageReducer'
@@ -82,7 +82,7 @@ const App = () => {
     />
   )
 
-  const removeBlog = async (blog) => {
+  /* const removeBlog = async (blog) => {
     if (window.confirm(`Do you really want to delete ${blog.title}`)) {
       try {
         dispatch(deleteBlog(blog))
@@ -92,7 +92,7 @@ const App = () => {
         console.log(exception)
       }
     }
-  }
+  } */
   const matchUsers = useRouteMatch('/users/:id')
   const showUser = matchUsers ? users.find(u => u.id === matchUsers.params.id) : null
   const matchBlog = useRouteMatch('/blogs/:id')
@@ -117,7 +117,7 @@ const App = () => {
           <User user={showUser} />
         </Route>
         <Route path='/blogs/:id'>
-          <BlogDetails key={blog.id} user={user} blog={showBlog} removeBlog={removeBlog} />
+          <BlogDetails key={blog.id} user={user} blog={showBlog} />
         </Route>
         <Route path='/users'>
           <Users />
