@@ -12,7 +12,7 @@ import { initBlogs, addBlogs, deleteBlog } from './reducers/blogReducer'
 import { login, logout, getUser } from './reducers/userReducer'
 import { initUsers } from './reducers/usersReducer'
 import {
-  useRouteMatch, Switch, Route, useHistory
+  useRouteMatch, Switch, Route, useHistory, Link
 } from 'react-router-dom'
 import { useField } from './hooks/useField'
 import { newMessage } from './reducers/messageReducer'
@@ -28,23 +28,28 @@ const App = () => {
   const user = useSelector(state => state.user)
   const users = useSelector(state => state.users)
   const history = useHistory()
+
+
+  /* useEffect(() => {
+    dispatch(initBlogs())
+    dispatch(initUsers())
+  }, []) */
   useEffect(() => {
     dispatch(initBlogs())
     dispatch(initUsers())
-  }, [])
-  useEffect(() => {
     dispatch(getUser())
   }, [dispatch])
   const handleLogin = async (e) => {
     e.preventDefault()
     const creds = {
-      username: username.value.toString(),
-      password: password.value.toString()
+      username: username.value,
+      password: password.value
     }
     try {
       await dispatch(login(creds))
       username.reset()
       password.reset()
+      dispatch(newMessage('successful login'))
 
     } catch (exception) {
       username.reset()
@@ -62,7 +67,6 @@ const App = () => {
     dispatch(addBlogs(blogObject))
     dispatch(newMessage(`A new blog by ${user.username} is added`))
   }
-
   const blogForm = () => (
     <Togglable buttonLabel='new blog' ref={blogFormRef}>
       <BlogForm
@@ -83,6 +87,7 @@ const App = () => {
       try {
         dispatch(deleteBlog(blog))
         dispatch(newMessage(`${blog.title} has been removed`))
+        history.push('/')
       } catch (exception) {
         console.log(exception)
       }
@@ -92,6 +97,7 @@ const App = () => {
   const showUser = matchUsers ? users.find(u => u.id === matchUsers.params.id) : null
   const matchBlog = useRouteMatch('/blogs/:id')
   const showBlog = matchBlog ? blog.find(b => b.id === matchBlog.params.id) : null
+  console.log(showBlog, 'sw')
   if (user === null) {
     return (
       <div>
@@ -116,9 +122,11 @@ const App = () => {
         <Route path='/users'>
           <Users />
         </Route>
+        <Route path='/login'>
+          {loginForm()}
+        </Route>
         <Route path='/'>
           <Notification message={message} />
-
           <h3>{user.name}</h3>
           {sortedBlogs.map((blog) =>
             <Blog key={blog.id} blog={blog} />

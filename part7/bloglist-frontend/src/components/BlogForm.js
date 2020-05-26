@@ -20,7 +20,6 @@ const BlogForm = ({ createBlog }) => {
     url.reset()
 
   }
-
   return (
     <form id='form' onSubmit={addBlog}>
       title:<input
