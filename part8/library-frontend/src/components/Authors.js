@@ -16,8 +16,7 @@ export const ALL_AUTHORS = gql`
 const Authors = (props) => {
   const authors = useQuery(ALL_AUTHORS)
   if (!props.show) return null
-
-  if (authors.loading) return <div>loading ...</div>
+  if (authors.loading) return <div>loading...</div>
 
   return (
     <div>

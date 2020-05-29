@@ -1,11 +1,48 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
+import LoginForm from './components/LoginForm'
 import NewBook from './components/NewBook'
-
+import { useApolloClient } from '@apollo/client'
+const Notify = ({ errorMessage }) => {
+  if (!errorMessage) return null
+  return (
+    <div style={{ color: 'red' }}>
+      {errorMessage}
+    </div>
+  )
+}
 const App = () => {
   const [page, setPage] = useState('authors')
+  const [token, setToken] = useState(null)
+  const [errorMessage, setErrorMessage] = useState('')
+  const client = useApolloClient()
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    return token ? setToken(token) : null
+  }, [])
+  const notify = message => {
+    setErrorMessage(message)
+    setTimeout(() => { setErrorMessage(null) }, 5000)
+  }
+  if (!token) {
+    return (
+      <div>
+        <Notify errorMessage={errorMessage} />
+        <h2>Login</h2>
+        <LoginForm
+          setToken={setToken}
+          setError={notify} />
+      </div>
+    )
+  }
+  const logout = () => {
+    setToken(null)
+    localStorage.clear()
+    client.resetStore()
+  }
 
   return (
     <div>
