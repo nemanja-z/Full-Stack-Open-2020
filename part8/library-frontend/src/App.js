@@ -21,8 +21,10 @@ const App = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    return token ? setToken(token) : null
-  }, [])
+    if (token) {
+      setToken(token)
+    }
+  }, [token])
   const notify = message => {
     setErrorMessage(message)
     setTimeout(() => { setErrorMessage(null) }, 5000)

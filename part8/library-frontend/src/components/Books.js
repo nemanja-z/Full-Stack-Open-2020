@@ -14,9 +14,9 @@ export const ALL_BOOKS = gql`
 `;
 
 const Books = (props) => {
-  const books = useQuery(ALL_BOOKS)
+  const fetchBooks = useQuery(ALL_BOOKS)
   if (!props.show) return null
-  if (books.loading) return <div>loading...</div>
+  const books = fetchBooks.loading ? [] : fetchBooks.data.allBooks
   return (
     <div>
       <h2>books</h2>
@@ -32,7 +32,7 @@ const Books = (props) => {
               published
             </th>
           </tr>
-          {books.data.allBooks.map(a =>
+          {books & books.map(a =>
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author}</td>

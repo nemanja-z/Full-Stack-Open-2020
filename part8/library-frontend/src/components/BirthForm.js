@@ -18,6 +18,7 @@ const BirthForm = () => {
         refetchQueries: [{ query: ALL_AUTHORS }]
     })
     const authors = useQuery(ALL_AUTHORS)
+    if (!authors) return null
     const editAge = async e => {
         e.preventDefault()
         updateAuthor({ variables: { name, setBornTo: +born } })

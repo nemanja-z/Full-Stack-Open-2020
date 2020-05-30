@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { gql, useQuery } from '@apollo/client';
 import BirthForm from './BirthForm'
 
@@ -14,9 +14,15 @@ export const ALL_AUTHORS = gql`
 `;
 
 const Authors = (props) => {
-  const authors = useQuery(ALL_AUTHORS)
+  const fetchAuthors = useQuery(ALL_AUTHORS)
+  const [author, setAuthors] = useState(null)
+  useEffect(() => {
+    if (fetchAuthors.data) {
+      setAuthors(fetchAuthors.data.allAuthors.map(author => author))
+    }
+  }, [fetchAuthors])
   if (!props.show) return null
-  if (authors.loading) return <div>loading...</div>
+  if (fetchAuthors.loading) return <div>loading...</div>
 
   return (
     <div>
@@ -32,7 +38,7 @@ const Authors = (props) => {
               books
             </th>
           </tr>
-          {authors.data.allAuthors.map(a =>
+          {author.map(a =>
             <tr key={a.name}>
               <td>{a.name}</td>
               <td>{a.born}</td>
