@@ -11,13 +11,12 @@ const SET_BIRTHYEAR = gql`
                 born
             }
     }`
-const BirthForm = () => {
+const BirthForm = ({ authors }) => {
     const [name, setName] = useState('')
     const [born, setBorn] = useState('')
     const [updateAuthor] = useMutation(SET_BIRTHYEAR, {
         refetchQueries: [{ query: ALL_AUTHORS }]
     })
-    const authors = useQuery(ALL_AUTHORS)
     if (!authors) return null
     const editAge = async e => {
         e.preventDefault()

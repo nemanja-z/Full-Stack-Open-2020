@@ -6,9 +6,6 @@ const Book = require('./models/book')
 const User = require('./models/user')
 const jwt = require('jsonwebtoken')
 
-
-const JWT_SECRET = process.env.SECRET
-
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true);
 
@@ -34,9 +31,9 @@ const typeDefs = gql`
     type Book {
         title: String!
         published: Int!
-        author: String!
-        id: ID!
+        author: Author!
         genres: [String!]!
+        id: ID!
     }
     type User {
         username: String!
@@ -87,14 +84,13 @@ const resolvers = {
             else return books;
         },
         me: (root, args, context) => context.currentUser,
-        allAuthors: () => Authors.find({}),
+        allAuthors: async () => Author.find({}),
         bookCount: () => Book.collection.countDocuments(),
         authorCount: () => Author.collection.countDocuments()
 
     },
     Mutation: {
-        addBook: async (root, args) => {
-            const book = new Book({ ...args })
+        addBook: async (root, args, { currentUser }) => {
             const currentUser = context.currentUser
             if (!currentUser) {
                 throw new AuthenticationError('not authenticated')
@@ -104,6 +100,8 @@ const resolvers = {
                     invalidArgs: args,
                 });
             }
+            const book = new Book({ ...args })
+
             try {
                 await book.save()
             } catch (error) {
@@ -123,7 +121,7 @@ const resolvers = {
             }
             return book
         },
-        editAuthor: async (root, args) => {
+        editAuthor: async (root, args, { currentUser }) => {
             if (!currentUser) {
                 throw new AuthenticationError("not authenticated")
             }
@@ -148,7 +146,7 @@ const resolvers = {
         },
         login: async (root, args) => {
             const user = User.findOne({ username: args.username })
-            if (!user || password !== 'secred') {
+            if (!user || args.password !== 'secret') {
                 throw new UserInputError('wrong credentials')
             }
             const userForToken = {

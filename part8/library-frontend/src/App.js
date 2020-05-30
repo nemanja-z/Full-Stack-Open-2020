@@ -19,12 +19,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const client = useApolloClient()
 
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      setToken(token)
-    }
-  }, [token])
+
   const notify = message => {
     setErrorMessage(message)
     setTimeout(() => { setErrorMessage(null) }, 5000)
@@ -51,11 +46,13 @@ const App = () => {
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
-        <button onClick={() => setPage('add')}>add book</button>
+        {token === null ? <button onClick={logout}>logout</button> :
+          <button onClick={() => setPage('add')}>add book</button>
+        }
       </div>
 
       <Authors
-        show={page === 'authors'}
+        token={token} show={page === 'authors'}
       />
 
       <Books

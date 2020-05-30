@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { gql, useQuery } from '@apollo/client';
 
 
@@ -15,8 +15,14 @@ export const ALL_BOOKS = gql`
 
 const Books = (props) => {
   const fetchBooks = useQuery(ALL_BOOKS)
+  const [book, setBooks] = useState(null)
+  useEffect(() => {
+    if (fetchBooks.data) {
+      setBooks(fetchBooks.data.allBooks.map(book => book))
+    }
+  }, [fetchBooks.data])
   if (!props.show) return null
-  const books = fetchBooks.loading ? [] : fetchBooks.data.allBooks
+  if (fetchBooks.loading) return <div>loading...</div>
   return (
     <div>
       <h2>books</h2>
@@ -32,7 +38,7 @@ const Books = (props) => {
               published
             </th>
           </tr>
-          {books & books.map(a =>
+          {book && book.map(a =>
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author}</td>

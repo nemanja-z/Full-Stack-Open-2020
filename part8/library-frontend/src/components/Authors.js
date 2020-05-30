@@ -38,7 +38,7 @@ const Authors = (props) => {
               books
             </th>
           </tr>
-          {author.map(a =>
+          {author && author.map(a =>
             <tr key={a.name}>
               <td>{a.name}</td>
               <td>{a.born}</td>
@@ -47,7 +47,8 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <BirthForm />
+      {!props.token ? null :
+        <BirthForm authors={author} />}
     </div>
   )
 }
