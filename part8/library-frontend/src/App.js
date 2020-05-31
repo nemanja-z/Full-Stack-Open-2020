@@ -19,7 +19,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const client = useApolloClient()
 
-
+  console.log(token, 'token')
   const notify = message => {
     setErrorMessage(message)
     setTimeout(() => { setErrorMessage(null) }, 5000)
@@ -60,7 +60,7 @@ const App = () => {
       />
 
       <NewBook
-        show={page === 'add'}
+        setError={setErrorMessage} show={page === 'add'}
       />
 
     </div>

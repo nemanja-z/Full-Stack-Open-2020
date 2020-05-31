@@ -24,25 +24,28 @@ const BirthForm = ({ authors }) => {
         setName('')
         setBorn('')
     }
-    const options = authors.data.allAuthors.map(author => {
-        return { value: author.name, label: author.name }
-    })
+    /*  const options = authors ? authors.data.allAuthors.map(author => {
+         return { value: author.name, label: author.name }
+     }) : [] */
     const handleChange = (name) => {
         setName(name.value)
     }
-    const { name: n } = name
+    // const { name: n } = name
     return (
         <div>
-            <form onSubmit={editAge}>
-                <Select
-                    value={n}
-                    onChange={handleChange}
-                    options={options} />
+            {authors.data && authors.data.allAuthors.map(author => {
+                return <form onSubmit={editAge}>
+                    <Select
+                        value={author.name}
+                        onChange={handleChange}
+                        options={author.name} />
+
                 born:<input
-                    value={born}
-                    onChange={({ target }) => setBorn(target.value)} />
-                <button type='submit'>update</button>
-            </form>
+                        value={born}
+                        onChange={({ target }) => setBorn(target.value)} />
+                    <button type='submit'>update</button>
+                </form>
+            })}
         </div>
     )
 }

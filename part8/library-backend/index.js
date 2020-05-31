@@ -1,11 +1,10 @@
 require('dotenv').config()
-const { ApolloServer, UserInputError, gql } = require('apollo-server')
+const { ApolloServer, UserInputError, gql, AuthenticationError } = require('apollo-server')
 const mongoose = require('mongoose')
 const Author = require('./models/author')
 const Book = require('./models/book')
 const User = require('./models/user')
 const jwt = require('jsonwebtoken')
-
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true);
 
@@ -21,11 +20,12 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
         console.log('error connection to MongoDB:', error.message)
     })
 
+
+//  bookCount: Int!
 const typeDefs = gql`
     type Author {
         name: String!
         born: Int
-        bookCount: Int!
         id: ID!
     }  
     type Book {
@@ -76,22 +76,30 @@ const resolvers = {
     Query: {
         allBooks: (root, args) => {
             if (args.author && args.genre)
-                return Book.find({ $and: [{ author: { $eq: args.author } }, { genres: { $in: args.genre } }] });
+                return Book.find({ $and: [{ author: args.author }, { genres: { $in: args.genre } }] });
             else if (args.author)
-                return Book.find({ author: { $eq: args.author } });
+                return Book.findOne({ author: args.author });
             else if (args.genre)
-                return Book.find({ genres: { $eq: args.genre } });
+                return Book.findOne({ genres: args.genre });
             else return books;
         },
-        me: (root, args, context) => context.currentUser,
+        me: (root, args, { currentUser }) => currentUser,
         allAuthors: async () => Author.find({}),
         bookCount: () => Book.collection.countDocuments(),
         authorCount: () => Author.collection.countDocuments()
 
     },
+    /* Book: {
+        author: (root) => {
+            return {
+                name: root.name,
+                born: root.born
+            }
+        }
+    }, */
     Mutation: {
         addBook: async (root, args, { currentUser }) => {
-            const currentUser = context.currentUser
+            console.log(currentUser, 'current')
             if (!currentUser) {
                 throw new AuthenticationError('not authenticated')
             }
@@ -100,7 +108,19 @@ const resolvers = {
                     invalidArgs: args,
                 });
             }
-            const book = new Book({ ...args })
+            let author = await Author.findOne({ name: args.author })
+            if (!author) {
+                author = await new Author({ ...args })
+                try {
+                    await author.save()
+                }
+                catch (error) {
+                    throw new UserInputError(error.message, {
+                        invalidArgs: args,
+                    })
+                }
+            }
+            const book = new Book({ ...args, author })
 
             try {
                 await book.save()
@@ -109,16 +129,8 @@ const resolvers = {
                     invalidArgs: args,
                 })
             }
-            const author = Author.findOne({ name: { $eq: args.author } })
-            if (!author) {
-                let authorr = new Author({ ...args })
-                try { await authorr.save() }
-                catch (error) {
-                    throw new UserInputError(error.message, {
-                        invalidArgs: args,
-                    })
-                }
-            }
+
+
             return book
         },
         editAuthor: async (root, args, { currentUser }) => {
@@ -165,7 +177,7 @@ const server = new ApolloServer({
         const auth = req ? req.headers.authorization : null
         if (auth && auth.toLowerCase().startsWith('bearer')) {
             const decodedToken = jwt.verify(
-                auth.substring(7), JWT_SECRET
+                auth.substring(7), process.env.JWT_SECRET
             )
             const currentUser = await User.findById(decodedToken.id)
             return { currentUser }
