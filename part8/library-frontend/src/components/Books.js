@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { gql, useQuery } from '@apollo/client';
-
+import { useQuery } from '@apollo/client';
+import { gql } from 'apollo-boost';
 
 export const ALL_BOOKS = gql`
     query {
         allBooks {
           title
-          author
+          author{
+            name
+          }
           published
           id
         }
@@ -21,6 +23,7 @@ const Books = (props) => {
       setBooks(fetchBooks.data.allBooks.map(book => book))
     }
   }, [fetchBooks.data])
+  console.log(fetchBooks, 'books')
   if (!props.show) return null
   if (fetchBooks.loading) return <div>loading...</div>
   return (

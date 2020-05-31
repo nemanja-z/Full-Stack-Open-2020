@@ -30,6 +30,7 @@ const App = () => {
         <Notify errorMessage={errorMessage} />
         <h2>Login</h2>
         <LoginForm
+          show={page === 'login'}
           setToken={setToken}
           setError={notify} />
       </div>
@@ -46,8 +47,11 @@ const App = () => {
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
-        {token === null ? <button onClick={logout}>logout</button> :
-          <button onClick={() => setPage('add')}>add book</button>
+        {token === null ? <button onClick={() => setPage('login')}>login</button> : (
+          <>
+            <button onClick={() => setPage('add')}>add book</button>
+            <button onClick={logout}>logout</button>
+          </>)
         }
       </div>
 

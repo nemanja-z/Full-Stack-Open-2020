@@ -21,11 +21,12 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
     })
 
 
-//  bookCount: Int!
+
 const typeDefs = gql`
     type Author {
         name: String!
         born: Int
+        bookCount: Int!
         id: ID!
     }  
     type Book {
@@ -76,63 +77,59 @@ const resolvers = {
     Query: {
         allBooks: (root, args) => {
             if (args.author && args.genre)
-                return Book.find({ $and: [{ author: args.author }, { genres: { $in: args.genre } }] });
+                return Book.find({ $and: [{ author: args.author }, { genres: { $in: args.genre } }] }).populate('author');
             else if (args.author)
-                return Book.findOne({ author: args.author });
+                return Book.find({ author: args.author }).populate('author');
             else if (args.genre)
-                return Book.findOne({ genres: args.genre });
-            else return books;
+                return Book.find({ genres: args.genre }).populate('author');
+            else return Book.find({}).populate('author');
         },
         me: (root, args, { currentUser }) => currentUser,
         allAuthors: async () => Author.find({}),
-        bookCount: () => Book.collection.countDocuments(),
         authorCount: () => Author.collection.countDocuments()
 
     },
-    /* Book: {
-        author: (root) => {
-            return {
-                name: root.name,
-                born: root.born
-            }
+    Author: {
+        bookCount: async (root) => {
+            return Book.aggregate.count('author')
         }
-    }, */
+    },
     Mutation: {
-        addBook: async (root, args, { currentUser }) => {
-            console.log(currentUser, 'current')
-            if (!currentUser) {
-                throw new AuthenticationError('not authenticated')
-            }
-            if (!args.title || !args.author || !args.published || !args.genres) {
-                throw new UserInputError('Missing fields', {
-                    invalidArgs: args,
-                });
-            }
-            let author = await Author.findOne({ name: args.author })
-            if (!author) {
-                author = await new Author({ ...args })
-                try {
-                    await author.save()
+        addBook:
+            async (root, args, { currentUser }) => {
+                if (!currentUser) {
+                    throw new AuthenticationError('not authenticated')
                 }
-                catch (error) {
+                if (!args.title || !args.author || !args.published || !args.genres) {
+                    throw new UserInputError('Missing fields', {
+                        invalidArgs: args,
+                    });
+                }
+                let author = await Author.findOne({ name: args.author })
+                if (!author) {
+                    author = await new Author({ ...args })
+                    try {
+                        await author.save()
+                    }
+                    catch (error) {
+                        throw new UserInputError(error.message, {
+                            invalidArgs: args,
+                        })
+                    }
+                }
+                const book = new Book({ ...args, author })
+
+                try {
+                    await book.save()
+                } catch (error) {
                     throw new UserInputError(error.message, {
                         invalidArgs: args,
                     })
                 }
-            }
-            const book = new Book({ ...args, author })
-
-            try {
-                await book.save()
-            } catch (error) {
-                throw new UserInputError(error.message, {
-                    invalidArgs: args,
-                })
-            }
 
 
-            return book
-        },
+                return book
+            },
         editAuthor: async (root, args, { currentUser }) => {
             if (!currentUser) {
                 throw new AuthenticationError("not authenticated")
@@ -169,13 +166,12 @@ const resolvers = {
         }
     }
 }
-
 const server = new ApolloServer({
     typeDefs,
     resolvers,
     context: async ({ req }) => {
         const auth = req ? req.headers.authorization : null
-        if (auth && auth.toLowerCase().startsWith('bearer')) {
+        if (auth && auth.toLowerCase().startsWith('bearer ')) {
             const decodedToken = jwt.verify(
                 auth.substring(7), process.env.JWT_SECRET
             )

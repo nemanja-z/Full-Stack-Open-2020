@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useMutation, gql } from '@apollo/client'
+import { useMutation } from '@apollo/client'
+import { gql } from 'apollo-boost';
+
 
 const LOGIN = gql`
     mutation login($username:String!,$password:String!){

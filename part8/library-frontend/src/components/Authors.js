@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import BirthForm from './BirthForm'
+import { gql } from 'apollo-boost';
 
 export const ALL_AUTHORS = gql`
     query {
