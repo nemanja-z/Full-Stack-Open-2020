@@ -91,7 +91,7 @@ const resolvers = {
     },
     Author: {
         bookCount: async (root) => {
-            return Book.aggregate.count('author')
+            return Book.count({ author: root.id })
         }
     },
     Mutation: {
@@ -107,7 +107,7 @@ const resolvers = {
                 }
                 let author = await Author.findOne({ name: args.author })
                 if (!author) {
-                    author = await new Author({ ...args })
+                    author = new Author({ name: args.author })
                     try {
                         await author.save()
                     }
@@ -145,16 +145,19 @@ const resolvers = {
 
         },
         createUser: async (root, args) => {
-            const user = new User({ ...args })
-            return user.save()
-                .catch(error => {
-                    throw new UserInputError(error.message, {
-                        inalidArgs: args,
-                    })
+            const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre });
+            try {
+                user.save()
+            }
+            catch (error) {
+                throw new UserInputError(error.message, {
+                    inalidArgs: args,
                 })
+            }
+            return user
         },
         login: async (root, args) => {
-            const user = User.findOne({ username: args.username })
+            const user = await User.findOne({ username: args.username })
             if (!user || args.password !== 'secret') {
                 throw new UserInputError('wrong credentials')
             }
@@ -162,7 +165,10 @@ const resolvers = {
                 username: user.username,
                 id: user._id
             }
-            return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+            console.log(userForToken, 'token')
+            return {
+                value: jwt.sign(userForToken, process.env.SECRET)
+            }
         }
     }
 }
@@ -170,16 +176,16 @@ const server = new ApolloServer({
     typeDefs,
     resolvers,
     context: async ({ req }) => {
-        const auth = req ? req.headers.authorization : null
+        const auth = req ? req.headers.authorization : null;
         if (auth && auth.toLowerCase().startsWith('bearer ')) {
-            const decodedToken = jwt.verify(
-                auth.substring(7), process.env.JWT_SECRET
-            )
-            const currentUser = await User.findById(decodedToken.id)
-            return { currentUser }
-        }
+            const decodedToken = jwt.verify(auth.substring(7), process.env.SECRET);
+            const currentUser = await User.findById(decodedToken.id);
+            console.log(currentUser, 'cu')
+            return { currentUser };
+        };
+
     }
-})
+});
 server.listen().then(({ url }) => {
     console.log(`Server ready at ${url}`)
 })

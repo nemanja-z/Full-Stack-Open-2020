@@ -14,7 +14,7 @@
     "@apollo/client": "^3.0.0-beta.50",
     "apollo-server": "^2.14.1",
     "dotenv": "^8.2.0",
-    "graphql": "^14.5.4",
+    "graphql": "^15.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.16",
     "mongoose-unique-validator": "^2.0.3",
