@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react'
-import { useMutation } from '@apollo/client'
-import { gql } from 'apollo-boost';
+import { useMutation, gql } from '@apollo/client'
 
 
 const LOGIN = gql`
-    mutation login($username:String!,$password:String!){
-        login(username:$username,password:$password){
-            value
+mutation login($username:String!,$password:String!){
+    login(username:$username,password:$password){
+        value
         }
-    }`
-const LoginForm = ({ setToken, setError }) => {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    }`;
+const LoginForm = ({ setError,setToken }) => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [login, result] = useMutation(LOGIN, {
         onError: (error) => {
             setError(error.graphqlErrors[0].message.data)
         }
-    })
+    });
+
     useEffect(() => {
         if (result.data) {
             const token = result.data.login.value
             setToken(token)
-            localStorage.setItem('token', token)
+            localStorage.setItem('auth', token)
         }
     }, [result.data, setToken])
     const submit = async e => {

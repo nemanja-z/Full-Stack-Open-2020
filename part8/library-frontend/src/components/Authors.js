@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { useQuery } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import BirthForm from './BirthForm'
-import { gql } from 'apollo-boost';
 
 export const ALL_AUTHORS = gql`
     query {
         allAuthors {
             name
             born
+            bookCount
             id
         }
     }
@@ -21,6 +21,8 @@ const Authors = (props) => {
       setAuthors(fetchAuthors.data.allAuthors.map(author => author))
     }
   }, [fetchAuthors])
+  console.log(author)
+
   if (!props.show) return null
   if (fetchAuthors.loading) return <div>loading...</div>
 
@@ -47,8 +49,7 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      {!props.token ? null :
-        <BirthForm authors={author} />}
+      <BirthForm authors={author} />
     </div>
   )
 }

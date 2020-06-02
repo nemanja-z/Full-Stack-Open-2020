@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useQuery, useMutation, gql } from '@apollo/client'
+import { useMutation, gql } from '@apollo/client'
 import { ALL_AUTHORS } from './Authors'
 import Select from 'react-select';
 const SET_BIRTHYEAR = gql`
@@ -24,28 +24,27 @@ const BirthForm = ({ authors }) => {
         setName('')
         setBorn('')
     }
-    /*  const options = authors ? authors.data.allAuthors.map(author => {
-         return { value: author.name, label: author.name }
-     }) : [] */
+    const options = authors.map(author => {
+        return { value: author.name, label: author.name }
+    })
     const handleChange = (name) => {
         setName(name.value)
     }
-    // const { name: n } = name
+    const { name: n } = name
     return (
         <div>
-            {authors.data && authors.data.allAuthors.map(author => {
-                return <form onSubmit={editAge}>
-                    <Select
-                        value={author.name}
-                        onChange={handleChange}
-                        options={author.name} />
+            <form onSubmit={editAge}>
+                <Select
+                    value={n}
+                    onChange={handleChange}
+                    options={options} />
 
                 born:<input
-                        value={born}
-                        onChange={({ target }) => setBorn(target.value)} />
-                    <button type='submit'>update</button>
-                </form>
-            })}
+                    value={born}
+                    onChange={({ target }) => setBorn(target.value)} />
+                <button type='submit'>update</button>
+            </form>
+
         </div>
     )
 }

@@ -57,13 +57,11 @@ const typeDefs = gql`
         setBornTo: Int!
         ): Author
         createUser(
-            username: String!
-            favoriteGenre:String!
-          ): User
+        username: String!
+        favoriteGenre:String!): User
         login(
-            username: String!
-            password: String!
-          ): Token
+        username: String!
+        password: String!): Token
       }
     type Query {
         me: User
@@ -75,14 +73,21 @@ const typeDefs = gql`
 `
 const resolvers = {
     Query: {
-        allBooks: (root, args) => {
-            if (args.author && args.genre)
-                return Book.find({ $and: [{ author: args.author }, { genres: { $in: args.genre } }] }).populate('author');
-            else if (args.author)
-                return Book.find({ author: args.author }).populate('author');
+        allBooks: async (root, args) => {
+            let books = await Book.find({}).populate('author');
+            if (args.author && args.genre) {
+                const author = await Author.findOne({ name: args.author });
+                const genres = books.filter(book => book.genres.includes(args.genre));
+                return genres.filter(genre => genre.author.id == author.id);
+            }
+            else if (args.author) {
+                const author = await Author.findOne({ name: args.author });
+                await Book.findById(author.id).populate('author')
+            }
             else if (args.genre)
-                return Book.find({ genres: args.genre }).populate('author');
-            else return Book.find({}).populate('author');
+                return Book.find({ genres: { $in: [args.genre] } }).populate('author');
+            return books;
+
         },
         me: (root, args, { currentUser }) => currentUser,
         allAuthors: async () => Author.find({}),
@@ -91,7 +96,7 @@ const resolvers = {
     },
     Author: {
         bookCount: async (root) => {
-            return Book.count({ author: root.id })
+            return Book.countDocuments({ author: root.id })
         }
     },
     Mutation: {
@@ -100,8 +105,13 @@ const resolvers = {
                 if (!currentUser) {
                     throw new AuthenticationError('not authenticated')
                 }
-                if (!args.title || !args.author || !args.published || !args.genres) {
-                    throw new UserInputError('Missing fields', {
+                if (args.author.length < 5) {
+                    throw new UserInputError('Name is to short', {
+                        invalidArgs: args,
+                    })
+                }
+                if (!args.title) {
+                    throw new UserInputError('Title field is required', {
                         invalidArgs: args,
                     });
                 }
@@ -126,25 +136,23 @@ const resolvers = {
                         invalidArgs: args,
                     })
                 }
-
-
                 return book
             },
         editAuthor: async (root, args, { currentUser }) => {
             if (!currentUser) {
                 throw new AuthenticationError("not authenticated")
             }
-            const author = Author.findOne({ name: { $eq: args.name } })
+            const author = await Author.findOne({ name: args.name })
             if (!author) return null
-            else {
-                const updatedAuthor = Author.updateOne(
-                    { "_id": author._id },
-                    { $set: { "born": args.setBornTo } })
-                return updatedAuthor
-            }
-
+            const updated = await Author.findOneAndUpdate(
+                { "_id": author._id },
+                { $set: { "born": args.setBornTo } })
+            return updated
         },
         createUser: async (root, args) => {
+            if (args.username < 4 || !args.favoriteGenre) {
+                throw new UserInputError('You need to enter username longer than 3 characters and favorite genre')
+            }
             const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre });
             try {
                 user.save()
@@ -165,7 +173,6 @@ const resolvers = {
                 username: user.username,
                 id: user._id
             }
-            console.log(userForToken, 'token')
             return {
                 value: jwt.sign(userForToken, process.env.SECRET)
             }
@@ -180,7 +187,6 @@ const server = new ApolloServer({
         if (auth && auth.toLowerCase().startsWith('bearer ')) {
             const decodedToken = jwt.verify(auth.substring(7), process.env.SECRET);
             const currentUser = await User.findById(decodedToken.id);
-            console.log(currentUser, 'cu')
             return { currentUser };
         };
 
