@@ -1,26 +1,8 @@
 import React, { useState } from 'react'
 import { gql, useMutation } from '@apollo/client'
-import { ALL_BOOKS } from './Books'
-import { ALL_AUTHORS } from './Authors'
+import { ALL_BOOKS, ADD_BOOK } from '../queries'
 
 
-const ADD_BOOK = gql`
-    mutation addBook($title:String!,$author:String!,$published:Int!,$genres:[String!]!){
-      addBook(
-        title:$title,
-        author:$author,
-        published:$published,
-        genres:$genres
-        ){
-          title
-          author{
-            name
-            id
-            bookCount
-          }
-          published
-          genres
-        }}`
 
 
 const NewBook = (props) => {
@@ -33,14 +15,15 @@ const NewBook = (props) => {
   const [addBook] = useMutation(ADD_BOOK, {
     onError: (error) => { props.setError(error.graphQLErrors[0].message) },
     update: (store, response) => {
-      const dataInStore = store.readQuery({ ALL_BOOKS })
+      /* const dataInStore = store.readQuery({ ALL_BOOKS })
       store.writeQuery({
         query: ALL_BOOKS,
         data: {
           ...dataInStore,
           allBooks: [...dataInStore.allBooks, response.data.addBook]
         }
-      })
+      }) */
+      props.updateCacheWith(response.data.addBook)
     }
   })
   if (!props.show) {

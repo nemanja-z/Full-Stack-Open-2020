@@ -4,6 +4,8 @@ const mongoose = require('mongoose')
 const Author = require('./models/author')
 const Book = require('./models/book')
 const User = require('./models/user')
+const { PubSub } = require('apollo-server')
+const pubsub = new PubSub()
 const jwt = require('jsonwebtoken')
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true);
@@ -70,6 +72,9 @@ const typeDefs = gql`
         allBooks(author: String, genre: String): [Book!]
         allAuthors: [Author!]!
     }
+    type Subscription{
+        bookAdded:Book!
+    }
 `
 const resolvers = {
     Query: {
@@ -90,12 +95,12 @@ const resolvers = {
 
         },
         me: (root, args, { currentUser }) => currentUser,
-        allAuthors: async () => Author.find({}),
+        allAuthors: () => Author.find({}),
         authorCount: () => Author.collection.countDocuments()
 
     },
     Author: {
-        bookCount: async (root) => {
+        bookCount: (root) => {
             return Book.countDocuments({ author: root.id })
         }
     },
@@ -136,6 +141,7 @@ const resolvers = {
                         invalidArgs: args,
                     })
                 }
+                pubsub.publish('BOOK_ADDED', { bookAdded: book })
                 return book
             },
         editAuthor: async (root, args, { currentUser }) => {
@@ -176,6 +182,12 @@ const resolvers = {
             return {
                 value: jwt.sign(userForToken, process.env.SECRET)
             }
+        },
+
+    },
+    Subscription: {
+        bookAdded: {
+            subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
         }
     }
 }
@@ -192,6 +204,7 @@ const server = new ApolloServer({
 
     }
 });
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
     console.log(`Server ready at ${url}`)
+    console.log(`Subscriptions ready at ${subscriptionsUrl}`)
 })

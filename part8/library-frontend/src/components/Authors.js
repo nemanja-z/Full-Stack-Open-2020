@@ -21,7 +21,6 @@ const Authors = (props) => {
       setAuthors(fetchAuthors.data.allAuthors.map(author => author))
     }
   }, [fetchAuthors])
-  console.log(author)
 
   if (!props.show) return null
   if (fetchAuthors.loading) return <div>loading...</div>
