@@ -26,9 +26,8 @@ const App = () => {
   const [token, setToken] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const client = useApolloClient();
-  const [view, setView] = useState('');
-  const [book, setBooks] = useState(null)
-  const fetchBooks = useQuery(ALL_BOOKS)
+  const [book, setBooks] = useState(null);
+  const fetchBooks = useQuery(ALL_BOOKS);
 
 
   const updateCacheWith = addedBook => {
@@ -107,7 +106,7 @@ const App = () => {
       />
 
       <Books
-        book={book} setView={setView} show={page === 'books'}
+        book={book} show={page === 'books'}
       />
 
       <NewBook

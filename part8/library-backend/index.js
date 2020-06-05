@@ -90,7 +90,7 @@ const resolvers = {
                 await Book.findById(author.id).populate('author')
             }
             else if (args.genre)
-                return Book.find({ genres: { $in: [args.genre] } }).populate('author');
+                return Book.find({ genres: { $in: [new RegExp(args.genre, 'i')] } }).populate('author');
             return books;
 
         },

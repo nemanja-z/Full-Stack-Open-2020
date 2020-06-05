@@ -3,7 +3,7 @@ import { useLazyQuery } from '@apollo/client';
 import { GET_BOOKS } from '../queries'
 const Books = (props) => {
   const [bookByGenre, setBooksByGenre] = useState(null)
-  const [getBooks, { data, called, loading }] = useLazyQuery(GET_BOOKS);
+  const [getBooks, { data, loading }] = useLazyQuery(GET_BOOKS);
 
 
   const filterByGenre = async genre => {
@@ -15,9 +15,8 @@ const Books = (props) => {
     }
   }, [data])
   if (!props.book) return <div>waiting...</div>
-  const genres = props.book.map(book => book.genres).flat().map(b => b.toLowerCase())
+  const genres = props.book.map(book => book.genres.map(g => g.toLowerCase())).flat()
   const filterGenre = [...new Set(genres)]
-  console.log(filterGenre)
 
   if (loading) return <div>loading...</div>
   if (!props.show) return null;
@@ -25,30 +24,57 @@ const Books = (props) => {
     return (
       <div>
         <h2>filtered books</h2>
-
-        {bookByGenre.map(b =>
-          <div key={b.title}>
-            <div>{b.title}</div>
-            <div>{b.author.name}</div>
-            <div>{b.published}</div>
-            <button onClick={() => setBooksByGenre(null)}>clear filter</button>
-          </div>
-        )}
+        <table>
+          <tbody>
+            <tr>
+              <th>
+                title
+              </th>
+              <th>
+                author
+            </th>
+              <th>
+                published
+            </th>
+            </tr>
+            {bookByGenre.map(b =>
+              <tr key={b.title}>
+                <td>{b.title}</td>
+                <td>{b.author.name}</td>
+                <td>{b.published}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        <button onClick={() => setBooksByGenre(null)}>clear filter</button>
       </div>
     )
   }
   return (
     <div>
       <h2>books</h2>
-
-
-      {props.book && props.book.map(b =>
-        <div key={b.title}>
-          <div>{b.title}</div>
-          <div>{b.author.name}</div>
-          <div>{b.published}</div>
-        </div>
-      )}
+      <table>
+        <tbody>
+          <tr>
+            <th>
+              title
+            </th>
+            <th>
+              author
+            </th>
+            <th>
+              published
+            </th>
+          </tr>
+          {props.book.map(b =>
+            <tr key={b.title}>
+              <td>{b.title}</td>
+              <td>{b.author.name}</td>
+              <td>{b.published}</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
       {filterGenre.map(b =>
         <button key={b} onClick={() => filterByGenre(b)}>{b}</button>
 

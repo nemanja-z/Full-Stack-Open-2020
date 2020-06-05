@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { ME } from '../queries'
 
 const Recommendation = ({ show, book }) => {
@@ -35,7 +35,7 @@ const Recommendation = ({ show, book }) => {
                         }
                         return null
                     }).map(book => {
-                        return (<tr key={userInfo.username}>
+                        return (<tr key={book.title}>
                             <td>{book.title}</td>
                             <td>{book.author.name}</td>
                             <td>{book.published}</td>

@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import BirthForm from './BirthForm'
+import { ALL_AUTHORS } from '../queries'
 
-export const ALL_AUTHORS = gql`
-    query {
-        allAuthors {
-            name
-            born
-            bookCount
-            id
-        }
-    }
-`;
 
 const Authors = (props) => {
   const fetchAuthors = useQuery(ALL_AUTHORS)
