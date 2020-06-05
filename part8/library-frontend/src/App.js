@@ -6,10 +6,8 @@ import LoginForm from './components/LoginForm'
 import NewBook from './components/NewBook'
 import Recommendation from './components/Recommendation'
 import { useApolloClient } from '@apollo/client'
-import { ALL_BOOKS, BOOK_ADDED, GENRE_FILTER } from './queries'
-import { useQuery, useLazyQuery, useSubscription } from '@apollo/client';
-
-
+import { ALL_BOOKS, BOOK_ADDED } from './queries'
+import { useSubscription, useQuery } from '@apollo/client';
 
 const Notify = ({ errorMessage }) => {
   if (!errorMessage) {
@@ -29,10 +27,9 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const client = useApolloClient();
   const [view, setView] = useState('');
-  const [book, setBooks] = useState(null);
-  const [fetchBooks] = useLazyQuery(GENRE_FILTER,
-    { variables: { genre: view } });
-  console.log(fetchBooks)
+  const [book, setBooks] = useState(null)
+  const fetchBooks = useQuery(ALL_BOOKS)
+
 
   const updateCacheWith = addedBook => {
     const includedIn = (set, object) =>
@@ -52,11 +49,6 @@ const App = () => {
       updateCacheWith(addedBook)
     }
   })
-  /*  {
-     for (let b of book.genres) {
-       if (b.toLowerCase().includes(view)) return b;
-     } return null;
-   } */
 
   useEffect(() => {
     let token = localStorage.getItem('auth')
@@ -64,14 +56,13 @@ const App = () => {
       setToken(token)
     }
   }, [token])
+
   useEffect(() => {
+
     if (fetchBooks.data) {
-      setBooks(fetchBooks.data.allBooks.filter(book => book
-      ))
+      setBooks(fetchBooks.data.allBooks.map(book => book))
     }
-  }, [fetchBooks.data, view]);
-
-
+  }, [fetchBooks.data]);
   const notify = (message) => {
     setErrorMessage(message)
     setTimeout(() => {

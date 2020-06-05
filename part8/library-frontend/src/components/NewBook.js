@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { gql, useMutation } from '@apollo/client'
-import { ALL_BOOKS, ADD_BOOK } from '../queries'
+import { useMutation } from '@apollo/client'
+import { ADD_BOOK } from '../queries'
 
 
 
@@ -15,14 +15,6 @@ const NewBook = (props) => {
   const [addBook] = useMutation(ADD_BOOK, {
     onError: (error) => { props.setError(error.graphQLErrors[0].message) },
     update: (store, response) => {
-      /* const dataInStore = store.readQuery({ ALL_BOOKS })
-      store.writeQuery({
-        query: ALL_BOOKS,
-        data: {
-          ...dataInStore,
-          allBooks: [...dataInStore.allBooks, response.data.addBook]
-        }
-      }) */
       props.updateCacheWith(response.data.addBook)
     }
   })
@@ -43,7 +35,7 @@ const NewBook = (props) => {
   }
 
   const addGenre = () => {
-    setGenres(genres.concat(genre))
+    setGenres(genres.concat(genre.toLowerCase()))
     setGenre('')
   }
 

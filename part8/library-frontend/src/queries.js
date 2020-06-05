@@ -45,8 +45,8 @@ export const ADD_BOOK = gql`
           published
           genres
         }}`
-export const GENRE_FILTER = gql`
-        query allBooks($genre:String!){
+export const GET_BOOKS = gql`
+        query getBooks($genre:String!){
           allBooks(genre:$genre){
             title
           author{
