@@ -20,10 +20,16 @@ app.get('/bmi', (req, res) => {
     };
     res.send(data);
 });
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-app.post('/exercise', (req: any, res) => {
-    const { target, daily_exercises } = req.body;
-    const count = countExercise(target, daily_exercises);
+app.post('/exercise', (req, res) => {
+    const { goal, hour } = req.body; //eslint-disable-line
+    if (!goal) {
+        res.status(400).send({ "error": "You have to set your goal" });
+    }
+    if (!hour) {
+        res.status(400).send({ "error": "You could try to start exercising " });
+    }
+    const count = countExercise(goal, hour);
+    console.log(count);
     res.send(count);
 });
 const PORT = 3003;

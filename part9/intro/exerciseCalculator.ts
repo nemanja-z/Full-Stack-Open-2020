@@ -41,4 +41,4 @@ export const countExercise = (goal: number, hour: Array<number>): Summary => {
 };
 const goal = Number(process.argv[2]);
 const hour = process.argv.slice(3).map(h => Number(h));
-console.log(countExercise(goal, hour));
+//console.log(countExercise(goal, hour));
