@@ -22,11 +22,8 @@ app.get('/bmi', (req, res) => {
 });
 app.post('/exercise', (req, res) => {
     const { goal, hour } = req.body; //eslint-disable-line
-    if (!goal) {
-        res.status(400).send({ "error": "You have to set your goal" });
-    }
-    if (!hour) {
-        res.status(400).send({ "error": "You could try to start exercising " });
+    if (!goal || !goal) {
+        res.status(400).send({ "error": "Parameters missing" });
     }
     const count = countExercise(goal, hour);
     console.log(count);
