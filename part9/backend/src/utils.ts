@@ -6,6 +6,8 @@ const isString = (text: any): text is string => {
     return typeof text === 'string' || text instanceof String;
 };
 const isGender = (param: any): param is Gender => {
+    console.log(Object.values(Gender));
+
     return Object.values(Gender).includes(param);
 };
 const isDate = (date: string): boolean => {
@@ -31,7 +33,7 @@ const parseOccupation = (occupation: any): string => {
 };
 const parseSSN = (ssn: any): string => {
     if (!ssn || !isString(ssn)) {
-        throw new Error('Incorrect snn: ' + ssn);
+        throw new Error('Incorrect or missing ssn: ' + ssn);
     }
     return ssn;
 };
