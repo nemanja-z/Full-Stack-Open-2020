@@ -1,5 +1,5 @@
 import patientData from '../data/patients';
-import { ClearedPatientEntry, NewPatientEntry, PatientEntry } from '../types';
+import { PublicPatient, ClearedPatientEntry, NewPatientEntry, Patient } from '../types';
 
 
 const patients: Array<ClearedPatientEntry> = patientData;
@@ -7,9 +7,13 @@ const getEntries = (): ClearedPatientEntry[] => {
     return patients.map(({ id, name, dateOfBirth, gender, occupation }) =>
         ({ id, name, dateOfBirth, gender, occupation }));
 };
+const getById = (id: string): PublicPatient[] => {
+    const found = patients.filter(p => p.id === id);
+    return found.map(({ id, name, dateOfBirth, gender, occupation, entries }) =>
+        ({ id, name, dateOfBirth, gender, occupation, entries }));
+};
 
-
-const addPatient = (entry: NewPatientEntry): PatientEntry => {
+const addPatient = (entry: NewPatientEntry): Patient => {
     const newPatientEntry = {
         id: Date.now().toString(),
         ...entry
@@ -20,5 +24,6 @@ const addPatient = (entry: NewPatientEntry): PatientEntry => {
 
 export default {
     getEntries,
-    addPatient
+    addPatient,
+    getById
 };
