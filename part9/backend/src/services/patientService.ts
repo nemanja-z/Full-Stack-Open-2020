@@ -1,8 +1,8 @@
-import patientData from '../data/patients';
+import patientsData from '../data/patients';
 import { PublicPatient, ClearedPatientEntry, NewPatientEntry, Patient } from '../types';
 
 
-const patients: Array<ClearedPatientEntry> = patientData;
+const patients: ClearedPatientEntry[] = patientsData;
 const getEntries = (): ClearedPatientEntry[] => {
     return patients.map(({ id, name, dateOfBirth, gender, occupation }) =>
         ({ id, name, dateOfBirth, gender, occupation }));

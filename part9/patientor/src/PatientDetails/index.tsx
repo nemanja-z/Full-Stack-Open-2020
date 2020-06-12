@@ -30,6 +30,7 @@ const PatientDetails: React.FC = () => {
     };
     fetchPatientDetails();
   }, [dispatch, id]);
+  console.log(patientInfo);
   const icons = (gender: string) => {
     switch (gender) {
       case 'male': return <Icon name='mars' />;
@@ -48,8 +49,28 @@ const PatientDetails: React.FC = () => {
           <h2>{pat.name} {icons(pat.gender)}</h2>
           <p>{pat.ssn}</p>
           <p>{pat.occupation}</p>
+          <h4>entries</h4>
+
+          {pat.entries && pat.entries.map(pa => {
+            pa.diagnosisCodes && pa.diagnosisCodes.map(p => {
+              return (<div key={pat.id}>
+                <p>{pa.date} {pa.description}</p>
+              </div>);
+            }
+            );
+          }
+          )}
         </div>
       ))}
-    </div >);
+
+    </div >
+  );
 };
+/* {
+  pa.diagnosisCodes && pa.diagnosisCodes.map(p =>
+    <li key={pat.id}>{p}</li>
+  );
+}
+
+                  <li key={pat.id}>{p}</li> */
 export default PatientDetails;
