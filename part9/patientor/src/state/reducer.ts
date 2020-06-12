@@ -15,7 +15,6 @@ export type Action =
     type: "PATIENT_DETAILS";
     payload: Patient;
   };
-
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "SET_PATIENT_LIST":
@@ -41,9 +40,27 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         patientInfo: action.payload
-
       };
     default:
       return state;
   }
+};
+
+export const setPatientList = (patients: Patient[]): Action => {
+  return {
+    type: "SET_PATIENT_LIST",
+    payload: patients
+  };
+};
+export const addPatient = (patient: Patient): Action => {
+  return {
+    type: "ADD_PATIENT",
+    payload: patient
+  };
+};
+export const patientDetails = (patient: Patient): Action => {
+  return {
+    type: "PATIENT_DETAILS",
+    payload: patient
+  };
 };
