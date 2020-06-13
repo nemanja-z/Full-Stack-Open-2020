@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { Icon } from 'semantic-ui-react';
 import { Patient } from "../types";
 import { patientDetails } from '../state/reducer';
-
+import Entries from './Entries';
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 
@@ -23,14 +23,12 @@ const PatientDetails: React.FC = () => {
           `${apiBaseUrl}/patients/${id}`
         );
         dispatch(patientDetails(patient));
-        // dispatch({ type: "PATIENT_DETAILS", payload: patients });
       } catch (e) {
         console.error(e);
       }
     };
     fetchPatientDetails();
   }, [dispatch, id]);
-  console.log(patientInfo);
   const icons = (gender: string) => {
     switch (gender) {
       case 'male': return <Icon name='mars' />;
@@ -40,37 +38,36 @@ const PatientDetails: React.FC = () => {
     }
   };
   if (!patientInfo) return null;
-
-
+  console.log(patientInfo);
   return (
     < div >
       {Object.values(patientInfo).map((pat: Patient) => (
+
         <div key={pat.id}>
           <h2>{pat.name} {icons(pat.gender)}</h2>
           <p>{pat.ssn}</p>
           <p>{pat.occupation}</p>
-          <h4>entries</h4>
-
-          {pat.entries && pat.entries.map(pa => {
-            pa.diagnosisCodes && pa.diagnosisCodes.map(p => {
-              return (<div key={pat.id}>
-                <p>{pa.date} {pa.description}</p>
-              </div>);
-            }
-            );
-          }
-          )}
-        </div>
-      ))}
-
-    </div >
+        </div >))}
+      {Object.values(patientInfo).map((pat: Patient) => {
+        {
+          return pat.entries ? pat.entries.map(p =>
+            <Entries key={p.id} entry={p} />) : null;
+        }
+      })}
+    </div>
   );
 };
-/* {
-  pa.diagnosisCodes && pa.diagnosisCodes.map(p =>
-    <li key={pat.id}>{p}</li>
-  );
-}
-
-                  <li key={pat.id}>{p}</li> */
 export default PatientDetails;
+
+/* {!pat.entries ? <h4>no entries</h4> :
+  <div>
+    <h4>entries</h4>
+    {pat.entries.map(pa =>
+      <div key={pa.id}>
+        <div>{pa.date} {pa.description}</div>
+        {!pa.diagnosisCodes ? null :
+          <ul>
+            {pa.diagnosisCodes?.map(p =>
+              <li key={p}>{p}</li>)}
+          </ul>}
+      </div>)} */
