@@ -16,6 +16,15 @@ router.post('/', (req, res) => {
         res.status(400).send(e);
     }
 });
+router.post('/:id/entries', (req, res) => {
+    try {
+        const addedEntry = patientService.addEntry(req.params.id, req.body);
+        res.send(addedEntry);
+    }
+    catch (e) {
+        res.status(400).send(e);
+    }
+});
 router.get('/:id', (req, res) => {
     try {
         const { id } = req.params;

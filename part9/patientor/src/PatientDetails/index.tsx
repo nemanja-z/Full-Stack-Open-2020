@@ -2,17 +2,30 @@ import React from 'react';
 
 import { useStateValue } from "../state";
 import { useParams } from "react-router-dom";
-import { Icon } from 'semantic-ui-react';
+import { Icon, Grid, Button } from 'semantic-ui-react';
 import { Patient } from "../types";
 import { patientDetails } from '../state/reducer';
 import Entries from './Entries';
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
-
+import AddHealthCheckEntryForm from '../AddHealthcheckModal/index';
 
 
 const PatientDetails: React.FC = () => {
   const [{ patientInfo }, dispatch] = useStateValue();
+
+  const [healthcheckModalOpen, setHealthcheckModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | undefined>();
+
+  const openModal = (): void => setHealthcheckModalOpen(true);
+
+
+  const submitHealthCheckEntry = () => { };
+  const closeModal = (): void => {
+    setError(undefined);
+    setHealthcheckModalOpen(false);
+  };
+
   const { id } = useParams<{ id: string }>();
 
   React.useEffect(() => {
@@ -38,9 +51,17 @@ const PatientDetails: React.FC = () => {
     }
   };
   if (!patientInfo) return null;
-  console.log(patientInfo);
   return (
     < div >
+      <Grid>
+        <Grid.Column floated="left" width={5}>
+          <h2>{patientInfo.name} {icons(patientInfo.gender)}</h2>
+        </Grid.Column>
+        <Grid.Column floated="right" width={8}>
+          Add Healthcare Entry:{' '}
+          <Button onClick={() => openModal()}>Hospital</Button>
+        </Grid.Column>
+      </Grid>
       {Object.values(patientInfo).map((pat: Patient) => (
 
         <div key={pat.id}>
@@ -54,6 +75,13 @@ const PatientDetails: React.FC = () => {
             <Entries key={p.id} entry={p} />) : null;
         }
       })}
+      <AddHealthCheckEntryForm
+        modalOpen={healthcheckModalOpen}
+        onSubmit={submitHealthCheckEntry}
+        onClose={() => closeModal()}
+        error={error}
+        patientName={patientInfo.name}
+      />
     </div>
   );
 };

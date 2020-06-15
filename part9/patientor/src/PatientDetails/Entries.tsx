@@ -39,6 +39,7 @@ const Entries: React.FC<{ entry: Entry }> = ({ entry }) => {
                 {icon(entry)}
                 <p>{entry.specialist}</p>
                 <p>{entry.description}</p>
+                <p>{entry.employerName}</p>
                 <ul>
                     {entry.diagnosisCodes && (
                         entry.diagnosisCodes.map(e => <li key={e}>{e}</li>)
