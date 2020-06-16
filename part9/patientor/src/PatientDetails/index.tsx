@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { useStateValue } from "../state";
 import { useParams } from "react-router-dom";
 import { Icon, Grid, Button } from 'semantic-ui-react';
@@ -9,21 +8,28 @@ import Entries from './Entries';
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 import AddHealthCheckEntryForm from '../AddHealthcheckModal/index';
+import AddOccupationalHealthcareEntryForm from '../AddOccupationalHealthcareModal/index';
+import AddHospitalEntryForm from '../AddHospitalModal/index';
+
 
 
 const PatientDetails: React.FC = () => {
   const [{ patientInfo }, dispatch] = useStateValue();
-
   const [healthcheckModalOpen, setHealthcheckModalOpen] = React.useState<boolean>(false);
+  const [hospitalModalOpen, setHospitalModalOpen] = React.useState<boolean>(false);
+  const [occupationalHealthcareModalOpen, setOccupationalHealthcareModalOpen] = React.useState<boolean>(false);
+
   const [error, setError] = React.useState<string | undefined>();
 
-  const openModal = (): void => setHealthcheckModalOpen(true);
+  const openHealthcheck = (): void => setHealthcheckModalOpen(true);
+  const openHospital = (): void => setHospitalModalOpen(true);
+  const openOccupational = (): void => setOccupationalHealthcareModalOpen(true);
 
-
-  const submitHealthCheckEntry = () => { };
   const closeModal = (): void => {
     setError(undefined);
     setHealthcheckModalOpen(false);
+    setHospitalModalOpen(false);
+    setOccupationalHealthcareModalOpen(false);
   };
 
   const { id } = useParams<{ id: string }>();
@@ -47,7 +53,7 @@ const PatientDetails: React.FC = () => {
       case 'male': return <Icon name='mars' />;
       case 'female': return <Icon name='venus' />;
       case 'other': return <Icon name='genderless' />;
-      default: return gender;
+      default: return null;
     }
   };
   if (!patientInfo) return null;
@@ -55,11 +61,13 @@ const PatientDetails: React.FC = () => {
     < div >
       <Grid>
         <Grid.Column floated="left" width={5}>
-          <h2>{patientInfo.name} {icons(patientInfo.gender)}</h2>
+          <h2>{patientInfo.name}</h2>
         </Grid.Column>
         <Grid.Column floated="right" width={8}>
-          Add Healthcare Entry:{' '}
-          <Button onClick={() => openModal()}>Hospital</Button>
+          Add Entry:{' '}
+          <Button onClick={() => openHospital()}>Hospital</Button>
+          <Button onClick={() => openOccupational()}>Occupational Healthcare</Button>
+          <Button onClick={() => openHealthcheck()}>Healthcheck</Button>
         </Grid.Column>
       </Grid>
       {Object.values(patientInfo).map((pat: Patient) => (
@@ -82,20 +90,22 @@ const PatientDetails: React.FC = () => {
         error={error}
         patientName={patientInfo.name}
       />
+      <AddOccupationalHealthcareEntryForm
+        modalOpen={occupationalHealthcareModalOpen}
+        onSubmit={submitHealthCheckEntry}
+        onClose={() => closeModal()}
+        error={error}
+        patientName={patientInfo.name}
+      />
+      <AddHospitalEntryForm
+        modalOpen={hospitalModalOpen}
+        onSubmit={submitHealthCheckEntry}
+        onClose={() => closeModal()}
+        error={error}
+        patientName={patientInfo.name}
+      />
     </div>
   );
 };
 export default PatientDetails;
 
-/* {!pat.entries ? <h4>no entries</h4> :
-  <div>
-    <h4>entries</h4>
-    {pat.entries.map(pa =>
-      <div key={pa.id}>
-        <div>{pa.date} {pa.description}</div>
-        {!pa.diagnosisCodes ? null :
-          <ul>
-            {pa.diagnosisCodes?.map(p =>
-              <li key={p}>{p}</li>)}
-          </ul>}
-      </div>)} */

@@ -1,30 +1,35 @@
+
 import React from "react";
 import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
 import { useStateValue } from "../state";
 
-import { TextField, DiagnosisSelection, NumberField } from "../AddPatientModal/FormField";
-import { HealthCheckEntry } from "../types";
+import { TextField, DiagnosisSelection } from "../AddPatientModal/FormField";
+import { OccupationalHealthcareEntry } from "../types";
 
-export type HealthCheckEntryFormValues = Omit<HealthCheckEntry, 'id'>;
+export type OccupationalHealthcareEntryFormValues = Omit<OccupationalHealthcareEntry, 'id'>;
 interface Props {
-    onSubmit: (values: HealthCheckEntryFormValues) => void;
+    onSubmit: (values: OccupationalHealthcareEntryFormValues) => void;
     onCancel: () => void;
 }
 
 
-export const AddHealthcheckForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
+export const AddOccupationalHealthcareEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
     const [{ diagnoses }] = useStateValue();
 
     return (
         <Formik
             initialValues={{
-                type: 'HealthCheck',
+                type: 'OccupationalHealthcare',
                 description: '',
                 date: '',
                 specialist: '',
                 diagnosisCodes: [],
-                healthCheckRating: 0
+                employerName: '',
+                sickLeave: {
+                    startDate: "",
+                    endDate: ""
+                }
             }}
             onSubmit={onSubmit}
             validate={values => {
@@ -34,10 +39,13 @@ export const AddHealthcheckForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                     errors.description = requiredError;
                 }
                 if (!values.date) {
-                    errors.data = requiredError;
+                    errors.date = requiredError;
                 }
                 if (!values.specialist) {
                     errors.specialist = requiredError;
+                }
+                if (!values.employerName) {
+                    errors.employerName = requiredError;
                 }
                 return errors;
             }}
@@ -75,11 +83,22 @@ export const AddHealthcheckForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                             diagnoses={Object.values(diagnoses)}
                         />
                         <Field
-                            label='Health Check Rating'
-                            name='healthCheckRating'
-                            component={NumberField}
-                            min={0}
-                            max={3}
+                            label='Employer name'
+                            placeholder="Employer name"
+                            name="employerName"
+                            component={TextField}
+                        />
+                        <Field
+                            label='Sick leave - start date'
+                            placeholder="Start date"
+                            name="sickLeave.startDate"
+                            component={TextField}
+                        />
+                        <Field
+                            label='Sick leave - end date'
+                            placeholder="End date"
+                            name="sickLeave.endDate"
+                            component={TextField}
                         />
                         <Grid>
                             <Grid.Column floated="left" width={5}>
@@ -104,5 +123,4 @@ export const AddHealthcheckForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         </Formik>
     );
 };
-
-export default AddHealthcheckForm;
+export default AddOccupationalHealthcareEntryForm;

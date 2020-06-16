@@ -1,30 +1,34 @@
+
 import React from "react";
 import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
 import { useStateValue } from "../state";
 
-import { TextField, DiagnosisSelection, NumberField } from "../AddPatientModal/FormField";
-import { HealthCheckEntry } from "../types";
+import { TextField, DiagnosisSelection } from "../AddPatientModal/FormField";
+import { HospitalEntry } from "../types";
 
-export type HealthCheckEntryFormValues = Omit<HealthCheckEntry, 'id'>;
+export type HospitalEntryFormValues = Omit<HospitalEntry, 'id'>;
 interface Props {
-    onSubmit: (values: HealthCheckEntryFormValues) => void;
+    onSubmit: (values: HospitalEntryFormValues) => void;
     onCancel: () => void;
 }
 
 
-export const AddHealthcheckForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
+export const AddHospitalForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
     const [{ diagnoses }] = useStateValue();
 
     return (
         <Formik
             initialValues={{
-                type: 'HealthCheck',
+                type: 'Hospital',
                 description: '',
                 date: '',
                 specialist: '',
                 diagnosisCodes: [],
-                healthCheckRating: 0
+                discharge: {
+                    date: "",
+                    criteria: ""
+                }
             }}
             onSubmit={onSubmit}
             validate={values => {
@@ -38,6 +42,12 @@ export const AddHealthcheckForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                 }
                 if (!values.specialist) {
                     errors.specialist = requiredError;
+                }
+                if (!values.discharge.date) {
+                    errors.discharge = requiredError;
+                }
+                if (!values.discharge.criteria) {
+                    errors.discharge = requiredError;
                 }
                 return errors;
             }}
@@ -75,11 +85,16 @@ export const AddHealthcheckForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                             diagnoses={Object.values(diagnoses)}
                         />
                         <Field
-                            label='Health Check Rating'
-                            name='healthCheckRating'
-                            component={NumberField}
-                            min={0}
-                            max={3}
+                            label='Discharge date'
+                            placeholder="Discharge date"
+                            name="discharge.date"
+                            component={TextField}
+                        />
+                        <Field
+                            label='Discharge criteria'
+                            placeholder="Discharge criteria"
+                            name="discharge.criteria"
+                            component={TextField}
                         />
                         <Grid>
                             <Grid.Column floated="left" width={5}>
@@ -104,5 +119,4 @@ export const AddHealthcheckForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         </Formik>
     );
 };
-
-export default AddHealthcheckForm;
+export default AddHospitalForm;
