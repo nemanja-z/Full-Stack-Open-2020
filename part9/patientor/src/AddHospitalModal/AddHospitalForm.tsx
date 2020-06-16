@@ -21,9 +21,9 @@ export const AddHospitalForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         <Formik
             initialValues={{
                 type: 'Hospital',
-                description: '',
-                date: '',
-                specialist: '',
+                description: "",
+                date: "",
+                specialist: "",
                 diagnosisCodes: [],
                 discharge: {
                     date: "",
@@ -59,12 +59,6 @@ export const AddHospitalForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                             label="Description"
                             placeholder="Description"
                             name="description"
-                            component={TextField}
-                        />
-                        <Field
-                            label="Social Security Number"
-                            placeholder="SSN"
-                            name="ssn"
                             component={TextField}
                         />
                         <Field

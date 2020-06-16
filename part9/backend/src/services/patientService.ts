@@ -42,7 +42,7 @@ const addEntry = (id: string, entry: Entry): Patient => {
 
     switch (entry.type) {
         case 'Hospital':
-            if (entry.discharge) throw new Error('error: discharge data missing');
+            if (!entry.discharge) throw new Error('error: discharge data missing');
             return updatedPatient();
         case 'OccupationalHealthcare':
             if (!entry.employerName) throw new Error('error: employer name missing');

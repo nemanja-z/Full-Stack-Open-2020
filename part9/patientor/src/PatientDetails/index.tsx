@@ -10,6 +10,12 @@ import { apiBaseUrl } from "../constants";
 import AddHealthCheckEntryForm from '../AddHealthcheckModal/index';
 import AddOccupationalHealthcareEntryForm from '../AddOccupationalHealthcareModal/index';
 import AddHospitalEntryForm from '../AddHospitalModal/index';
+import { HealthCheckEntryFormValues } from '../AddHealthcheckModal/AddHealthcheckForm';
+import { HospitalEntryFormValues } from '../AddHospitalModal/AddHospitalForm';
+import { OccupationalHealthcareEntryFormValues } from '../AddOccupationalHealthcareModal/AddOccupationalHealthcareForm';
+
+
+import { updateEntry } from '../state/reducer';
 
 
 
@@ -48,6 +54,7 @@ const PatientDetails: React.FC = () => {
     };
     fetchPatientDetails();
   }, [dispatch, id]);
+  if (!patientInfo) return <h2>Loading...</h2>;
   const icons = (gender: string) => {
     switch (gender) {
       case 'male': return <Icon name='mars' />;
@@ -56,7 +63,46 @@ const PatientDetails: React.FC = () => {
       default: return null;
     }
   };
-  if (!patientInfo) return null;
+  const submitHealthCheckEntry = async (values: HealthCheckEntryFormValues) => {
+    try {
+      const { data: updatePatient } = await axios.post<Patient>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+      dispatch(updateEntry(updatePatient));
+      closeModal();
+    } catch (e) {
+      console.error(e.response.data);
+      setError(e.response.data.error);
+    }
+  };
+  const submitHospitalEntry = async (values: HospitalEntryFormValues) => {
+    try {
+      const { data: updatePatient } = await axios.post<Patient>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+      dispatch(updateEntry(updatePatient));
+      closeModal();
+    } catch (e) {
+      console.error(e.response.data);
+      setError(e.response.data.error);
+    }
+  };
+  const submitOccupationalHealthcareEntry = async (values: OccupationalHealthcareEntryFormValues) => {
+    try {
+      const { data: updatePatient } = await axios.post<Patient>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+      dispatch(updateEntry(updatePatient));
+      closeModal();
+    } catch (e) {
+      console.error(e.response.data);
+      setError(e.response.data.error);
+    }
+  };
+
   return (
     < div >
       <Grid>
@@ -76,13 +122,11 @@ const PatientDetails: React.FC = () => {
           <h2>{pat.name} {icons(pat.gender)}</h2>
           <p>{pat.ssn}</p>
           <p>{pat.occupation}</p>
+
+          {pat.entries ? pat.entries.map(p =>
+            <Entries key={p.id} entry={p} />) : null}
         </div >))}
-      {Object.values(patientInfo).map((pat: Patient) => {
-        {
-          return pat.entries ? pat.entries.map(p =>
-            <Entries key={p.id} entry={p} />) : null;
-        }
-      })}
+
       <AddHealthCheckEntryForm
         modalOpen={healthcheckModalOpen}
         onSubmit={submitHealthCheckEntry}
@@ -92,14 +136,14 @@ const PatientDetails: React.FC = () => {
       />
       <AddOccupationalHealthcareEntryForm
         modalOpen={occupationalHealthcareModalOpen}
-        onSubmit={submitHealthCheckEntry}
+        onSubmit={submitOccupationalHealthcareEntry}
         onClose={() => closeModal()}
         error={error}
         patientName={patientInfo.name}
       />
       <AddHospitalEntryForm
         modalOpen={hospitalModalOpen}
-        onSubmit={submitHealthCheckEntry}
+        onSubmit={submitHospitalEntry}
         onClose={() => closeModal()}
         error={error}
         patientName={patientInfo.name}
@@ -109,3 +153,9 @@ const PatientDetails: React.FC = () => {
 };
 export default PatientDetails;
 
+/* {Object.values(patientInfo).map((pat: Patient) => {
+  {
+    return pat.entries ? pat.entries.map(p =>
+      <Entries key={p.id} entry={p} />) : null;
+  }
+})} */

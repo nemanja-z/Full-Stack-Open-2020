@@ -60,12 +60,6 @@ export const AddOccupationalHealthcareEntryForm: React.FC<Props> = ({ onSubmit, 
                             component={TextField}
                         />
                         <Field
-                            label="Social Security Number"
-                            placeholder="SSN"
-                            name="ssn"
-                            component={TextField}
-                        />
-                        <Field
                             label="Date"
                             placeholder="YYYY-MM-DD"
                             name="date"

@@ -20,9 +20,9 @@ export const AddHealthcheckForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         <Formik
             initialValues={{
                 type: 'HealthCheck',
-                description: '',
-                date: '',
-                specialist: '',
+                description: "",
+                date: "",
+                specialist: "",
                 diagnosisCodes: [],
                 healthCheckRating: 0
             }}
@@ -49,12 +49,6 @@ export const AddHealthcheckForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                             label="Description"
                             placeholder="Description"
                             name="description"
-                            component={TextField}
-                        />
-                        <Field
-                            label="Social Security Number"
-                            placeholder="SSN"
-                            name="ssn"
                             component={TextField}
                         />
                         <Field
