@@ -8,8 +8,8 @@ const Button = ({ value, text }) => {
   )
 }
 
-const Statistics = ({ text, value }) => {
-  return (
+const Statistics = ({ text, value }) => 
+(
     <table>
       <tbody>
         <tr>
@@ -19,8 +19,6 @@ const Statistics = ({ text, value }) => {
       </tbody>
     </table>
   )
-}
-
 
 const App = () => {
   // save clicks of each button to own state
@@ -30,17 +28,19 @@ const App = () => {
 
   return (
     <div>
-      <div>
-        <h1>Give feedback</h1>
+      <h1>Give feedback</h1>
+      <>
         <Button text='Good'
           value={[good, setGood]} />
         <Button text='Neutral'
           value={[neutral, setNeutral]} />
         <Button text='Bad'
           value={[bad, setBad]} />
-      </div>
+      </>
 
-      <h1>Statistics</h1>
+      <h2>Statistics</h2>
+      {good||bad||neutral?
+      (<>
       <Statistics value={good}
         text='Good' />
       <Statistics value={neutral}
@@ -51,12 +51,11 @@ const App = () => {
         text='All' />
       <Statistics value={(good - bad) / (good + bad + neutral)}
         text='Average' />
-      <Statistics value={(good / (good + bad + neutral)) * 100 + '%'}
-        text='Positive' />:<p>No feedback given</p>
-)
-
+      <Statistics value={(good / (good + bad + neutral)) * 100 + '%'} text='Positive' />
+        </>):
+        <p>No feedback given</p>}
     </div>
   );
 };
 
-ReactDOM.render(<App />, document.getElementById("root"))
+ReactDOM.render(<App />, document.getElementById("root"));
