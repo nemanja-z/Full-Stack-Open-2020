@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Persons from './components/Persons'
-import Filter from './components/Filter'
-import PersonForm from './components/PersonForm'
-import service from './services/service'
-import Notification from './components/Notification'
+import Persons from './components/Persons';
+import Filter from './components/Filter';
+import PersonForm from './components/PersonForm';
+import service from './services/service';
+import Notification from './components/Notification';
 
 
 const App = () => {
@@ -16,10 +16,10 @@ const App = () => {
 
   useEffect(() => {
     service.getAll()
-      .then(request => {
-        setPersons(request);
-      })
-      .catch(e => e);
+      .then(request => 
+        setPersons(request)
+      )
+      .catch(e => console.log(e.response));
   }, []);
   const handleChange = (e) => {
     e.preventDefault()
@@ -36,38 +36,35 @@ const App = () => {
 
   const addName = (e) => {
     e.preventDefault()
-    const p = {
+    const newPerson = {
       name: newName,
       number: newNumber,
     }
 
-    if (persons.some(per => per.name === p.name)) {
-      const id = persons.find(pr => pr.name === p.name).id
-      if (window.confirm(`${p.name} is already added to phonebook. Do you want to replace the old number with a new one?`)) {
-        service.update(id, p)
+    if (persons.some(per => per.name === newPerson.name)) {
+      const id = persons.find(pr => pr.name === newPerson.name).id
+      if (window.confirm(`${newPerson.name} is already added to phonebook. Do you want to replace the old number with a new one?`)) {
+        service.update(id, newPerson)
           .then(request => {
-            setPersons(persons.map(p => p.id === id ? request : p))
+            setPersons(persons.map(person => person.id === id ? request : person))
             setNewNumber('')
             setNewName('')
-            setMessage(`${p.name}'s number is updated to ${p.number}`)
+            setMessage(`${newPerson.name}'s number is updated to ${newPerson.number}`)
             setTimeout(() => { setMessage(null) }, 5000)
           })
           .catch(() => {
-            setMessage(`Information of ${p.name} has already been removed from server`)
+            setMessage(`Information of ${newPerson.name} has already been removed from server`)
             setTimeout(() => {
               setMessage(null)
             }, 5000)
           })
-
-
-
       }
       return;
     }
-    service.create(p)
+    service.create(newPerson)
       .then(request => {
         setPersons(persons.concat(request))
-        setMessage(`${p.name} is added to the phonebook`)
+        setMessage(`${newPerson.name} is added to the phonebook`)
         setTimeout(() => { setMessage(null) }, 5000)
         setNewNumber('')
         setNewName('')
@@ -79,21 +76,20 @@ const App = () => {
       })
   }
 
-
-
   const handleRemove = (e) => {
-    let obj = persons[e.target.id];
-    if (window.confirm(`Do you really want to delete ${obj.name}?`)) {
-      service.remove(obj.id)
+    const personRemove = persons.find(person=>person.id===Number(e.target.id));
+    if (window.confirm(`Do you really want to delete ${personRemove.name}?`)) {
+      service.remove(personRemove.id)
+      .then(()=>
+        setPersons(persons.filter(person=>person.id!==personRemove.id)));
     }
-    else {
-      return false;
-    }
+    return;
   }
 
-  const view = !search ?
-    persons : persons.filter(p => p.name.toLowerCase().startsWith(search))
-  return (
+  const view = !search ?persons: 
+  persons.filter(person => person.name.toLowerCase().startsWith(search));
+ 
+    return (
     <div>
       <h1>Phonebook</h1>
       <Notification message={message} />
@@ -113,4 +109,4 @@ const App = () => {
     </div>
   )
 }
-export default App
+export default App;

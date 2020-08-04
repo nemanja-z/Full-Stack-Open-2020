@@ -1,8 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-const Filter = ({ search, changeSearch }) => {
-
-    return (
+const Filter = ({ search, changeSearch }) => (
         <div>
             <div>filter: <input
                 value={search}
@@ -10,5 +8,4 @@ const Filter = ({ search, changeSearch }) => {
 
         </div>
     )
-}
-export default Filter
+export default Filter;

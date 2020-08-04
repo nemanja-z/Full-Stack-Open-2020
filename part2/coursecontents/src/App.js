@@ -1,6 +1,7 @@
 import React from 'react';
-import './App.css';
-import Course from './components/Course'
+import Course from './components/Course';
+const shortid = require('shortid');
+
 
 const App = () => {
   const course = [
@@ -50,9 +51,10 @@ const App = () => {
 
 
   return (
-    <div>{course.map(c =>
-      <Course course={c} />)}
+    <div>
+    {course.map((c) =>
+      <Course key={shortid.generate()} course={c} />)}
     </div>
   )
 }
-export default App
+export default App;

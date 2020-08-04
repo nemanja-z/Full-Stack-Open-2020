@@ -1,17 +1,18 @@
-import React from 'react'
+import React from 'react';
+const shortid = require('shortid');
 
-export const Persons = ({ view, handleRemove }) => {
-    return (
+const Persons = ({ view, handleRemove }) => 
+(
         <div>
             {
-                view.map((p, id) =>
-                    <div key={id} style={{ display: 'flex' }}>
-                        <p key={id}>{`${p.name} ${p.number}`}</p>
-                        <button onClick={handleRemove} id={id}>delete</button>
+                view.map((person) =>
+                    <div key={shortid.generate()} style={{ display: 'flex' }}>
+                        <p key={person.id}>{`${person.name} ${person.number}`}</p>
+                        <button onClick={handleRemove} id={person.id}>delete</button>
                     </div>)
             }
 
         </div>
     )
-}
-export default Persons
+
+export default Persons;
