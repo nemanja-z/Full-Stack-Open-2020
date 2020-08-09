@@ -16,7 +16,7 @@ const App = () => {
 
   useEffect(() => {
     service.getAll()
-      .then(request => 
+      .then(request =>
         setPersons(request)
       )
       .catch(e => console.log(e.response));
@@ -46,38 +46,39 @@ const App = () => {
       if (window.confirm(`${newPerson.name} is already added to phonebook. Do you want to replace the old number with a new one?`)) {
         service.update(id, newPerson)
           .then(request => {
-            setPersons(persons.map(person => person.id === id ? request : person))
-            setNewNumber('')
-            setNewName('')
-            setMessage(`${newPerson.name}'s number is updated to ${newPerson.number}`)
-            setTimeout(() => { setMessage(null) }, 5000)
+            setPersons(persons.map(person => person.id === id ? request : person));
+            setNewNumber('');
+            setNewName('');
+            setMessage(`${newPerson.name}'s number is updated to ${newPerson.number}`);
+            setTimeout(() => { setMessage(null) }, 5000);
           })
           .catch(() => {
-            setMessage(`Information of ${newPerson.name} has already been removed from server`)
+            setMessage(`Information of ${newPerson.name} has already been removed from server`);
             setTimeout(() => {
               setMessage(null)
-            }, 5000)
+            }, 5000);
           })
       }
       return;
     }
     service.create(newPerson)
       .then(request => {
-        setPersons(persons.concat(request))
-        setMessage(`${newPerson.name} is added to the phonebook`)
-        setTimeout(() => { setMessage(null) }, 5000)
-        setNewNumber('')
-        setNewName('')
+        setPersons(persons.concat(request));
+        setMessage(`${newPerson.name} is added to the phonebook`);
+        setTimeout(() => { setMessage(null) }, 5000);
+        setNewNumber('');
+        setNewName('');
       })
       .catch(error => {
-        const message = JSON.stringify(error.response.data)
-        setMessage(`${message}`)
-        setTimeout(() => { setMessage(null) }, 5000)
+        console.log(JSON.stringify(error.response.data),'error')
+        const message = JSON.stringify(error.response.data);
+        setMessage(`${message}`);
+        setTimeout(() => { setMessage(null) }, 5000);
       })
   }
 
   const handleRemove = (e) => {
-    const personRemove = persons.find(person=>person.id===Number(e.target.id));
+    const personRemove = persons.find(person=>person.id===e.target.id);
     if (window.confirm(`Do you really want to delete ${personRemove.name}?`)) {
       service.remove(personRemove.id)
       .then(()=>
@@ -86,8 +87,9 @@ const App = () => {
     return;
   }
 
-  const view = !search ?persons: 
-  persons.filter(person => person.name.toLowerCase().startsWith(search));
+  const view = !search ?
+                persons: 
+                persons.filter(person => person.name.toLowerCase().startsWith(search));
  
     return (
     <div>
