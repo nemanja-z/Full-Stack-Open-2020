@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-mongoose.set('useFindAndModify', false)
+mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 const blogSchema = mongoose.Schema({
     title: { type: String, required: true },
@@ -11,7 +11,7 @@ const blogSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }
-})
+});
 
 blogSchema.set('toJSON', {
     transform: (document, returnedObject) => {
@@ -19,7 +19,7 @@ blogSchema.set('toJSON', {
         delete returnedObject._id
         delete returnedObject.__v
     }
-})
+});
 
 
 
