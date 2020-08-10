@@ -7,11 +7,11 @@ import Notification from './components/Notification';
 
 
 const App = () => {
-  const [persons, setPersons] = useState([])
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
-  const [search, setSearch] = useState('')
-  const [message, setMessage] = useState('')
+  const [persons, setPersons] = useState([]);
+  const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
+  const [search, setSearch] = useState('');
+  const [message, setMessage] = useState('');
 
 
   useEffect(() => {
@@ -22,27 +22,27 @@ const App = () => {
       .catch(e => console.log(e.response));
   }, []);
   const handleChange = (e) => {
-    e.preventDefault()
-    setNewName(e.target.value)
+    e.preventDefault();
+    setNewName(e.target.value);
   }
   const handleNum = (e) => {
-    e.preventDefault()
-    setNewNumber(e.target.value)
+    e.preventDefault();
+    setNewNumber(e.target.value);
   }
   const changeSearch = (e) => {
-    e.preventDefault()
-    setSearch(e.target.value)
+    e.preventDefault();
+    setSearch(e.target.value);
   }
 
   const addName = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const newPerson = {
       name: newName,
       number: newNumber,
     }
 
     if (persons.some(per => per.name === newPerson.name)) {
-      const id = persons.find(pr => pr.name === newPerson.name).id
+      const id = persons.find(pr => pr.name === newPerson.name).id;
       if (window.confirm(`${newPerson.name} is already added to phonebook. Do you want to replace the old number with a new one?`)) {
         service.update(id, newPerson)
           .then(request => {
