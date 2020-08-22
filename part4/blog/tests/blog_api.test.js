@@ -5,7 +5,6 @@ const helper = require('./test_helper');
 const api = supertest(app);
 const Blog = require('../models/blog');
 const User = require('../models/user');
-const jwt = require('jsonwebtoken');
 
 const testUser = {
     name: 'pro',
@@ -15,7 +14,7 @@ const testUser = {
 beforeEach(async () => {
     await Blog.deleteMany({});
     await User.deleteMany({});
-    const newUser = await api.post('/api/users').send(testUser);
+    await api.post('/api/users').send(testUser);
 
     const credentials = {
         username: testUser.username,
@@ -24,7 +23,7 @@ beforeEach(async () => {
     const login = await api.post('/api/login').send(credentials);
     token = login.body.token;
     const blogObjects = helper.initialBlogs.map(blog => new Blog(blog));
-    const savedBlogs = savedBlogs.map(blog => blog.save());
+    const savedBlogs = blogObjects.map(blog => blog.save());
     await Promise.all(savedBlogs);
 
 })
@@ -75,33 +74,33 @@ beforeEach(async () => {
                 expect(titles).toContain("First class tests");
         })
     })
-        describe('Missing arguments',()=>{
-            test('blog without url or title is not added', async () => {
+    describe('Missing arguments',()=>{
+        test('blog without url or title is not added', async () => {
+            const newBlog = {
+                author: "Robert C. Martin",
+                url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+                likes: 10
+            }
+
+            await api
+                .post('/api/blogs')
+                .set('Authorization', `bearer ${token}`)
+                .send(newBlog)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+        })
+        test('blog without token can\'t be added', async () => {
                 const newBlog = {
                     author: "Robert C. Martin",
                     url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-                    likes: 10
+                    likes: 15
                 }
 
                 await api
-                    .post('/api/blogs')
-                    .set('Authorization', `bearer ${token}`)
-                    .send(newBlog)
-                    .expect(400)
-                    .expect('Content-Type', /application\/json/)
-
-            })
-            test('blog without token can\'t be added', async () => {
-                    const newBlog = {
-                        author: "Robert C. Martin",
-                        url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-                        likes: 15
-                    }
-
-                    await api
-                    .post("/api/blogs")
-                    .send(newBlog)
-                    .expect(401)
+                .post("/api/blogs")
+                .send(newBlog)
+                .expect(401)
             })
     })
 
