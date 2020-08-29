@@ -1,39 +1,40 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const BlogForm = ({ createBlog }) => {
-  const [newTitle, setNewTitle] = useState('')
-  const [newUrl, setNewUrl] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
+  const [newTitle, setNewTitle] = useState('');
+  const [newUrl, setNewUrl] = useState('');
+  const [newAuthor, setNewAuthor] = useState('');
 
   const handleTitleChange = e => {
-    e.preventDefault()
-    setNewTitle(e.target.value)
+    e.preventDefault();
+    setNewTitle(e.target.value);
   }
   const handleAuthorChange = e => {
-    e.preventDefault()
-    setNewAuthor(e.target.value)
+    e.preventDefault();
+    setNewAuthor(e.target.value);
   }
 
   const handleUrlChange = e => {
-    e.preventDefault()
-    setNewUrl(e.target.value)
+    e.preventDefault();
+    setNewUrl(e.target.value);
   }
-  const addBlog = (e) => {
-    e.preventDefault()
+  const addBlog = async (e) => {
+    e.preventDefault();
     const newBlog = {
       title: newTitle,
       author: newAuthor,
       url: newUrl,
       likes: 0
-    }
-    createBlog(newBlog)
-    setNewTitle('')
-    setNewAuthor('')
-    setNewUrl('')
+    };
+    await createBlog(newBlog);
+    setNewTitle('');
+    setNewAuthor('');
+    setNewUrl('');
   }
   return (
     <form id='form' onSubmit={addBlog}>
-      title:<input
+          title:<input
         id='title'
         value={newTitle}
         onChange={handleTitleChange}
@@ -52,5 +53,7 @@ const BlogForm = ({ createBlog }) => {
     </form>
   )
 }
-
-export default BlogForm
+BlogForm.propTypes={
+  createBlog:PropTypes.func.isRequired
+}
+export default BlogForm;

@@ -2,7 +2,6 @@ const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
-const { request } = require('express');
 require('dotenv').config();
 
 
@@ -32,7 +31,7 @@ blogsRouter.delete('/:id', async (req, res) => {
 })
 
 blogsRouter.put('/:id', async (req, res) => {
-    const { title, url } = req.body;
+    const { title, url, author, likes} = req.body;
     const targetBlog = await Blog.findById(req.params.id);
     if (!title || !url) {
         res.status(400).json({ error: 'Title or URL missing' }).end();
@@ -40,7 +39,7 @@ blogsRouter.put('/:id', async (req, res) => {
     if(!targetBlog){
         res.status(404).end();
     }
-    const blog = {...req.body};
+    const blog = {title, url, author, likes};
     const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, blog, {
         new: true
     });
