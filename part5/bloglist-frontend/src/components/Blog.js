@@ -12,12 +12,12 @@ const Blog = ({ blog, user, removeBlog }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
-  }
-  const updateLikes = async (blog) => {
+  };
+  const updateLikes = async () => {
     blog.likes = blog.likes + 1;
     const result = await blogService.update(blog);
     setLikes(result.likes);
-  }
+  };
   const authorize = blog.user.name === user.name;
   const toggleShow = () => setShowAll(!showAll);
   if (showAll) {
@@ -35,18 +35,18 @@ const Blog = ({ blog, user, removeBlog }) => {
         </div>
         <div style={{ display: 'flex' }} className='more'>
           <p data-testid='likes'>{likes}</p>
-          <button onClick={() => updateLikes(blog)} className='like-update'>like</button>
+          <button onClick={updateLikes} className='like-update'>like</button>
         </div>
-        {authorize&&<button onClick={() => removeBlog(blog)}>delete</button>}
-      </div>)
+        {authorize&&<button onClick={()=>removeBlog(blog)}>delete</button>}
+      </div>);
   }
 
   return (
     <div className='blog' style={blogStyle}>
       <p>{`${blog.title} ${blog.author}`}</p>
       <button onClick={toggleShow}>show more</button>
-    </div>)
-}
+    </div>);
+};
 Blog.propTypes={
   blog:PropTypes.object,
   user:PropTypes.object.isRequired,

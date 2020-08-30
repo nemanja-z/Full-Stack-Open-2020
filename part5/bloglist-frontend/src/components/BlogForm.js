@@ -9,16 +9,16 @@ const BlogForm = ({ createBlog }) => {
   const handleTitleChange = e => {
     e.preventDefault();
     setNewTitle(e.target.value);
-  }
+  };
   const handleAuthorChange = e => {
     e.preventDefault();
     setNewAuthor(e.target.value);
-  }
+  };
 
   const handleUrlChange = e => {
     e.preventDefault();
     setNewUrl(e.target.value);
-  }
+  };
   const addBlog = async (e) => {
     e.preventDefault();
     const newBlog = {
@@ -31,7 +31,7 @@ const BlogForm = ({ createBlog }) => {
     setNewTitle('');
     setNewAuthor('');
     setNewUrl('');
-  }
+  };
   return (
     <form id='form' onSubmit={addBlog}>
           title:<input
@@ -51,9 +51,9 @@ const BlogForm = ({ createBlog }) => {
       />
       <button type="submit">save</button>
     </form>
-  )
-}
+  );
+};
 BlogForm.propTypes={
   createBlog:PropTypes.func.isRequired
-}
+};
 export default BlogForm;
