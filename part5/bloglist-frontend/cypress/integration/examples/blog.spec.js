@@ -1,7 +1,7 @@
 describe('Blog app', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3001/api/testing/reset');
-    const user = { username: 'proba', password: 'tri' };
+    const user = { username: 'danas', name: 'danas', password: 'danas' };
     cy.request('POST', 'http://localhost:3001/api/users', user);
     cy.visit('http://localhost:3000');
   });
@@ -19,8 +19,8 @@ describe('Blog app', function () {
       cy.get('.message').contains('wrong credentials');
     });
     it('successful login', function () {
-      cy.get('#username').type('proba');
-      cy.get('#password').type('tri');
+      cy.get('#username').type('danas');
+      cy.get('#password').type('danas');
       cy.get('#login-button').click();
 
       cy.get('.message').contains('successful login');
@@ -31,7 +31,25 @@ describe('Blog app', function () {
 
   describe('When logged in', function () {
     beforeEach(function () {
-      cy.login({ username: 'proba', password: 'tri' });
+      cy.login({ username: 'danas', password: 'danas' });
+      cy.createBlog({
+        title: 'this',
+        author: 'is',
+        url: 'confusing',
+        likes: 43
+      });
+      cy.createBlog({
+        title: 'this',
+        author: 'is',
+        url: 'confusing...not',
+        likes: 100
+      });
+      cy.createBlog({
+        title: 'this',
+        author: 'is',
+        url: 'not confusing',
+        likes: 75
+      });
     });
 
     it('A blog can be created', function () {
@@ -66,26 +84,9 @@ describe('Blog app', function () {
     });
     describe('Sort blogs by likes number', function () {
       beforeEach(function () {
-        cy.createBlog({
-          title: 'this',
-          author: 'is',
-          url: 'confusing',
-          likes: 43
-        });
-        cy.createBlog({
-          title: 'this',
-          author: 'is',
-          url: 'confusing...not',
-          likes: 100
-        });
-        cy.createBlog({
-          title: 'this',
-          author: 'is',
-          url: 'not confusing',
-          likes: 75
-        });
+         
       });
-      it('Sort blogs', function () {
+       it('Sort blogs', function () {
         cy.get('.blog').each(() => {
           cy.contains('show more').click();
         }).then(() => {
@@ -94,8 +95,8 @@ describe('Blog app', function () {
             expect(like.first()).to.contain('100');
             expect(like.last()).to.contain('43');
           });
-        });
-      });
+        }); 
+      }); 
     });
 
   });

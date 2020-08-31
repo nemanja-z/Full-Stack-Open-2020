@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const BlogForm = ({ createBlog }) => {
+const BlogForm = ({ createBlog}) => {
   const [newTitle, setNewTitle] = useState('');
   const [newUrl, setNewUrl] = useState('');
   const [newAuthor, setNewAuthor] = useState('');

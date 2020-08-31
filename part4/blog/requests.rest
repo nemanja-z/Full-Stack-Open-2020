@@ -1,5 +1,10 @@
-DELETE http://localhost:3003/api/blogs/5eafe542084e87183811a916
+POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InByb2JhIiwiaWQiOiI1ZWFjMjQ4ODBiOTkwODFhZDA2NjMxOWUiLCJpYXQiOjE1ODg4ODMxMjV9.t36Vwy62dLWXBExwYtIkZ9HZ3HVycz2JUzjogc7ls3I
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhbmFzIiwiaWQiOiI1ZjRkMjdmYzY3ODMxOTE4ZDAyNDFjN2EiLCJpYXQiOjE1OTg4OTIzMTN9.9Jr6E-v3WaaDRgQrBPR2qad5xrKdVfYnjZeLONmFDIs
 
-
+{
+    "title":"vfv",
+    "author":"mdsfseeee",
+    "likes":24,
+    "url":"fds"
+}
