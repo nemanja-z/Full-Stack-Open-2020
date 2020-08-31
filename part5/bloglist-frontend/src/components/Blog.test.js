@@ -21,8 +21,10 @@ test('render content', () => {
     id:"fdsfs232342ewfw34"
   };
   const removeBlog=jest.fn();
+  const updatedLikes=jest.fn();
+
   const component = render(
-    <Blog user={user} blog={blog} removeBlog={removeBlog}/>
+    <Blog user={user} blog={blog} removeBlog={removeBlog} updatedLikes={updatedLikes}/>
   );
   expect(component.container).toHaveTextContent('Que te llamas');
 });
@@ -44,8 +46,9 @@ test('render url and likes', () => {
     id:"fdsfs232342ewfw34"
   }
   const removeBlog=jest.fn();
+  const updateLikes=jest.fn();
   const component = render(
-    <Blog user={user} blog={blog} removeBlog={removeBlog}/>
+    <Blog user={user} blog={blog} removeBlog={removeBlog} updatedLikes={updatedLikes}/>
   );
 
   const button = component.getByText('show more');

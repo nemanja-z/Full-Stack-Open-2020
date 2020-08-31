@@ -1,22 +1,15 @@
 import React, { useState } from 'react';
-import blogService from '../services/blogs';
 import PropTypes from 'prop-types';
 
 
-const Blog = ({ blog, user, removeBlog }) => {
+const Blog = ({ blog, user, removeBlog, updateLikes }) => {
   const [showAll, setShowAll] = useState(false);
-  const [likes, setLikes] = useState(blog.likes);
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
-  };
-  const updateLikes = async () => {
-    blog.likes = blog.likes + 1;
-    const result = await blogService.update(blog);
-    setLikes(result.likes);
   };
   const authorize = blog.user.name === user.name;
   const toggleShow = () => setShowAll(!showAll);
@@ -34,8 +27,8 @@ const Blog = ({ blog, user, removeBlog }) => {
           <p>{blog.url}</p>
         </div>
         <div style={{ display: 'flex' }} className='more'>
-          <p data-testid='likes'>{likes}</p>
-          <button onClick={updateLikes} className='like-update'>like</button>
+          <p data-testid='likes'>{blog.likes}</p>
+          <button onClick={()=>updateLikes(blog)} className='like-update'>like</button>
         </div>
         {authorize&&<button onClick={()=>removeBlog(blog)}>delete</button>}
       </div>);
@@ -48,8 +41,17 @@ const Blog = ({ blog, user, removeBlog }) => {
     </div>);
 };
 Blog.propTypes={
-  blog:PropTypes.object,
-  user:PropTypes.object.isRequired,
-  removeBlog:PropTypes.func.isRequired
+  blog:PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    likes: PropTypes.number
+  }),
+  user:PropTypes.shape({
+    token:PropTypes.string,
+    username:PropTypes.string,
+    name:PropTypes.string}),
+  removeBlog:PropTypes.func.isRequired,
+  updateLikes:PropTypes.func.isRequired
 };
 export default Blog;
