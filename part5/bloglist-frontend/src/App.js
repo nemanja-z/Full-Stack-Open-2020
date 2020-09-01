@@ -15,13 +15,13 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const blogFormRef = React.createRef();
-  const sortedBlogs=[...blog].sort((a, b) => a.likes < b.likes);
         
   useEffect(() => {
     const fetchBlogs = async () => {
       try{
         const blogs = await blogService.getAll();
-        setBlogs(blogs);
+        const sortedBlogs=[...blogs].sort((a, b) => b.likes - a.likes);
+        setBlogs(sortedBlogs);
       }catch(e){
         console.log(e);
       }};
@@ -75,14 +75,14 @@ const App = () => {
   const updateLikes = async (targetBlog) => {
     targetBlog.likes = targetBlog.likes + 1;
     const result = await blogService.update(targetBlog);
-    setBlogs(blog.map(b=>b.id===result.id?result:b));
-  }; 
+    setBlogs(blog.map(b=>b.id===result.id?result:b).sort((a, b) => b.likes - a.likes));
+  };
   const removeBlog = async (blog) => {
     const { id } = blog;
     if (window.confirm(`Do you really want to delete ${blog.title}`)) {
       try {
         await blogService.remove(id);
-        setBlogs(await blogService.getAll());
+        setBlogs(blog.filter(b=>b.id!==id));
         setMessage(`${blog.title} has been removed`);
         setTimeout(() => {
           setMessage(null);
@@ -111,7 +111,7 @@ const App = () => {
         <Notification message={message} />
         <button onClick={loggedOut}>logout</button>
         <h3>{user.name}</h3>
-        {sortedBlogs.map((blog) =>
+        {blog.map((blog) =>
           <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} updateLikes={updateLikes}/>
         )}
         <Togglable buttonLabel='new blog' ref={blogFormRef}>

@@ -3,6 +3,8 @@ describe('Blog app', function () {
     cy.request('POST', 'http://localhost:3001/api/testing/reset');
     const user = { username: 'danas', name: 'danas', password: 'danas' };
     cy.request('POST', 'http://localhost:3001/api/users', user);
+    const other = { username: 'test', name: 'test', password: 'test' };
+    cy.request('POST', 'http://localhost:3001/api/users', other);
     cy.visit('http://localhost:3000');
   });
 
@@ -32,24 +34,6 @@ describe('Blog app', function () {
   describe('When logged in', function () {
     beforeEach(function () {
       cy.login({ username: 'danas', password: 'danas' });
-      cy.createBlog({
-        title: 'this',
-        author: 'is',
-        url: 'confusing',
-        likes: 43
-      });
-      cy.createBlog({
-        title: 'this',
-        author: 'is',
-        url: 'confusing...not',
-        likes: 100
-      });
-      cy.createBlog({
-        title: 'this',
-        author: 'is',
-        url: 'not confusing',
-        likes: 75
-      });
     });
 
     it('A blog can be created', function () {
@@ -82,9 +66,29 @@ describe('Blog app', function () {
       cy.contains('delete').click();
       cy.get('this').should('not.exist');
     });
+  });
     describe('Sort blogs by likes number', function () {
       beforeEach(function () {
-         
+        cy.login({ username: 'danas', password: 'danas' });
+        cy.createBlog({
+          title: 'this',
+          author: 'is',
+          url: 'confusing...not',
+          likes: 100
+        });
+        cy.createBlog({
+          title: 'what',
+          author: 'is',
+          url: 'confusing',
+          likes: 43
+        });
+        cy.createBlog({
+          title: 'why',
+          author: 'is',
+          url: 'not confusing',
+          likes: 75
+        });
+        cy.visit('http://localhost:3000');
       });
        it('Sort blogs', function () {
         cy.get('.blog').each(() => {
@@ -96,10 +100,14 @@ describe('Blog app', function () {
             expect(like.last()).to.contain('43');
           });
         }); 
-      }); 
+      });
+      it('User can\'t delete other user blog', function (){
+        cy.contains('logout').click();
+        cy.login({ username: 'test', password: 'test' });
+        cy.contains('show more').first().click();
+        cy.get('delete').should('not.exist');
+      }) 
     });
-
+  
   });
-});
-
 
