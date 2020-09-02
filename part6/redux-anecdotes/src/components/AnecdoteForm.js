@@ -1,17 +1,17 @@
-import React from 'react'
-import { newAnecdote } from '../reducers/anecdoteReducer'
-import { newNotification } from '../reducers/notificationReducer'
-import { connect } from 'react-redux'
+import React from 'react';
+import { newAnecdote } from '../reducers/anecdoteReducer';
+import { newNotification } from '../reducers/notificationReducer';
+import { connect } from 'react-redux';
 
 
 const AnecdoteForm = (props) => {
 
     const addAnecdote = async (e) => {
-        e.preventDefault()
-        const content = e.target.anecdote.value
-        e.target.anecdote.value = ''
-        props.newAnecdote(content)
-        props.newNotification(content, 5)
+        e.preventDefault();
+        const content = e.target.anecdote.value;
+        e.target.anecdote.value = '';
+        props.newAnecdote(content);
+        props.newNotification(content, 5);
 
     }
     return (
@@ -25,7 +25,7 @@ const AnecdoteForm = (props) => {
     )
 }
 
-const mapDispatchToProps = { newAnecdote, newNotification }
+const mapDispatchToProps = { newAnecdote, newNotification };
 
-export default connect(null, mapDispatchToProps)(AnecdoteForm)
+export default connect(null, mapDispatchToProps)(AnecdoteForm);
 
