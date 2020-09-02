@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 
 const User = ({ user }) => {
 
-  if (!user) return null
+  if (!user) return null;
   return (
     <div>
       <h3>{`Blogs added by: ${user.name}`}</h3>
@@ -11,6 +11,6 @@ const User = ({ user }) => {
           <li key={u.id}>{u.title}</li>)}
       </ul>
     </div>
-  )
-}
-export default User
+  );
+};
+export default User;

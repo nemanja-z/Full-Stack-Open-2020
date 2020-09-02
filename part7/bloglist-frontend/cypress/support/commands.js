@@ -29,10 +29,10 @@ Cypress.Commands.add('login', ({ username, password }) => {
     username,
     password,
   }).then(({ body }) => {
-    localStorage.setItem('loggedUser', JSON.stringify(body))
-    cy.visit('http://localhost:3000')
-  })
-})
+    localStorage.setItem('loggedUser', JSON.stringify(body));
+    cy.visit('http://localhost:3000');
+  });
+});
 
 
 Cypress.Commands.add('createBlog', ({ title, author, url, likes }) => {
@@ -43,7 +43,7 @@ Cypress.Commands.add('createBlog', ({ title, author, url, likes }) => {
     headers: {
       'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedUser')).token}`
     }
-  })
+  });
 
-  cy.visit('http://localhost:3000')
-})
+  cy.visit('http://localhost:3000');
+});

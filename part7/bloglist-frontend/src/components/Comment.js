@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const Comment = ({ addComment, comment }) => {
 
@@ -9,6 +9,6 @@ const Comment = ({ addComment, comment }) => {
         reset='reset' />
       <button type='submit'>send comment</button>
     </form >
-  )
-}
-export default Comment
+  );
+};
+export default Comment;

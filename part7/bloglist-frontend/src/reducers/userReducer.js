@@ -1,45 +1,45 @@
-import loginService from '../services/login'
-import { newMessage } from './messageReducer'
+import loginService from '../services/login';
+import { newMessage } from './messageReducer';
 
 const reducer = (state = [], action) => {
   switch (action.type) {
   case 'LOGIN':
-    return action.data
+    return action.data;
   case 'LOGOUT':
-    return null
+    return null;
   case 'GET':
-    return action.data
+    return action.data;
   default:
-    return state
+    return state;
   }
-}
+};
 export const login = (creds) => {
   return async dispatch => {
-    const user = await loginService.login(creds)
-    window.localStorage.setItem('loggedUser', JSON.stringify(user))
+    const user = await loginService.login(creds);
+    window.localStorage.setItem('loggedUser', JSON.stringify(user));
     dispatch({
       type: 'LOGIN',
       data: user
-    })
-    dispatch(newMessage('successful login'))
-  }
-}
+    });
+    dispatch(newMessage('successful login'));
+  };
+};
 export const getUser = () => {
   return dispatch => {
-    const user = JSON.parse(window.localStorage.getItem('loggedUser'))
+    const user = JSON.parse(window.localStorage.getItem('loggedUser'));
     dispatch({
       type: 'GET',
       data: user
-    })
-  }
-}
+    });
+  };
+};
 export const logout = () => {
   return dispatch => {
-    window.localStorage.clear()
+    window.localStorage.clear();
     dispatch({
       type: 'LOGOUT',
       data: null
-    })
-  }
-}
-export default reducer
+    });
+  };
+};
+export default reducer;

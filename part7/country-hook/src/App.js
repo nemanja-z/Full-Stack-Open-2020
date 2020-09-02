@@ -1,52 +1,52 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const useField = (type) => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState('');
 
-  const onChange = (event) => {
-    setValue(event.target.value)
-  }
+  const onChange = (e) => {
+    setValue(e.target.value);
+  };
 
   return {
     type,
     value,
     onChange
-  }
-}
+  };
+};
 
 const useCountry = (name) => {
-  const [country, setCountry] = useState(null)
+  const [country, setCountry] = useState(null);
 
   useEffect(() => {
     const fetch = async (name) => {
       try {
-        const response = await axios.get(`https://restcountries.eu/rest/v2/name/${name}?fullText=true`)
-        setCountry({ data: response.data[0], found: true })
+        const response = await axios.get(`https://restcountries.eu/rest/v2/name/${name}?fullText=true`);
+        setCountry({ data: response.data[0], found: true });
       }
       catch (error) {
-        setCountry({ found: false })
-        console.log(error.response.data)
+        setCountry({ found: false });
+        console.log(error.response.data);
       }
     }
-    fetch(name)
-  }, [name])
+    fetch(name);
+  }, [name]);
 
-  return country
+  return country;
 }
 
 const Country = ({ country }) => {
   if (!country) {
-    return null
-  }
+    return null;
+  };
 
   if (!country.found) {
     return (
       <div>
         not found...
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div>
@@ -55,18 +55,18 @@ const Country = ({ country }) => {
       <div>population {country.data.population}</div>
       <img src={country.data.flag} height='100' alt={`flag of ${country.data.name}`} />
     </div>
-  )
-}
+  );
+};
 
 const App = () => {
-  const nameInput = useField('text')
-  const [name, setName] = useState('')
-  const country = useCountry(name)
+  const nameInput = useField('text');
+  const [name, setName] = useState('');
+  const country = useCountry(name);
 
   const fetch = (e) => {
-    e.preventDefault()
-    setName(nameInput.value)
-  }
+    e.preventDefault();
+    setName(nameInput.value);
+  };
 
   return (
     <div>
@@ -77,7 +77,7 @@ const App = () => {
 
       <Country country={country} />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

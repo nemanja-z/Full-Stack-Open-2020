@@ -1,7 +1,7 @@
-import React from 'react'
-import { Form, Button } from 'react-bootstrap'
+import React from 'react';
+import { Form, Button } from 'react-bootstrap';
 
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 const LoginForm = ({ handleSubmit, username, password }) => {
   return (
@@ -20,38 +20,16 @@ const LoginForm = ({ handleSubmit, username, password }) => {
         </Button>
       </Form>
     </div >
-  )
-}
+  );
+};
 
-{/* <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          username
-          <input
-            id='username'
 
-            {...username}
-            reset='reset'
-          />
-        </div>
-        <div>
-          password
-          <input
-            id='password'
-
-            {...password}
-            reset='reset'
-          />
-        </div>
-        <button id='login-button' type="submit">login</button>
-      </form>
-    </div> */}
 LoginForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   username: PropTypes.object.isRequired,
   password: PropTypes.object.isRequired
-}
-export default LoginForm
+};
+export default LoginForm;
 
 
 /* < Form onSubmit = { handleSubmit } >

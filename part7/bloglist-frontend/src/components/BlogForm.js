@@ -1,27 +1,27 @@
-import React from 'react'
-import { useField } from '../hooks/useField'
-import { Form, Button } from 'react-bootstrap'
+import React from 'react';
+import { useField } from '../hooks/useField';
+import { Form, Button } from 'react-bootstrap';
 
 const BlogForm = ({ createBlog }) => {
-  const title = useField('text')
-  const url = useField('text')
-  const author = useField('text')
+  const title = useField('text');
+  const url = useField('text');
+  const author = useField('text');
 
   const addBlog = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const newBlog = {
       title: title.value,
       author: author.value,
       url: url.value,
       likes: 0,
       comments: ''
-    }
-    createBlog(newBlog)
-    title.reset()
-    author.reset()
-    url.reset()
+    };
+    createBlog(newBlog);
+    title.reset();
+    author.reset();
+    url.reset();
 
-  }
+  };
   return (
     <Form onSubmit={addBlog}>
       <Form.Group controlId="title">
@@ -40,8 +40,8 @@ const BlogForm = ({ createBlog }) => {
         create blog
       </Button>
     </Form>
-  )
-}
+  );
+};
 
-export default BlogForm
+export default BlogForm;
 

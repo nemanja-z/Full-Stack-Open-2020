@@ -103,11 +103,10 @@ blogsRouter.post('/', async (req, res) => {
         comments: []
     })
 
-    const savedBlog = await blog.save()
-    savedBlog.user = user
+    const savedBlog = await blog.save();
+    await savedBlog.populate('user').execPopulate();
     user.blogs = user.blogs.concat(savedBlog._id)
-    await user.save()
-
+    await user.save();
     res.status(201).json(savedBlog.toJSON())
 })
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const MockBlog = ({ blog, onClick }) => {
   return (
@@ -11,7 +11,7 @@ const MockBlog = ({ blog, onClick }) => {
         <button onClick={onClick} className='like'>likes</button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MockBlog
+export default MockBlog;

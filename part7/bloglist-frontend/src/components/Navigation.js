@@ -1,12 +1,12 @@
-import React from 'react'
-import { Navbar, Nav } from 'react-bootstrap'
+import React from 'react';
+import { Navbar, Nav } from 'react-bootstrap';
 import {
   Link
-} from 'react-router-dom'
+} from 'react-router-dom';
 const Navigation = ({ user, loggedOut }) => {
   const padding = {
     padding: 5
-  }
+  };
   return (
     <div>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -32,22 +32,7 @@ const Navigation = ({ user, loggedOut }) => {
         </Navbar.Collapse>
       </Navbar>
 
-    </div>)
-}
+    </div>);
+};
 
-
-{/*   <Link style={padding} to='/'>blogs</Link>
-      <Link style={padding} to='/users'>users</Link>
-      {
-        user
-          ? <em>{user.username} logged in</em>
-          : <Link to="/login">login</Link>
-      }
-      <button onClick={loggedOut}>logout</button>
-    </div >
-  )
-}
-
-      {user && (<div style={{ display: 'flex' }}>
-        <h2>{`${user.username} is logged in`}</h2> */}
-export default Navigation
+export default Navigation;

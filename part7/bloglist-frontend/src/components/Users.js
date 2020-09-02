@@ -1,15 +1,17 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React from 'react';
+import { useSelector } from 'react-redux';
 import {
   Link
-} from 'react-router-dom'
+} from 'react-router-dom';
 const Users = () => {
-  const users = useSelector(state => state.users)
+  const users = useSelector(state => state.users);
   return (
-    < table >
+    <>
+    <h2>Users</h2>
+    <table>
       <thead>
         <tr>
-          <th colSpan="2">User Number of Blogs</th>
+          <th colSpan="3">blogs created</th>
         </tr>
       </thead>
       <tbody>
@@ -18,12 +20,13 @@ const Users = () => {
             <td><Link to={`/users/${u.id}`}>{u.name}</Link></td>
             <td>{u.blogs.length}</td>
           </tr>
-          )
+          );
         })}
       </tbody>
-    </table >
+    </table>
+    </>
 
-  )
-}
-export default Users
+  );
+};
+export default Users;
 
