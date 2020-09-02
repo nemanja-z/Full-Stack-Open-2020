@@ -9,14 +9,14 @@ blogsRouter.get('/', async (req, res) => {
     const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
     res.json(blogs.map(blog => blog.toJSON()));
 
-})
+});
 blogsRouter.get('/:id', async (req, res) => {
     const blog = await Blog.findOne({ _id: req.params.id }).populate('user', {username: 1,name: 1});
     if (!blog) {
         res.status(404).end();
     } 
     res.json(blog.toJSON());
-})
+});
 
 
 blogsRouter.delete('/:id', async (req, res) => {
@@ -28,7 +28,7 @@ blogsRouter.delete('/:id', async (req, res) => {
     }
     await Blog.findByIdAndDelete(req.params.id);
     res.status(204).end();
-})
+});
 
 blogsRouter.put('/:id', async (req, res) => {
     const { title, url, author, likes} = req.body;
@@ -48,7 +48,7 @@ blogsRouter.put('/:id', async (req, res) => {
         return res.status(400).end();
     }
     res.status(200).json(updatedBlog.toJSON());
-})
+});
 
 blogsRouter.post('/', async (req, res) => {
     const {title,likes,url,author} = req.body;

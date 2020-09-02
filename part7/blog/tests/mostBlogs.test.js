@@ -1,12 +1,12 @@
-const mostBlogs = require('../utils/list_helper').mostBlogs
+const mostBlogs = require('../utils/list_helper').mostBlogs;
 
 
 describe('Author with largest amount of blogs', () => {
 
     test('when list is empty', () => {
         const blog = [];
-        const result = mostBlogs(blog)
-        expect(result).toBeNull()
+        const result = mostBlogs(blog);
+        expect(result).toBeNull();
     })
     test('when list have one blog', () => {
         const oneBlog = [{
@@ -15,13 +15,13 @@ describe('Author with largest amount of blogs', () => {
             author: "Michael Chan",
             url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
             likes: 13
-        }]
-        const result = mostBlogs(oneBlog)
+        }];
+        const result = mostBlogs(oneBlog);
         expect(result).toEqual({
             author: "Michael Chan",
             blogs: 1
-        })
-    })
+        });
+    });
     test('when list have more than one blog post', () => {
         const blog = [
             {
@@ -58,13 +58,13 @@ describe('Author with largest amount of blogs', () => {
                 author: "Robert C. Martin",
                 url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
                 likes: 10, __v: 0
-            }]
+            }];
         const ones =
         {
             "author": "Edsger W. Dijkstra",
             "blogs": 3
-        }
+        };
 
-        expect(mostBlogs(blog)).toEqual(ones)
+        expect(mostBlogs(blog)).toEqual(ones);
     })
 })

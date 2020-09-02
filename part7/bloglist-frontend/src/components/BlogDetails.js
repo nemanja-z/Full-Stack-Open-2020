@@ -27,19 +27,19 @@ const BlogDetails = ({ blog, user, history}) => {
   };
 
 
-  const updateLikes = async (like) => {
+  const updateLikes = async (liked) => {
     try{
-      const toUpdate={...like, likes:like.likes + 1};
-      dispatch(likeBlog(toUpdate));
+      //const toUpdate={...blog, likes:blog.likes + 1};
+      dispatch(likeBlog(liked));
     }catch(e){
       console.log(e.response.message);
     }
   };
-  const removeBlog = async (blog) => {
-    if (window.confirm(`Do you really want to delete ${blog.title}`)) {
+  const removeBlog = async (delBlog) => {
+    if (window.confirm(`Do you really want to delete ${delBlog.title}`)) {
       try {
-        dispatch(deleteBlog(blog));
-        dispatch(newMessage(`${blog.title} has been removed`));
+        dispatch(deleteBlog(delBlog));
+        dispatch(newMessage(`${delBlog.title} has been removed`));
         history.push('/');
       } catch (exception) {
         console.log(exception);

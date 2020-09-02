@@ -28,12 +28,12 @@ const App = () => {
   const user = useSelector(state => state.user);
   const users = useSelector(state => state.users);
   const history = useHistory();
-
   
   useEffect(() => {
     dispatch(initBlogs());
     dispatch(initUsers());
     dispatch(getUser());
+
   }, [dispatch]);
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -91,7 +91,7 @@ const App = () => {
           <User user={showUser} />
         </Route>
         <Route path='/blogs/:id'>
-          <BlogDetails history={history} key={blog.id} user={user} blog={showBlog} />
+         <BlogDetails history={history} key={blog.id} user={user} blog={showBlog} />
         </Route>
         <Route path='/users'>
           <Users />

@@ -8,12 +8,7 @@ const reducer = (state = [], action) => {
     return state.concat(action.data);
   case 'LIKE': {
     const { id } = action.data;
-    const target = state.find(s => s.id === id);
-    const changed = {
-      ...target,
-      likes: target.likes + 1
-    };
-    return state.map(s => s.id === id ? changed : s);
+    return state.map(blog => blog.id === id ? action.data : blog);
   }
   case 'COMMENT': {
     const { id } = action.data;
@@ -47,9 +42,10 @@ export const addBlogs = (blog) => {
 };
 export const likeBlog = (blog) => {
   return async dispatch => {
-    const update = await blogService.update(blog);
+    const liked = {...blog, likes:blog.likes+1};
+    const update = await blogService.update(liked);
     dispatch({
-      type: 'VOTE',
+      type: 'LIKE',
       data: update
     });
   };

@@ -1,4 +1,4 @@
-const favoriteBlog = require('../utils/list_helper').favoriteBlog
+const favoriteBlog = require('../utils/list_helper').favoriteBlog;
 
 
 describe('Favorite blog', () => {
@@ -6,7 +6,7 @@ describe('Favorite blog', () => {
         title: "React patterns",
         author: "Michael Chan",
         likes: 13
-    }]
+    }];
     const blog = [
         {
             _id: "5a422aa71b54a676254d17f8",
@@ -35,18 +35,18 @@ describe('Favorite blog', () => {
             author: "Robert C. Martin",
             url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
             likes: 10, __v: 0
-        }]
+        }];
     test('when list is empty', () => {
         const blog = [];
-        const result = favoriteBlog(blog)
-        expect(result).toBeNull()
-    })
+        const result = favoriteBlog(blog);
+        expect(result).toBeNull();
+    });
     test('when list have one post', () => {
-        const result = favoriteBlog(oneBlog)
-        expect(result).toEqual(oneBlog)
-    })
+        const result = favoriteBlog(oneBlog);
+        expect(result).toEqual(oneBlog);
+    });
     test('when list have more than one post', () => {
-        const result = favoriteBlog(blog)
-        expect(result).toEqual(oneBlog)
-    })
-})
+        const result = favoriteBlog(blog);
+        expect(result).toEqual(oneBlog);
+    });
+});
