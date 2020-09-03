@@ -25,7 +25,7 @@ const App = () => {
   const dispatch = useDispatch();
   const message = useSelector(state => state.message);
   const blog = useSelector(state => state.blog);
-  const user = useSelector(state => state.user);
+  const user = useSelector(state =>{ return {...state.user}});
   const users = useSelector(state => state.users);
   const history = useHistory();
   
@@ -66,7 +66,6 @@ const App = () => {
       console.log(e.response.message);
     }
   };
- 
   
   const matchUsers = useRouteMatch('/users/:id');
   const showUser = matchUsers ? users.find(u => u.id === matchUsers.params.id) : null;
@@ -75,45 +74,45 @@ const App = () => {
   
   return (
     <div>
-    {!user ? (<div>
-          <h2>Login to application</h2>
-        <Notification message={message} />
-        <LoginForm
-      username={username}
-      password={password}
-      handleSubmit={handleLogin}
-        />
-      </div>) : (<div>
-      <h2>Blogs</h2>
-      <Navigation user={user} loggedOut={loggedOut} />
-      <Switch>
-        <Route path='/users/:id'>
-          <User user={showUser} />
-        </Route>
-        <Route path='/blogs/:id'>
-         <BlogDetails history={history} key={blog.id} user={user} blog={showBlog} />
-        </Route>
-        <Route path='/users'>
-          <Users />
-        </Route>
-        <Route path='/login'>
-            <LoginForm
-              username={username}
-              password={password}
-              handleSubmit={handleLogin}
-            />
-        </Route>
-        <Route path='/'>
+    {!user ? 
+        (<div>
+        <h2>Login to application</h2>
           <Notification message={message} />
-          <h3>{user.name}</h3>
-          {sortedBlogs.map((blog) =>
-            <Blog key={blog.id} blog={blog} />
-          )}
-          <Togglable buttonLabel='new blog' ref={blogFormRef}>
-            <BlogForm createBlog={addBlog}/>
-          </Togglable>
-        </Route>
-      </Switch>
+          <LoginForm
+            username={username}
+            password={password}
+            handleSubmit={handleLogin}
+          />
+      </div>) : 
+      (<div>
+      <h2>Blogs</h2>
+        <Navigation user={user} loggedOut={loggedOut} />
+          <Switch>
+            <Route path='/users/:id'>
+              <User user={showUser} />
+            </Route>
+            <Route path='/blogs/:id'>
+              <BlogDetails history={history} user={user} blog={showBlog} />
+            </Route>
+            <Route path='/users'>
+              <Users />
+            </Route>
+            <Route path='/login'>
+                <LoginForm
+                  username={username}
+                  password={password}
+                  handleSubmit={handleLogin}
+                />
+            </Route>
+            <Route path='/'>
+              <Notification message={message} />
+              <h3>{user.name}</h3>
+                <Blog blogs={sortedBlogs} />
+              <Togglable buttonLabel='new blog' ref={blogFormRef}>
+                <BlogForm createBlog={addBlog}/>
+              </Togglable>
+            </Route>
+          </Switch>
       </div>)}
     </div>
   );

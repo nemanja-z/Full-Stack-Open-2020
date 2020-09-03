@@ -6,11 +6,13 @@ import { useField } from '../hooks/useField';
 import { newMessage } from '../reducers/messageReducer';
 import { Card, ListGroup } from 'react-bootstrap';
 import { useDispatch} from 'react-redux';
+import PropTypes from 'prop-types';
 
 
 const BlogDetails = ({ blog, user, history}) => {
   const dispatch = useDispatch();
   const comment = useField('text');
+
   if (blog===undefined){ 
     history.push('/');
     return null;
@@ -29,7 +31,6 @@ const BlogDetails = ({ blog, user, history}) => {
 
   const updateLikes = async (liked) => {
     try{
-      //const toUpdate={...blog, likes:blog.likes + 1};
       dispatch(likeBlog(liked));
     }catch(e){
       console.log(e.response.message);
@@ -70,5 +71,25 @@ const BlogDetails = ({ blog, user, history}) => {
     </div>
   );
 };
-
+BlogDetails.propTypes={
+  blog:PropTypes.shape({
+    author:PropTypes.string.isRequired,
+    title:PropTypes.string.isRequired,
+    likes:PropTypes.number.isRequired,
+    url:PropTypes.string.isRequired,
+    id:PropTypes.string,
+    comments:PropTypes.array,
+    user:PropTypes.shape({
+      username:PropTypes.string,
+      name:PropTypes.string,
+      token:PropTypes.string
+    })
+  }),
+  user:PropTypes.shape({
+    username:PropTypes.string,
+    name:PropTypes.string,
+    token:PropTypes.string
+  }),
+  history:PropTypes.object.isRequired
+}
 export default BlogDetails;
