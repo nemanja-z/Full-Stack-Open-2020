@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 const BlogDetails = ({ blog, user, history}) => {
   const dispatch = useDispatch();
   const comment = useField('text');
-
+  
   if (blog===undefined){ 
     history.push('/');
     return null;

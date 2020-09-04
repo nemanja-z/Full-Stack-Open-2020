@@ -23,12 +23,12 @@ const App = () => {
   const password = useField('password');
   const blogFormRef = React.createRef();
   const dispatch = useDispatch();
-  const message = useSelector(state => state.message);
+  const message = useSelector(state =>state.message.toString());
   const blog = useSelector(state => state.blog);
   const user = useSelector(state =>{ return {...state.user}});
   const users = useSelector(state => state.users);
   const history = useHistory();
-  
+  console.log(typeof message)
   useEffect(() => {
     dispatch(initBlogs());
     dispatch(initUsers());
@@ -95,7 +95,7 @@ const App = () => {
               <BlogDetails history={history} user={user} blog={showBlog} />
             </Route>
             <Route path='/users'>
-              <Users />
+              <Users users={users}/>
             </Route>
             <Route path='/login'>
                 <LoginForm

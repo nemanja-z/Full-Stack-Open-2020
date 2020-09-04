@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Comment = ({ addComment, comment }) => {
 
@@ -11,4 +12,10 @@ const Comment = ({ addComment, comment }) => {
     </form >
   );
 };
+
+Comment.propTypes={
+  addComment:PropTypes.func.isRequired,
+  comment:PropTypes.object.isRequired
+};
+
 export default Comment;

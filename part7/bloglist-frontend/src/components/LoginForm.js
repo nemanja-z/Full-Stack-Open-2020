@@ -1,11 +1,9 @@
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
-
 import PropTypes from 'prop-types';
 
 const LoginForm = ({ handleSubmit, username, password }) => {
   return (
-    < div >
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="username">
           <Form.Label>username</Form.Label>
@@ -19,7 +17,6 @@ const LoginForm = ({ handleSubmit, username, password }) => {
           login
         </Button>
       </Form>
-    </div >
   );
 };
 

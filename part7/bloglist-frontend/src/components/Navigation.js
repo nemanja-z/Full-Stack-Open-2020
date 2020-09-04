@@ -3,12 +3,14 @@ import { Navbar, Nav } from 'react-bootstrap';
 import {
   Link
 } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
+
 const Navigation = ({ user, loggedOut }) => {
   const padding = {
     padding: 5
   };
   return (
-    <div>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -30,9 +32,16 @@ const Navigation = ({ user, loggedOut }) => {
 
           </Nav>
         </Navbar.Collapse>
-      </Navbar>
+      </Navbar>);
+};
 
-    </div>);
+Navigation.propTypes={
+  user:PropTypes.shape({
+    username:PropTypes.string,
+    name:PropTypes.string,
+    token:PropTypes.string
+  }),
+  loggedOut:PropTypes.func.isRequired
 };
 
 export default Navigation;

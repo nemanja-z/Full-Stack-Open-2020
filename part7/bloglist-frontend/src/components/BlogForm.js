@@ -1,6 +1,7 @@
 import React from 'react';
 import { useField } from '../hooks/useField';
 import { Form, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 const BlogForm = ({ createBlog }) => {
   const title = useField('text');
@@ -41,6 +42,10 @@ const BlogForm = ({ createBlog }) => {
       </Button>
     </Form>
   );
+};
+
+BlogForm.propTypes={
+  createBlog:PropTypes.func.isRequired
 };
 
 export default BlogForm;
