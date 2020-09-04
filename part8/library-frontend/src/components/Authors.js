@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import BirthForm from './BirthForm'
-import { ALL_AUTHORS } from '../queries'
+import BirthForm from './BirthForm';
+import { ALL_AUTHORS } from '../queries';
 
 
 const Authors = (props) => {
-  const fetchAuthors = useQuery(ALL_AUTHORS)
-  const [author, setAuthors] = useState(null)
+  const fetchAuthors = useQuery(ALL_AUTHORS);
+  const [author, setAuthors] = useState(null);
   useEffect(() => {
     if (fetchAuthors.data) {
-      setAuthors(fetchAuthors.data.allAuthors.map(author => author))
+      setAuthors(fetchAuthors.data.allAuthors.map(author => author));
     }
   }, [fetchAuthors])
 
-  if (!props.show) return null
-  if (fetchAuthors.loading) return <div>loading...</div>
+  if (!props.show) return null;
+  if (fetchAuthors.loading) return <div>loading...</div>;
 
   return (
     <div>
@@ -44,4 +44,4 @@ const Authors = (props) => {
   )
 }
 
-export default Authors
+export default Authors;

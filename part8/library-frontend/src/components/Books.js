@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/client';
-import { GET_BOOKS } from '../queries'
+import { GET_BOOKS } from '../queries';
 const Books = (props) => {
-  const [bookByGenre, setBooksByGenre] = useState(null)
+  const [bookByGenre, setBooksByGenre] = useState(null);
   const [getBooks, { data, loading }] = useLazyQuery(GET_BOOKS);
 
 
   const filterByGenre = async genre => {
-    getBooks({ variables: { genre: genre.toString() } })
-  }
+    getBooks({ variables: { genre: genre.toString() } });
+  };
   useEffect(() => {
     if (data) {
-      setBooksByGenre(data.allBooks)
+      setBooksByGenre(data.allBooks);
     }
   }, [data])
-  if (!props.book) return <div>waiting...</div>
-  const genres = props.book.map(book => book.genres.map(g => g.toLowerCase())).flat()
-  const filterGenre = [...new Set(genres)]
+  if (!props.book) return <div>waiting...</div>;
+  const genres = props.book.map(book => book.genres.map(g => g.toLowerCase())).flat();
+  const filterGenre = [...new Set(genres)];
 
-  if (loading) return <div>loading...</div>
+  if (loading) return <div>loading...</div>;
   if (!props.show) return null;
   if (bookByGenre) {
     return (
@@ -83,4 +83,4 @@ const Books = (props) => {
   )
 }
 
-export default Books
+export default Books;

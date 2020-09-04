@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import { ME } from '../queries'
+import { ME } from '../queries';
 
 const Recommendation = ({ show, book }) => {
     const [userInfo, setUserInfo] = useState(null);
@@ -14,7 +14,7 @@ const Recommendation = ({ show, book }) => {
     }, [user.data])
 
     if (!show) return null;
-    if (user.loading) return <div>loading...</div>
+    if (user.loading) return <div>loading...</div>;
     return (
         <div>
             <h2>Recommendations based on your favorite genre</h2>
@@ -49,4 +49,4 @@ const Recommendation = ({ show, book }) => {
     )
 }
 
-export default Recommendation
+export default Recommendation;

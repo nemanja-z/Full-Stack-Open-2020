@@ -1,43 +1,50 @@
-import React, { useState } from 'react'
-import { useMutation } from '@apollo/client'
-import { ADD_BOOK } from '../queries'
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { ADD_BOOK } from '../queries';
 
 
 
 
 const NewBook = (props) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [published, setPublished] = useState('')
-  const [genre, setGenre] = useState('')
-  const [genres, setGenres] = useState([])
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [published, setPublished] = useState('');
+  const [genre, setGenre] = useState('');
+  const [genres, setGenres] = useState([]);
 
   const [addBook] = useMutation(ADD_BOOK, {
     onError: (error) => { props.setError(error.graphQLErrors[0].message) },
     update: (store, response) => {
       props.updateCacheWith(response.data.addBook)
     }
-  })
+  });
   if (!props.show) {
-    return null
+    return null;
   }
   const submit = async (event) => {
     event.preventDefault();
-    addBook({ variables: { title, author, published, genres } })
-
-    console.log('add book...')
-
-    setTitle('')
-    setPublished('')
-    setAuthor('')
-    setGenres([])
-    setGenre('')
-  }
+      try{addBook({ variables: { title, author, published, genres } });
+      console.log('add book...');
+      setTitle('');
+      setPublished('');
+      setAuthor('');
+      setGenres([]);
+      setGenre('');
+    }catch(e){
+      console.log(e);
+      setTitle('');
+      setPublished('');
+      setAuthor('');
+      setGenres([]);
+      setGenre('');
+    };
+    
+  };
 
   const addGenre = () => {
-    setGenres(genres.concat(genre))
-    setGenre('')
-  }
+    setGenres(genres.concat(genre));
+    setGenre('');
+  };
 
   return (
     <div>
@@ -45,6 +52,7 @@ const NewBook = (props) => {
         <div>
           title
           <input
+            required
             value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
@@ -52,6 +60,7 @@ const NewBook = (props) => {
         <div>
           author
           <input
+            required
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
@@ -59,6 +68,7 @@ const NewBook = (props) => {
         <div>
           published
           <input
+            required
             type='number'
             value={published}
             onChange={({ target }) => setPublished(+target.value)}
@@ -80,4 +90,4 @@ const NewBook = (props) => {
   )
 }
 
-export default NewBook
+export default NewBook;
