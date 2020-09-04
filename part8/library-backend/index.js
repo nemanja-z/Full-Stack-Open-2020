@@ -81,7 +81,6 @@ const typeDefs = gql`
 const resolvers = {
     Query: {
         allBooks: async (root, args) => {
-            let books = await Book.find({}).populate('author');
             if (args.author && args.genre) {
                 const author = await Author.findOne({ name: args.author });
                 const genres = books.filter(book => book.genres.includes(args.genre));
@@ -89,10 +88,12 @@ const resolvers = {
             }
             else if (args.author) {
                 const author = await Author.findOne({ name: args.author });
-                await Book.findById(author.id).populate('author');
+                await Book.findById(author._id).populate('author');
             }
-            else if (args.genre)
+            else if (args.genre){
                 return Book.find({ genres: { $in: [new RegExp(args.genre, 'i')] } }).populate('author');
+            }
+            let books = await Book.find({}).populate('author');
             return books;
 
         },
@@ -125,27 +126,31 @@ const resolvers = {
                 let author = await Author.findOne({ name: args.author });
                 if (!author) {
                     author = new Author({ name: args.author });
-                    try {
-                        await author.save();
-                    }
-                    catch (error) {
-                        throw new UserInputError(error.message, {
-                            invalidArgs: args,
-                        });
-                    }
+                try{
+                    await author.save();
+                }catch(e){
+                    throw new UserInputError(e.message, {
+                        invalidArgs: args
+                      });
                 }
-                const book = new Book({ ...args, author });
-
-                try {
-                    await book.save();
-                } catch (error) {
-                    throw new UserInputError(error.message, {
-                        invalidArgs: args,
-                    });
+                const book = new Book({
+                    title: args.title,
+                    published: args.published,
+                    author: author._id,
+                    genres: args.genres,
+                  });
+                  try{
+                      await book.save();
+                  }catch(e){
+                      console.log(e.message)
+                    throw new UserInputError(e.message, {
+                        invalidArgs: args
+                      });
                 }
-                pubsub.publish('BOOK_ADDED', { bookAdded: book });
-                return book;
-            },
+                const added=await book.populate('author').execPopulate();
+                pubsub.publish('BOOK_ADDED', { bookAdded: added });
+                return added;
+            }},
         editAuthor: async (root, args, { currentUser }) => {
             if (!currentUser) {
                 throw new AuthenticationError("not authenticated");
@@ -167,7 +172,7 @@ const resolvers = {
             }
             catch (error) {
                 throw new UserInputError(error.message, {
-                    inalidArgs: args,
+                    invalidArgs: args,
                 });
             }
             return user;

@@ -13,7 +13,9 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([]);
 
   const [addBook] = useMutation(ADD_BOOK, {
-    onError: (error) => { props.setError(error.graphQLErrors[0].message) },
+    onError: (error) => {
+      props.setError(error.graphQLErrors[0].message)
+    },
     update: (store, response) => {
       props.updateCacheWith(response.data.addBook)
     }
@@ -23,22 +25,13 @@ const NewBook = (props) => {
   }
   const submit = async (event) => {
     event.preventDefault();
-      try{addBook({ variables: { title, author, published, genres } });
-      console.log('add book...');
-      setTitle('');
-      setPublished('');
-      setAuthor('');
-      setGenres([]);
-      setGenre('');
-    }catch(e){
-      console.log(e);
-      setTitle('');
-      setPublished('');
-      setAuthor('');
-      setGenres([]);
-      setGenre('');
-    };
-    
+    addBook({ variables: { title, author, published, genres} });
+    console.log('add book...');
+    setTitle('');
+    setPublished('');
+    setAuthor('');
+    setGenres([]);
+    setGenre('');
   };
 
   const addGenre = () => {
@@ -52,7 +45,6 @@ const NewBook = (props) => {
         <div>
           title
           <input
-            required
             value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
@@ -60,7 +52,6 @@ const NewBook = (props) => {
         <div>
           author
           <input
-            required
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
@@ -68,7 +59,6 @@ const NewBook = (props) => {
         <div>
           published
           <input
-            required
             type='number'
             value={published}
             onChange={({ target }) => setPublished(+target.value)}

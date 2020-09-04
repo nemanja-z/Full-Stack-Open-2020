@@ -7,7 +7,7 @@ const LoginForm = ({ setError, setToken }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [login, result] = useMutation(LOGIN, {
-        onError:(e)=> setError(e.graphqlErrors[0].message.data)
+        onError:(error)=> { setError(error.graphQLErrors[0].message) }
     });
     useEffect(() => {
         if (result.data) {

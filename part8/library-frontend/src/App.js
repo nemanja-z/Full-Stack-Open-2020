@@ -10,18 +10,18 @@ import { ALL_BOOKS, BOOK_ADDED } from './queries';
 import { useSubscription, useQuery } from '@apollo/client';
 
 const Notify = ({ errorMessage }) => {
+  
   if (!errorMessage) {
     return null;
   }
-  if(errorMessage){
-    setTimeout(()=>{return null},5000);
-    return (
-      <div style={{ color: 'red' }}>
-        {errorMessage}
-      </div>
-    )
+  
+  return (
+        <div style={{ color: 'red' }}>
+          {errorMessage}
+        </div>
+      );
   }
-}
+
 
 const App = () => {
   const [page, setPage] = useState('authors');
@@ -30,7 +30,7 @@ const App = () => {
   const client = useApolloClient();
   const [book, setBooks] = useState(null);
   const fetchBooks = useQuery(ALL_BOOKS);
-
+  console.log(errorMessage)
 
   const updateCacheWith = addedBook => {
     const includedIn = (set, object) =>
@@ -56,7 +56,10 @@ const App = () => {
     if (token) {
       setToken(token);
     }
-  }, [token])
+    if(errorMessage){
+      setTimeout(()=>{setErrorMessage(null)}, 5000);
+    }
+  }, [token, errorMessage])
 
   useEffect(() => {
 
@@ -64,18 +67,12 @@ const App = () => {
       setBooks(fetchBooks.data.allBooks.map(book => book));
     }
   }, [fetchBooks.data]);
-  const notify = (message) => {
-    setErrorMessage(message);
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 5000);
-  }
   
-        //<Notify errorMessage={errorMessage} />
+
   if (!token) {
     return (
       <div>
-      {errorMessage&&<Notify errorMessage={errorMessage} />}
+      <Notify errorMessage={errorMessage} />
         <h2>Login</h2>
         <LoginForm
           setError={setErrorMessage}
