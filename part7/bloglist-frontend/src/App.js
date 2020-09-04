@@ -23,12 +23,13 @@ const App = () => {
   const password = useField('password');
   const blogFormRef = React.createRef();
   const dispatch = useDispatch();
-  const message = useSelector(state =>state.message.toString());
+  const message = useSelector(state =>state.message);
   const blog = useSelector(state => state.blog);
-  const user = useSelector(state =>{ return {...state.user}});
+  const user = useSelector(state =>state.user);
   const users = useSelector(state => state.users);
   const history = useHistory();
-  console.log(typeof message)
+  
+  
   useEffect(() => {
     dispatch(initBlogs());
     dispatch(initUsers());

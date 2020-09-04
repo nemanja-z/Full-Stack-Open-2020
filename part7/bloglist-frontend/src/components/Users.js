@@ -3,14 +3,14 @@ import {
   Link
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
+import Table from 'react-bootstrap/Table';
 
 
 const Users = ({users}) => {
   return (
     <>
     <h2>Users</h2>
-    <table>
+    <Table>
       <thead>
         <tr>
           <th></th>
@@ -24,10 +24,8 @@ const Users = ({users}) => {
             <td>{user.blogs.length}</td>
           </tr>))}
       </tbody>
-    </table>
-    </>
-
-  );
+    </Table>
+    </>);
 };
 
 Users.propTypes={

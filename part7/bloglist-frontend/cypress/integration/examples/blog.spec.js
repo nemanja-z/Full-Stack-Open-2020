@@ -1,8 +1,10 @@
 describe('Blog app', function () {
   beforeEach(function () {
-    cy.request('POST', 'http://localhost:3003/api/testing/reset');
-    const user = { username: 'proba', password: 'tri' };
-    cy.request('POST', 'http://localhost:3003/api/users', user);
+    cy.request('POST', 'http://localhost:3001/api/testing/reset');
+    const userOne = { username: 'proba', password: 'tri' };
+    cy.request('POST', 'http://localhost:3001/api/users', userOne);
+    const userTwo = { username: 'danas', password: 'danas' };
+    cy.request('POST', 'http://localhost:3001/api/users', userTwo);
     cy.visit('http://localhost:3000');
   });
 
@@ -41,26 +43,12 @@ describe('Blog app', function () {
       cy.contains('save').click();
     });
     it('A blog can be liked', function () {
-      cy.contains('new blog').click();
-      cy.get('#title').type('this');
-      cy.get('#author').type('is');
-      cy.get('#url').type('confusing.com');
-      /*  cy.contains('save').click()
-      cy.contains('show more').click()
-      cy.contains('like').click()
-      cy.contains('like').click()
-      cy.contains('like').click()
-      cy.contains('like').click() */
+      cy.contains('.list-group-item').first().click();
+      cy.get('like').click();
     });
     it('A blog can be deleted', function () {
-      cy.contains('new blog').click();
-      cy.get('#title').type('this');
-      cy.get('#author').type('is');
-      cy.get('#url').type('confusing.com');
-      cy.contains('save').click();
-      /*  cy.contains('show more').click()
-       cy.contains('delete').click()
-       cy.get('this').should('not.exist') */
+      cy.contains('.list-group-item').first().click();
+      cy.get('delete').click();
     });
     describe('Sort blogs by likes number', function () {
       beforeEach(function () {

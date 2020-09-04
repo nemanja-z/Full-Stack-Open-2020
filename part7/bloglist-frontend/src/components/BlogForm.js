@@ -27,7 +27,7 @@ const BlogForm = ({ createBlog }) => {
     <Form onSubmit={addBlog}>
       <Form.Group controlId="title">
         <Form.Label>title</Form.Label>
-        <Form.Control {...title} reset='reset' />
+        <Form.Control {...title} as='textarea' reset='reset' />
       </Form.Group>
       <Form.Group controlId="author">
         <Form.Label>author</Form.Label>

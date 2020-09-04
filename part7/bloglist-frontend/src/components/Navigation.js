@@ -1,5 +1,8 @@
 import React from 'react';
-import { Navbar, Nav } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+
 import {
   Link
 } from 'react-router-dom';
@@ -28,7 +31,7 @@ const Navigation = ({ user, loggedOut }) => {
                   : <Link to="/login">login</Link>
               }
             </Nav.Link>
-            <button onClick={loggedOut}>logout</button>
+            <Button onClick={loggedOut}>logout</Button>
 
           </Nav>
         </Navbar.Collapse>
@@ -36,11 +39,15 @@ const Navigation = ({ user, loggedOut }) => {
 };
 
 Navigation.propTypes={
-  user:PropTypes.shape({
+  user:PropTypes.oneOfType([PropTypes.shape({
     username:PropTypes.string,
     name:PropTypes.string,
     token:PropTypes.string
-  }),
+  }),PropTypes.arrayOf(PropTypes.shape({
+    username:PropTypes.string,
+    name:PropTypes.string,
+    token:PropTypes.string
+  }))]),
   loggedOut:PropTypes.func.isRequired
 };
 

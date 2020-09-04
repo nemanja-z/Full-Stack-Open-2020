@@ -12,7 +12,7 @@ const Notification = ({ message }) => {
 };
 
 Notification.propTypes={
-  message:PropTypes.string
+  message:PropTypes.oneOfType([PropTypes.string,PropTypes.array])
 };
 
 export default Notification;

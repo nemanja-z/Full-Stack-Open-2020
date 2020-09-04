@@ -4,7 +4,9 @@ import { commentBlog, deleteBlog } from '../reducers/blogReducer';
 import Comment from './Comment';
 import { useField } from '../hooks/useField';
 import { newMessage } from '../reducers/messageReducer';
-import { Card, ListGroup } from 'react-bootstrap';
+import ListGroup  from 'react-bootstrap/ListGroup';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 import { useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -58,7 +60,7 @@ const BlogDetails = ({ blog, user, history}) => {
         <button onClick={()=>updateLikes(blog)}>like</button>
       </div>
       <p>{`added by ${blog.user.username}`}</p>
-      {authorize && <button onClick={() => removeBlog(blog)}>delete</button>}
+      {authorize && <Button onClick={() => removeBlog(blog)}>delete</Button>}
       <Comment addComment={addComment} comment={comment} />
       <Card style={{ width: '18rem' }}>
         <Card.Title>Comments:</Card.Title>
@@ -85,11 +87,15 @@ BlogDetails.propTypes={
       token:PropTypes.string
     })
   }),
-  user:PropTypes.shape({
+  user:PropTypes.oneOfType([PropTypes.shape({
     username:PropTypes.string,
     name:PropTypes.string,
     token:PropTypes.string
-  }),
+  }),PropTypes.arrayOf(PropTypes.shape({
+    username:PropTypes.string,
+    name:PropTypes.string,
+    token:PropTypes.string
+  }))]),
   history:PropTypes.object.isRequired
 }
 export default BlogDetails;
