@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { GET_BOOKS } from '../queries';
-const Books = (props) => {
-  const [bookByGenre, setBooksByGenre] = useState(null);
-  const [getBooks, { data, loading }] = useLazyQuery(GET_BOOKS);
 
+
+const Books = ({book, show, setError}) => {
+
+  const [bookByGenre, setBooksByGenre] = useState(null);
+  const [getBooks, { data}] = useLazyQuery(GET_BOOKS, {
+    onError:e=>{ setError(e.graphQLErrors[0].message) }
+  });
 
   const filterByGenre = async genre => {
     getBooks({ variables: { genre: genre.toString() } });
@@ -14,12 +18,10 @@ const Books = (props) => {
       setBooksByGenre(data.allBooks);
     }
   }, [data])
-  if (!props.book) return <div>waiting...</div>;
-  const genres = props.book.map(book => book.genres.map(g => g.toLowerCase())).flat();
+  if (!show || !book) return null;
+  const genres = book.map(book => book.genres.map(g => g.toLowerCase())).flat();
   const filterGenre = [...new Set(genres)];
-
-  if (loading) return <div>loading...</div>;
-  if (!props.show) return null;
+  
   if (bookByGenre) {
     return (
       <div>
@@ -66,7 +68,7 @@ const Books = (props) => {
               published
             </th>
           </tr>
-          {props.book.map(b =>
+          {book.map(b =>
             <tr key={b.title}>
               <td>{b.title}</td>
               <td>{b.author.name}</td>

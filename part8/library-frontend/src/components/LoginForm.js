@@ -18,11 +18,7 @@ const LoginForm = ({ setError, setToken }) => {
     }, [result.data, setToken])
     const submit = async e => {
         e.preventDefault();
-        try{
-            login({ variables: { username, password } });
-        }catch(e){
-            setError(e);
-        }
+        login({ variables: { username, password } });
     };
     return (
         <div>

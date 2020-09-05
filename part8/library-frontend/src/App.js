@@ -30,11 +30,10 @@ const App = () => {
   const client = useApolloClient();
   const [book, setBooks] = useState(null);
   const fetchBooks = useQuery(ALL_BOOKS);
-  console.log(errorMessage)
 
   const updateCacheWith = addedBook => {
     const includedIn = (set, object) =>
-      set.map(b => b.id).includes(object.id)
+    set.map(b => b.id).includes(object.id)
     const dataInStore = client.readQuery({ query: ALL_BOOKS });
     if (!includedIn(dataInStore.allBooks, addedBook)) {
       client.writeQuery({
@@ -56,10 +55,7 @@ const App = () => {
     if (token) {
       setToken(token);
     }
-    if(errorMessage){
-      setTimeout(()=>{setErrorMessage(null)}, 5000);
-    }
-  }, [token, errorMessage])
+  }, [token])
 
   useEffect(() => {
 
@@ -68,55 +64,51 @@ const App = () => {
     }
   }, [fetchBooks.data]);
   
-
-  if (!token) {
-    return (
-      <div>
-      <Notify errorMessage={errorMessage} />
-        <h2>Login</h2>
-        <LoginForm
-          setError={setErrorMessage}
-          setToken={setToken}
-        />
-      </div>
-    )
-  }
-
   const logout = () => {
     setToken(null);
     localStorage.clear();
     client.resetStore();
+  };
+  const handleMessage = msg =>{
+    setErrorMessage(msg);
+    return setTimeout(()=>{
+      setErrorMessage(null);
+    },5000);
   }
-
+  if (!token) {
+      return (
+        <div>
+        <Notify errorMessage={errorMessage} />
+          <h2>Login</h2>
+          <LoginForm
+            setError={handleMessage}
+            setToken={setToken}
+          />
+        </div>
+      )
+    }
   return (
     <div>
-    {errorMessage && <Notify errorMessage={errorMessage}/>}
+    <Notify errorMessage={errorMessage}/>
       <div>
-        <button onClick={() => setPage('authors')}>authors</button>
-        <button onClick={() => setPage('books')}>books</button>
         {token === null ? <button onClick={() => setPage('login')}>login</button> : (
           <>
+            <button onClick={() => setPage('authors')}>authors</button>
+            <button onClick={() => setPage('books')}>books</button>
             <button onClick={() => setPage('add')}>add book</button>
             <button onClick={() => setPage('recommend')}>recommend</button>
             <button onClick={logout}>logout</button>
           </>)
         }
       </div>
+        <Authors token={token} show={page === 'authors'}/>
+        
+        <Books book={book} show={page === 'books'} setError={handleMessage}/>
+        
+        <NewBook updateCacheWith={updateCacheWith} setError={handleMessage} show={page === 'add'}/>
 
-      <Authors
-        token={token} show={page === 'authors'}
-      />
-
-      <Books
-        book={book} show={page === 'books'}
-      />
-
-      <NewBook
-        updateCacheWith={updateCacheWith} setError={setErrorMessage} show={page === 'add'}
-      />
-      <Recommendation show={page === 'recommend'} book={book} />
-
-
+        <Recommendation show={page === 'recommend'} book={book} />
+      
     </div>
   )
 }

@@ -1,50 +1,38 @@
 import { gql } from '@apollo/client';
 const BOOK_DETAILS = gql`
-        fragment BOOK_DETAILS on Book{
-          title
-          author{
-            name
-            born
-            bookCount
-            id
-          }
-          published
-          genres
-          id
-        }`;
+  fragment BookDetails on Book{
+    id
+    title
+    author{
+      name
+      born
+      bookCount
+      id
+    }
+    published
+    genres
+  }`;
 
 export const ALL_BOOKS = gql`
     query {
         allBooks {
-          title
-          author{
-            name
-            born
-            bookCount
-          }
-          genres
-          published
-          id
+          ...BookDetails
         }
-    }
+    }${BOOK_DETAILS}
 `;
-export const ADD_BOOK = gql`
-    mutation addBook($title:String!,$author:String!,$published:Int!,$genres:[String!]!){
-      addBook(
-        title:$title,
-        author:$author,
-        published:$published,
-        genres:$genres
-        ){
-          title
-          author{
-            name
-            id
-            bookCount
-          }
-          published
-          genres
-        }}`;
+export const CREATE_BOOK = gql`
+  mutation createBook($title: String!, $published: Int!, $author: String!, $genres: [String!]!) {
+    addBook(
+      title: $title,
+      published: $published,
+      author: $author,
+      genres: $genres
+    ){
+      ...BookDetails
+    }
+  }
+  ${BOOK_DETAILS}
+`;
 export const LOGIN = gql`
         mutation login($username:String!,$password:String!){
             login(username:$username,password:$password){
@@ -63,20 +51,22 @@ export const SET_BIRTHYEAR = gql`
 export const ALL_AUTHORS = gql`
         query {
             allAuthors {
+                id
                 name
                 born
                 bookCount
-                id
             }
         }
     `;
 export const GET_BOOKS = gql`
         query getBooks($genre:String!){
           allBooks(genre:$genre){
+            id
             title
           author{
-            name
             id
+            born
+            name
             bookCount
           }
           published

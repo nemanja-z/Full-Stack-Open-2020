@@ -108,49 +108,44 @@ const resolvers = {
         }
     },
     Mutation: {
-        addBook:
-            async (root, args, { currentUser }) => {
+         addBook: async (root, args, { currentUser }) => {
                 if (!currentUser) {
                     throw new AuthenticationError('not authenticated');
                 }
                 if (args.author.length < 5) {
                     throw new UserInputError('Name is to short', {
-                        invalidArgs: args,
+                        invalidArgs: args.author,
                     });
                 }
                 if (!args.title) {
                     throw new UserInputError('Title field is required', {
-                        invalidArgs: args,
+                        invalidArgs: args.title,
                     });
                 }
                 let author = await Author.findOne({ name: args.author });
                 if (!author) {
                     author = new Author({ name: args.author });
+                    try{
+                        await author.save();
+                    }catch(e){
+                        throw new UserInputError(e.message, {
+                            invalidArgs: args.author
+                        });
+                    }
+                }
+                const book = new Book({
+                    ...args, author
+                  });
                 try{
-                    await author.save();
+                    await book.save();
                 }catch(e){
                     throw new UserInputError(e.message, {
                         invalidArgs: args
                       });
                 }
-                const book = new Book({
-                    title: args.title,
-                    published: args.published,
-                    author: author._id,
-                    genres: args.genres,
-                  });
-                  try{
-                      await book.save();
-                  }catch(e){
-                      console.log(e.message)
-                    throw new UserInputError(e.message, {
-                        invalidArgs: args
-                      });
-                }
-                const added=await book.populate('author').execPopulate();
-                pubsub.publish('BOOK_ADDED', { bookAdded: added });
-                return added;
-            }},
+                pubsub.publish('BOOK_ADDED', { bookAdded: book });
+                return book;
+        }, 
         editAuthor: async (root, args, { currentUser }) => {
             if (!currentUser) {
                 throw new AuthenticationError("not authenticated");

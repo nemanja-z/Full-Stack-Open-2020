@@ -4,7 +4,7 @@ import BirthForm from './BirthForm';
 import { ALL_AUTHORS } from '../queries';
 
 
-const Authors = (props) => {
+const Authors = ({show}) => {
   const fetchAuthors = useQuery(ALL_AUTHORS);
   const [author, setAuthors] = useState(null);
   useEffect(() => {
@@ -13,8 +13,7 @@ const Authors = (props) => {
     }
   }, [fetchAuthors])
 
-  if (!props.show) return null;
-  if (fetchAuthors.loading) return <div>loading...</div>;
+  if (!show) return null;
 
   return (
     <div>

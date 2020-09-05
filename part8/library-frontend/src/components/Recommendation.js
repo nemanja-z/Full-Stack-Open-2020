@@ -14,7 +14,7 @@ const Recommendation = ({ show, book }) => {
     }, [user.data])
 
     if (!show) return null;
-    if (user.loading) return <div>loading...</div>;
+    if (!user.data.me) return null;
     return (
         <div>
             <h2>Recommendations based on your favorite genre</h2>
