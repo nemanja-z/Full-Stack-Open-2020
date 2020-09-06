@@ -1,5 +1,6 @@
-import React from 'react'
+import React from 'react';
 import { CoursePart, assertNever } from '../index';
+
 const Part: React.FC<{ course: CoursePart }> = ({ course }) => {
     switch (course.name) {
         case 'Fundamentals':

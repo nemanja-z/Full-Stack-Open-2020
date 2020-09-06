@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 import { CoursePart } from '../index';
-import Part from './Part'
+import Part from './Part';
 const Content: React.FC<{ course: CoursePart[] }> = ({ course }) => {
     return (
         <div>

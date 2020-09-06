@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { CoursePart } from '../index';
 
 const Total: React.FC<{ exercise: CoursePart[] }> = ({ exercise }) => {

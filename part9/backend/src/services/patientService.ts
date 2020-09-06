@@ -1,6 +1,6 @@
 import patientsData from '../data/patients';
 import { PublicPatient, NewPatientEntry, Patient, Entry } from '../types';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 
 const assertNever = (value: never): never => {
@@ -19,24 +19,24 @@ const getById = (id: string): PublicPatient[] => {
         ({ id, name, dateOfBirth, gender, occupation, entries }));
 };
 const addPatient = (entry: NewPatientEntry): Patient => {
-    const newPatientEntry = {
-        id: uuidv4(),
+    const newPatientEntry:Patient = {
+        id: uuid(),
         ...entry
     };
-    patients.push(newPatientEntry);
+    patients.concat(newPatientEntry);
     return newPatientEntry;
 };
-const addEntry = (id: string, entry: Entry): Patient => {
-    const patient = patients.find(p => p.id === id);
+const addEntry = (patientId: string, entry: Entry): Patient | undefined => {
+    const patient = patients.find(p => p.id === patientId);
     if (!patient) throw new Error('error: malformed id');
     if (!entry.date || !entry.description || !entry.specialist) throw new Error('error: data is missing');
 
     const updatedPatient = (): Patient => {
-        entry = {
-            id: uuidv4(),
-            ...entry
+        const newEntry:Entry = {
+            ...entry,
+            id:uuid()
         };
-        patient.entries?.push(entry);
+        patient.entries?.concat(newEntry);
         return patient;
     };
 
