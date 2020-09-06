@@ -21,8 +21,9 @@ app.get('/bmi', (req, res) => {
     res.send(data);
 });
 app.post('/exercise', (req, res) => {
-    const { goal, hour } = req.body; //eslint-disable-line
-    if (!goal || !goal) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { goal, hour } = req.body; 
+    if (!goal || !hour) {
         res.status(400).send({ "error": "Parameters missing" });
     }
     const count = countExercise(goal, hour);

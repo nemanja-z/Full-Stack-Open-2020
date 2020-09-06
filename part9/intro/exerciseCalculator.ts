@@ -16,15 +16,17 @@ export const countExercise = (goal: number, hour: Array<number>): Summary => {
     const numHours = hour.reduce((curr, next) => curr + next);
     const average = numHours / numDays;
     let success = false;
-    if (average >= target) success = true;
+    if (average >= target){
+        success=true;
+    }
     const diff = average - target;
     let rating, desc;
     if (diff < -1) {
         desc = `You need to be more active`;
-        rating = 0;
+        rating = 1;
     } else if (diff < 0 && diff > -1) {
         desc = `You are almost there.`;
-        rating = 1;
+        rating = 2;
     } else {
         rating = 3;
         desc = `That's great.`;
@@ -39,6 +41,6 @@ export const countExercise = (goal: number, hour: Array<number>): Summary => {
         average: average
     };
 };
-const goal = Number(process.argv[2]);
-const hour = process.argv.slice(3).map(h => Number(h));
+//const goal = Number(process.argv[2]);
+//const hour = process.argv.slice(3).map(h => Number(h));
 //console.log(countExercise(goal, hour));
