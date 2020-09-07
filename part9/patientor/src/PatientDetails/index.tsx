@@ -60,7 +60,6 @@ const PatientDetails: React.FC = () => {
     }
   };
   const submitHealthCheckEntry = async (values: HealthCheckEntryFormValues) => {
-    console.log(values)
     try {
       const { data: updatePatient } = await axios.post<Patient>(
         `${apiBaseUrl}/patients/${id}/entries`,

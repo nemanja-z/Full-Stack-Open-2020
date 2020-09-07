@@ -5,8 +5,6 @@ const isString = (text: any): text is string => {
   return typeof text === 'string' || text instanceof String;
 };
 const isGender = (param: any): param is Gender => {
-  console.log(Object.values(Gender));
-
   return Object.values(Gender).includes(param);
 };
 const isDate = (date: string): boolean => {
