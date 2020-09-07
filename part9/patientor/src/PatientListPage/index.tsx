@@ -13,10 +13,10 @@ import { addPatient } from '../state/reducer';
 
 const PatientListPage: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
-
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | undefined>();
-
+  
+  
   const openModal = (): void => setModalOpen(true);
 
   const closeModal = (): void => {

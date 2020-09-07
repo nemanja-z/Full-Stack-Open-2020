@@ -65,17 +65,14 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         patients: {
           ...state.patients,
-          [action.payload.id]: {
-            ...state.patients[action.payload.id],
-            ...action.payload
-          }
+          [action.payload.id]:action.payload
+          
         }
       };
     default:
       return state;
   }
 };
-
 export const setPatientList = (patients: Patient[]): Action => {
   return {
     type: "SET_PATIENT_LIST",

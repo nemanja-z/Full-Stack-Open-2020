@@ -2,23 +2,26 @@ import React from 'react';
 import { Entry } from '../types';
 import HealthRatingBar from "../components/HealthRatingBar";
 import { Icon } from "semantic-ui-react";
+
 const Entries: React.FC<{ entry: Entry }> = ({ entry }) => {
+
     const assertNever = (value: never): never => {
         throw new Error(
             `Unhandled discriminated union member: ${JSON.stringify(value)}`
         );
     };
+
     const icon = (entry: Entry) => {
         switch (entry.type) {
-            case 'HealthCheck': return <Icon name='stethoscope' />;
-            case 'OccupationalHealthcare': return <Icon name='user md' />;
-            case 'Hospital': return <Icon name='hospital' />;
+            case "HealthCheck": return <Icon name='stethoscope' />;
+            case "OccupationalHealthcare": return <Icon name='user md' />;
+            case "Hospital": return <Icon name='hospital' />;
             default: return assertNever(entry);
 
         }
     };
     switch (entry.type) {
-        case 'HealthCheck':
+        case "HealthCheck":
             {
                 return (<>
                     <h3>{entry.date}</h3>
@@ -33,7 +36,7 @@ const Entries: React.FC<{ entry: Entry }> = ({ entry }) => {
                     <HealthRatingBar showText={false} rating={entry.healthCheckRating} />
                 </>);
             }
-        case 'OccupationalHealthcare': {
+        case "OccupationalHealthcare": {
             return (<>
                 <h3>{entry.date}</h3>
                 {icon(entry)}
@@ -53,7 +56,7 @@ const Entries: React.FC<{ entry: Entry }> = ({ entry }) => {
             </>);
         }
 
-        case 'Hospital':
+        case "Hospital":
             {
                 return (<>
                     <h3>{entry.date}</h3>

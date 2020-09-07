@@ -8,14 +8,6 @@ export enum Gender {
     Male = "male",
     Female = "female"
 }
-/* export interface PatientEntry {
-    id: string,
-    name: string,
-    dateOfBirth: string,
-    ssn?: string,
-    gender: Gender,
-    occupation: string
-} */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface BaseEntry {
     id: string;

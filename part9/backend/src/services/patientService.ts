@@ -8,15 +8,14 @@ const assertNever = (value: never): never => {
         `Unhandled discriminated union member: ${JSON.stringify(value)}`
     );
 };
-const patients: Patient[] = patientsData;
+let patients: Patient[] = patientsData;
 const getEntries = (): PublicPatient[] => {
     return patients.map(({ id, name, dateOfBirth, gender, occupation, entries }) =>
         ({ id, name, dateOfBirth, gender, occupation, entries }));
 };
-const getById = (id: string): PublicPatient[] => {
-    const found = patients.filter(p => p.id === id);
-    return found.map(({ id, name, dateOfBirth, gender, occupation, entries }) =>
-        ({ id, name, dateOfBirth, gender, occupation, entries }));
+const getById = (id: string): PublicPatient | undefined => {
+    const found = patients.find(p => p.id === id);
+    return found;
 };
 const addPatient = (entry: NewPatientEntry): Patient => {
     const newPatientEntry:Patient = {
@@ -32,24 +31,24 @@ const addEntry = (patientId: string, entry: Entry): Patient | undefined => {
     if (!entry.date || !entry.description || !entry.specialist) throw new Error('error: data is missing');
 
     const updatedPatient = (): Patient => {
-        const newEntry:Entry = {
-            ...entry,
-            id:uuid()
+        const newEntry = {...entry, id: uuid() };
+        const addPatientEntry = {
+            ...patient,
+            entries:patient.entries?.concat(newEntry)
         };
-        patient.entries?.concat(newEntry);
-        return patient;
+        return addPatientEntry;
     };
 
     switch (entry.type) {
-        case 'Hospital':
+        case 'Hospital':{
             if (!entry.discharge) throw new Error('error: discharge data missing');
-            return updatedPatient();
-        case 'OccupationalHealthcare':
+            return updatedPatient();}
+        case 'OccupationalHealthcare':{
             if (!entry.employerName) throw new Error('error: employer name missing');
-            return updatedPatient();
-        case 'HealthCheck':
+            return updatedPatient();}
+        case 'HealthCheck':{
             if (!entry.healthCheckRating) throw new Error('error: healthcheck rating missing');
-            return updatedPatient();
+            return updatedPatient();}
         default:
             return assertNever(entry);
     }
