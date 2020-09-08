@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import patientService from '../services/patientService';
-import toNewPatientEntry from '../utils';
+import {toNewPatientEntry, toNewEntry} from '../utils';
 
 router.get('/', (_req, res) => {
     try {
@@ -22,7 +22,8 @@ router.post('/', (req, res) => {
 });
 router.post('/:id/entries', (req, res) => {
     try {
-        const addedEntry = patientService.addEntry(req.params.id, req.body);
+        const newEntry = toNewEntry(req.body);
+        const addedEntry = patientService.addEntry(req.params.id, newEntry);
         res.json(addedEntry);
     }
     catch (e) {
