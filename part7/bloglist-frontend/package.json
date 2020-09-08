@@ -23,8 +23,6 @@
     "eject": "react-scripts eject",
     "eslint": "eslint .",
     "flint": "eslint --fix --ext .js,.jsx .",
-    "cypress:open": "cypress open",
-    "test:e2e": "cypress run",
     "start:test": "cross-env NODE_ENV=test node index.js"
   },
   "eslintConfig": {

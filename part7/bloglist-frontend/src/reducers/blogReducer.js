@@ -42,7 +42,7 @@ export const addBlogs = (blog) => {
 };
 export const likeBlog = (blog) => {
   return async dispatch => {
-    const liked = {...blog, likes:blog.likes+1};
+    const liked = {...blog, user:blog.user.id, likes:blog.likes+1};
     const update = await blogService.update(liked);
     dispatch({
       type: 'LIKE',

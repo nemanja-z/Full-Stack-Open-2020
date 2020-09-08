@@ -47,6 +47,7 @@ blogsRouter.put('/:id', async (req, res) => {
     if (!updatedBlog) {
         return res.status(400).end();
     }
+    await updatedBlog.populate('user').execPopulate();
     res.status(200).json(updatedBlog.toJSON());
 });
 
