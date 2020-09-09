@@ -120,13 +120,12 @@ const toNewPatientEntry = (object: any): NewPatientEntry => {
     dateOfBirth: parseDate(object.dateOfBirth),
     occupation: parseOccupation(object.occupation),
     gender: parseGender(object.gender),
-    entries: object.entries
+    entries: []
   };
 };
 
 const toNewBaseEntry = (object: any): NewBaseEntry => {
   const baseEntry: NewBaseEntry = {
-    type: parseType(object.type),
     description: parseDescription(object.description),
     date: parseDate(object.date),
     specialist: parseSpecialist(object.specialist)
@@ -134,35 +133,35 @@ const toNewBaseEntry = (object: any): NewBaseEntry => {
   if (object.diagnosisCodes) {
     baseEntry.diagnosisCodes = parseDiagnosis(object.diagnosisCodes);
   }
-  return baseEntry;
+   return baseEntry;
 }
 const toNewEntry = (object: any): NewEntry => {
-  const newBaseEntry = toNewBaseEntry(object) as NewEntry;
-
+    const newBaseEntry = toNewBaseEntry(object) as NewEntry; 
+    newBaseEntry.type = parseType(object.type);
     switch (newBaseEntry.type) {
-    case EntryType.HealthCheck: {
-      return {
-        ...newBaseEntry,
-        healthCheckRating: parseCheck(object.healthCheckRating)
-      }
-    }
-    case EntryType.Hospital: {
-      return {
-        ...newBaseEntry,
-        discharge: parseDischarge(object.discharge)
-      }
-    }
-      case EntryType.OccupationalHealthCare: {
-        const occupation = {
+      case EntryType.HealthCheck: {
+        return {
           ...newBaseEntry,
-          employerName: parseEmployer(object.employerName)
-        };
-        if (object.sickLeave) {
-          occupation.sickLeave=parseSickLeave(object.sickLeave)
+          healthCheckRating: parseCheck(object.healthCheckRating)
         }
-        return occupation;
       }
-    default: return assertNever(newBaseEntry);
+      case EntryType.Hospital: {
+        return {
+          ...newBaseEntry,
+          discharge: parseDischarge(object.discharge)
+        }
+      }
+        case EntryType.OccupationalHealthCare: {
+          const occupation = {
+            ...newBaseEntry,
+            employerName: parseEmployer(object.employerName)
+          };
+          if (object.sickLeave) {
+            occupation.sickLeave=parseSickLeave(object.sickLeave)
+          }
+          return occupation;
+        }
+      default: return assertNever(newBaseEntry);
   };
 }; 
 

@@ -1,4 +1,4 @@
-import { Patient, Gender, EntryType } from "../types";
+import { Patient, Gender, EntryType} from "../types";
 const patientsData: Patient[] = [
     {
       id: "d2773336-f723-11e9-8f0b-362b9e155667",

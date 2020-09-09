@@ -3,35 +3,31 @@ import { ClearedPatientEntry, NewPatientEntry, Patient, Entry, NewEntry } from '
 import { v4 as uuid } from 'uuid';
 
 
-/* const assertNever = (value: never): never => {
-    throw new Error(
-        `Unhandled discriminated union member: ${JSON.stringify(value)}`
-    );
-}; */ 
-let patients: Patient[] = patientsData;
+
+const patients: Patient[] = patientsData;
+let patientState = [...patients];
 const getEntries = (): ClearedPatientEntry[] => {
-    return patients.map(({ id, name, dateOfBirth, gender, occupation, entries }) =>
+    return patientState.map(({ id, name, dateOfBirth, gender, occupation, entries }) =>
         ({ id, name, dateOfBirth, gender, occupation, entries }));
 };
 const getById = (id: string): Patient | undefined => {
-    const found = patients.find(p => p.id === id);
+    const found = patientState.find(p => p.id === id);
     return found;
 };
 const addPatient = (entry: NewPatientEntry): Patient => {
-    const newPatientEntry:Patient = {
+    const newPatientEntry = {
         id: uuid(),
-        ...entry,
-        entries:[] as Entry[]
+        ...entry
     };
-    patients.push(newPatientEntry);
+    patientState=patientState.concat(newPatientEntry);
     return newPatientEntry;
 };
 const addEntry = (patientId: string, entry: NewEntry): Patient | undefined => {
-    const patient = patients.find(p => p.id === patientId);
+    const patient = patientState.find(p => p.id === patientId);
     if (!patient) throw new Error("malformed id");
-    if (!entry.date || !entry.description || !entry.specialist) throw new Error('error: data is missing');
     const addEntry: Entry = { ...entry, id: uuid() };
-    patient.entries.push(addEntry)
+    const patientEntry = { ...patient, entries: patient.entries.concat(addEntry) };
+    patientState=patientState.map(pat => pat.id === patientEntry.id ? patientEntry : pat);
     return patient;
 }
 

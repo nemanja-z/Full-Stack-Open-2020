@@ -1,7 +1,7 @@
 import React from 'react';
 import { Entry } from '../types';
 import HealthRatingBar from "../components/HealthRatingBar";
-import { Icon } from "semantic-ui-react";
+import { Icon, Card } from "semantic-ui-react";
 
 const Entries: React.FC<{ entry: Entry }> = ({ entry }) => {
 
@@ -23,57 +23,65 @@ const Entries: React.FC<{ entry: Entry }> = ({ entry }) => {
     switch (entry.type) {
         case "HealthCheck":
             {
-                return (<>
-                    <h3>{entry.date}</h3>
-                    {icon(entry)}
-                    <p>{entry.specialist}</p>
-                    <p>{entry.description}</p>
+                return (<Card>
+                    <Card.Content>
+                    <Card.Header>{entry.date} {icon(entry)}</Card.Header>
+                    <Card.Description>
+                    <p>Specialist: {entry.specialist}</p>
+                    <p>Description: {entry.description}</p>
+                    {entry.diagnosisCodes && <p>Diagnosis codes:</p>}
                     <ul>
-                        {entry.diagnosisCodes && (
-                            entry.diagnosisCodes.map(e => <li key={e}>{e}</li>)
-                        )}
-                    </ul>
+                        {
+                            entry.diagnosisCodes?.map(e => <li key={e}>{e}</li>)
+                        }
+                            </ul>
+                    </Card.Description>
                     <HealthRatingBar showText={false} rating={entry.healthCheckRating} />
-                </>);
+                    </Card.Content>
+                </Card>);
             }
         case "OccupationalHealthcare": {
-            return (<>
-                <h3>{entry.date}</h3>
-                {icon(entry)}
-                <p>{entry.specialist}</p>
-                <p>{entry.description}</p>
-                <p>{entry.employerName}</p>
+            return (<Card>
+                <Card.Header>{entry.date} {icon(entry)}</Card.Header>
+                <Card.Content>
+                <p>Specialist: {entry.specialist}</p>
+                <p>Description: {entry.description}</p>
+                <p>Employer name: {entry.employerName}</p>
+                {entry.diagnosisCodes && <p>Diagnosis codes:</p>}
                 <ul>
-                    {entry.diagnosisCodes && (
-                        entry.diagnosisCodes.map(e => <li key={e}>{e}</li>)
-                    )}
+                    {
+                        entry.diagnosisCodes?.map(e => <li key={e}>{e}</li>)
+                    }
                 </ul>
-                {entry.sickLeave ? (
+                
                     <div>
-                        <h4>Sick leave:start-end</h4>
-                        <p>{entry.sickLeave.startDate}-{entry.sickLeave.endDate}</p>
-                    </div>) : null}
-            </>);
+                        <p>Sick leave start: {entry.sickLeave?.startDate} </p>
+                        <p>Sick leave end: {entry.sickLeave?.endDate}</p>
+                        </div>
+                </Card.Content>
+            </Card>);
         }
 
         case "Hospital":
             {
-                return (<>
-                    <h3>{entry.date}</h3>
-                    {icon(entry)}
-                    <p>{entry.specialist}</p>
-                    <p>{entry.description}</p>
+                return (<Card>
+                    <Card.Header>{entry.date} {icon(entry)}</Card.Header>
+                    <Card.Content>
+                    <p>Specialist: {entry.specialist}</p>
+                    <p>Description: {entry.description}</p>
+                        {entry.diagnosisCodes && <p>Diagnosis codes:</p>}
                     <ul>
-                        {entry.diagnosisCodes && (
-                            entry.diagnosisCodes.map(e => <li key={e}>{e}</li>)
-                        )}
+                        {
+                            entry.diagnosisCodes?.map(e => <li key={e}>{e}</li>)
+                        }
                     </ul>
                     {entry.discharge ? (
                         <div>
                             <p>Discharge date:{entry.discharge.date}</p>
                             <p>Discharge criteria:{entry.discharge.criteria}</p>
-                        </div>) : null}
-                </>);
+                            </div>) : null}
+                    </Card.Content>
+                </Card>);
             }
         default:
             return assertNever(entry);

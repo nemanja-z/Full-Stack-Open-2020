@@ -16,7 +16,6 @@ export enum Gender {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface BaseEntry {
     id: string;
-    type:EntryType,
     description: string;
     date: string;
     specialist: string;
@@ -30,7 +29,7 @@ export enum HealthCheckRating {
 };
 
 interface HealthCheckEntry extends BaseEntry {
-    type: EntryType.HealthCheck;
+    type:EntryType.HealthCheck;
     healthCheckRating: HealthCheckRating;
 };
 export interface Discharge {

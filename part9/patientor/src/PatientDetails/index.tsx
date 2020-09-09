@@ -1,7 +1,7 @@
 import React from 'react';
 import { useStateValue } from "../state";
 import { useParams } from "react-router-dom";
-import { Icon, Grid, Button } from 'semantic-ui-react';
+import { Icon, Grid, Button, Header, Container } from 'semantic-ui-react';
 import { Patient, Gender } from "../types";
 import { patientDetails } from '../state/reducer';
 import Entries from './Entries';
@@ -100,10 +100,14 @@ const PatientDetails: React.FC = () => {
   };
 
   return (
-    < div >
+    <>
       <Grid>
         <Grid.Column floated="left" width={5}>
-          <h2>{patientInfo.name} {icons(patientInfo.gender)}</h2>
+          <Header size="large">{patientInfo.name} {icons(patientInfo.gender)}</Header>
+            <Header size="small">
+              ssn: {patientInfo.ssn} <br></br>
+              occupation: {patientInfo.occupation}
+            </Header>
         </Grid.Column>
         <Grid.Column floated="right" width={8}>
           Add Entry:{' '}
@@ -112,12 +116,11 @@ const PatientDetails: React.FC = () => {
           <Button onClick={() => openHealthcheck()}>Healthcheck</Button>
         </Grid.Column>
       </Grid>
-        <div key={patientInfo.id}>
-          <p>{patientInfo.ssn}</p>
-          <p>{patientInfo.occupation}</p>
-        </div >
+      <Container>
+      {patientInfo.entries && <span>Entries:</span>}
       {patientInfo.entries?.map(p =>
         <Entries key={p.id} entry={p} />)}
+      </Container>
       <AddHealthCheckEntryForm
         modalOpen={healthcheckModalOpen}
         onSubmit={submitHealthCheckEntry}
@@ -139,7 +142,7 @@ const PatientDetails: React.FC = () => {
         error={error}
         patientName={patientInfo.name}
       />
-    </div>
+    </>
   );
 };
 export default PatientDetails;
