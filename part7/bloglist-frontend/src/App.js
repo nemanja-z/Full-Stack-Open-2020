@@ -47,7 +47,6 @@ const App = () => {
       username.reset();
       password.reset();
       dispatch(newMessage('successful login'));
-
     } catch (exception) {
       username.reset();
       password.reset();

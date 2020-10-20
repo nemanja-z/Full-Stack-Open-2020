@@ -30,7 +30,6 @@ const BlogDetails = ({ blog, user, history}) => {
     }
   };
 
-  console.log(blog.user)
   const updateLikes = async (liked) => {
     try{
       dispatch(likeBlog(liked));

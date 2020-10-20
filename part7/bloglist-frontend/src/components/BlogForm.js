@@ -27,15 +27,15 @@ const BlogForm = ({ createBlog }) => {
     <Form onSubmit={addBlog}>
       <Form.Group controlId="title">
         <Form.Label>title</Form.Label>
-        <Form.Control {...title} as='textarea' reset='reset' />
+        <Form.Control required {...title} as='textarea' reset='reset' />
       </Form.Group>
       <Form.Group controlId="author">
         <Form.Label>author</Form.Label>
-        <Form.Control {...author} reset='reset' />
+        <Form.Control required {...author} reset='reset' />
       </Form.Group>
       <Form.Group controlId="url">
         <Form.Label>url</Form.Label>
-        <Form.Control {...url} reset='reset' />
+        <Form.Control required {...url} reset='reset' />
       </Form.Group>
       <Button variant="primary" type="submit">
         create blog

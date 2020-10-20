@@ -13,7 +13,7 @@ const LoginForm = ({ handleSubmit, username, password }) => {
           <Form.Label>password</Form.Label>
           <Form.Control {...password} reset='reset' />
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button id="login-button" variant="primary" type="submit">
           login
         </Button>
       </Form>
@@ -29,20 +29,3 @@ LoginForm.propTypes = {
 export default LoginForm;
 
 
-/* < Form onSubmit = { handleSubmit } >
-    <Form.Group>
-      <Form.Label>username:</Form.Label>
-      <Form.Control
-        {...username}
-        reset='reset'
-      />
-      <Form.Label>password:</Form.Label>
-      <Form.Control
-        {...password}
-        reset='reset'
-      />
-      <Button variant="primary" type="submit">
-        login
-  </Button>
-    </Form.Group>
-</Form > */
