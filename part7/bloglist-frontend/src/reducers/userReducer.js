@@ -15,6 +15,7 @@ const reducer = (state = [], action) => {
 };
 export const login = (creds) => {
   return async dispatch => {
+    try{
     const user = await loginService.login(creds);
     window.localStorage.setItem('loggedUser', JSON.stringify(user));
     dispatch({
@@ -22,6 +23,10 @@ export const login = (creds) => {
       data: user
     });
     dispatch(newMessage('successful login'));
+  }catch(e){
+    dispatch(newMessage('wrong credentials'));
+  }
+
   };
 };
 export const getUser = () => {

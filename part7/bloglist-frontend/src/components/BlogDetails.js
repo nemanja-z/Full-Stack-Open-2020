@@ -54,14 +54,14 @@ const BlogDetails = ({ blog, user, history}) => {
     <div key={blog.id}>
       <h2>{`${blog.title} ${blog.author}`}</h2>
       <p>{blog.url}</p>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex'}}>
         <p>{blog.likes} likes</p>
-        <button onClick={()=>updateLikes(blog)}>like</button>
+        <button className="btn-like" onClick={()=>updateLikes(blog)}>like</button>
       </div>
       <p>{`added by ${blog.user.username}`}</p>
-      {authorize && <Button onClick={() => removeBlog(blog)}>delete</Button>}
+      {authorize && <Button className="btn-delete" onClick={() => removeBlog(blog)}>delete</Button>}
       <Comment addComment={addComment} comment={comment} />
-      <Card style={{ width: '18rem' }}>
+      <Card style={{ width: '18rem'}}>
         <Card.Title>Comments:</Card.Title>
         <ListGroup variant="flush">
           {blog.comments && blog.comments.map((comment, i) =>

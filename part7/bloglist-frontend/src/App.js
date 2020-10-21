@@ -41,18 +41,16 @@ const App = () => {
     const creds = {
       username: username.value,
       password: password.value
-    };
+    };    
+    username.reset();
+    password.reset();
     try {
-      dispatch(login(creds));
-      username.reset();
-      password.reset();
-      dispatch(newMessage('successful login'));
-    } catch (exception) {
-      username.reset();
-      password.reset();
-      dispatch(newMessage('wrong credentials'));
+         dispatch(login(creds));
+    } catch (e) {
+      console.log(e.response.message);
     }
   };
+  //dispatch(newMessage('successful login'));
   const loggedOut = () => {
     dispatch(logout());
     history.push('/');
@@ -60,8 +58,9 @@ const App = () => {
   const sortedBlogs = [...blog].sort((a, b) => a.likes < b.likes);
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility();
-    try{ dispatch(addBlogs(blogObject));
-       dispatch(newMessage(`A new blog by ${user.username} is added`));
+    try{ 
+      dispatch(addBlogs(blogObject));
+      dispatch(newMessage(`A new blog by ${user.username} is added`));
     }catch(e){
       console.log(e.response.message);
     }
